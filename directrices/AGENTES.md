@@ -72,8 +72,8 @@ lo determina **el trabajo que el proyecto hace**, no una lista de partida.
 
 | Tipo de proyecto | Lo que suele necesitar |
 |---|---|
-| Web con interfaz | `planner`, `implementer`, `reviewer`, `frontend-reviewer` |
-| API o backend | `planner`, `implementer`, `reviewer`, `security-auditor`, `tester` |
+| Web con interfaz | `planner`, `implementer`, `reviewer`, `frontend-reviewer`, `tooling-advisor` |
+| API o backend | `planner`, `implementer`, `reviewer`, `security-auditor`, `tester`, `tooling-advisor` |
 | Datos o estadísticas | `planner`, `implementer`, `reviewer`, `debugger` |
 | CLI o herramienta | `planner`, `implementer`, `reviewer` |
 | Móvil | `planner`, `implementer`, `reviewer`, `perf-auditor` |
@@ -111,6 +111,19 @@ justifica, que es lo que de verdad lo convierte en agente y no en un prompt con 
 | `perf-auditor` | Mide cuellos de botella con datos. | Solo lectura; puede ejecutar perfiles. |
 | `migrator` | Ejecuta una migración de datos o de formato. | `edit` sobre las rutas de la migración, `bash` con glob. |
 | `frontend-reviewer` | Revisa accesibilidad, diseño y vista móvil. | `edit: deny`; puede abrir navegador controlado. |
+| `tooling-advisor` | Examina el proyecto y propone comandos, skills, MCP o agentes que ayuden, con su coste. | Todo denegado: `edit`, `bash`, `webfetch`. No instala ni activa nada. |
+
+`tooling-advisor` merece una nota. Es el único agente del catálogo cuya salida no es
+trabajo hecho, sino decisiones para que tú tomes. Existe porque aconsejar bien exige
+demostrar el hueco antes de proponer, y eso es más fácil de hacer sin permiso para tocar
+nada: quien no puede arreglarlo, no tiene la tentación de ofrecer el arreglo.
+
+Su regla contra recomendar de más es una prueba que se aplica a cada propuesta:
+
+> ¿Sin esto, el trabajo se para, se repite a mano, o se comprueba peor?
+
+Si la respuesta a las tres es no, es una preferencia y no se envía. Un asesor que recomienda
+mucho acaba siendo ignorado, y entonces no asesora nada.
 
 ### Coordinación
 

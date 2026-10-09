@@ -33,8 +33,8 @@ Copia esta carpeta entera a la carpeta del proyecto nuevo. Después sustituye ca
 
 | Tipo de proyecto | Agentes |
 |---|---|
-| Web con interfaz | `planner`, `implementer`, `reviewer`, `frontend-reviewer` |
-| API o backend | `planner`, `implementer`, `reviewer`, `security-auditor`, `tester` |
+| Web con interfaz | `planner`, `implementer`, `reviewer`, `frontend-reviewer`, `tooling-advisor` |
+| API o backend | `planner`, `implementer`, `reviewer`, `security-auditor`, `tester`, `tooling-advisor` |
 | Datos o estadísticas | `planner`, `implementer`, `reviewer`, `debugger` |
 | CLI o herramienta | `planner`, `implementer`, `reviewer` |
 | Móvil | `planner`, `implementer`, `reviewer`, `perf-auditor` |
@@ -47,7 +47,7 @@ Es un punto de partida, no una plantilla. Un backend con una parte visual que im
 Dos piezas son comunes a todos: alguien que **planifique** y alguien que **revise**. Sin
 planificación no hay spec; sin revisión, el principio 5 no se cumple.
 
-## Los doce candidatos
+## Los trece candidatos
 
 **Del flujo SDD**
 
@@ -69,6 +69,7 @@ planificación no hay spec; sin revisión, el principio 5 no se cumple.
 | `perf-auditor` | Mide cuellos de botella. | Solo lectura. |
 | `migrator` | Migra datos o formatos sin perder nada. | `edit` sobre las rutas de la migración. |
 | `frontend-reviewer` | Accesibilidad, diseño y vista móvil. | `edit: deny`; puede abrir navegador. |
+| `tooling-advisor` | Propone comandos, skills, MCP o agentes que ayuden, con su coste. | Todo denegado: no instala ni activa nada. |
 
 **Coordinación**
 
