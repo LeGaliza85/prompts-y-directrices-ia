@@ -1,0 +1,27 @@
+# Sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+
+# Node (solo si algún proyecto se prueba aquí)
+node_modules/
+*.tsbuildinfo
+
+# Entorno y secretos: nunca en el repositorio
+.env
+.env.*
+*.pem
+*.key
+
+# Salidas de compilación
+dist/
+build/
+*.log
+
+# Sistema
+$RECYCLE.BIN/
+*.tmp
