@@ -71,6 +71,22 @@ Los documentos se cargan según la tarea, para no llenar el contexto de golpe:
 El campo `instructions` de `opencode.jsonc` carga por defecto este archivo, `MEMORY.md` y
 `docs/constitution.md`.
 
+## Herramientas: cuándo te propongo algo
+
+El agente `tooling-advisor` te avisa de lo que pueda ayudarte. Los cuatro momentos en que
+lo hace:
+
+1. **Al empezar el proyecto**, con la constitución ya escrita. Es el momento más barato para
+   elegir herramientas.
+2. **Al cerrar cada fase del SDD**: spec, plan o tareas aprobadas.
+3. **Cuando algo se haya hecho a mano por segunda vez.** La repetición es la señal.
+4. **Siempre que me lo pidas.**
+
+Cada propuesta llega con qué falta sin ella, qué resuelve, cuánto cuesta —instalación,
+arranque por sesión y contexto en tokens—, el riesgo y la alternativa si dices que no. Nada
+se instala sin tu aprobación. Si la rechazas, queda registrado el motivo y no se vuelve a
+proponer por el mismo.
+
 ## Specs
 
 - Constitución: `docs/constitution.md`

@@ -12,6 +12,23 @@ Cuando detecto que falta una capacidad, presento este bloque **en el momento de 
 y espero tu respuesta. No lo agrupo para el final de la fase ni lo dejo para el cierre: si
 llega tarde, la decisión ya no existe y solo queda un aviso inútil.
 
+## Cuándo te aviso
+
+**Al empezar el proyecto**, con la constitución ya escrita. Es el momento más barato para
+decidir: poner una herramienta al principio cuesta menos queañadirla cuando ya hay código
+escrito contra ella.
+
+**Al cerrar cada fase del SDD** —spec aprobada, plan aprobado, tareas aprobadas—. Lo que se
+acaba de definir dice qué va a hacer el proyecto, y de ahí se deduce qué necesitará.
+
+**Cuando algo se haya hecho a mano por segunda vez.** La repetición es la señal más fiable de
+que falta algo.
+
+**Siempre que me lo pidas**, con la duda que tengas.
+
+El agente encargado de esto es `tooling-advisor`. Está en solo lectura y sin permiso para
+instalar nada, precisamente para que su salida sea una propuesta y no un cambio.
+
 ```
 🛑
 Recomendación — <MCP | skill | subagente>
