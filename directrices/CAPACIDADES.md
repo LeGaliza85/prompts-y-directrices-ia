@@ -138,6 +138,10 @@ con una palabra cuando hagan falta.
 La API key de los remotos va en variables de entorno o en la configuración local, nunca en
 el repositorio.
 
+**Cómo se configuran, se comprueban y se apagan:** `MCP.md`. Allí está el orden de revisión
+cuando un MCP figura en `/mcps` pero no conecta, que es el modo de fallo más común y no da
+error visible.
+
 ---
 
 ## Skills

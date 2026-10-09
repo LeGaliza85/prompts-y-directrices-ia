@@ -66,8 +66,13 @@ viven en la biblioteca del sistema, no en el proyecto:
 |---|---|
 | Redactar o cambiar una spec | `<BIBLIOTECA>/SDD.md`, `<BIBLIOTECA>/EARS.md` |
 | Decidir si algo está bien hecho | `docs/constitution.md`, `EXPECT.md` (este proyecto) |
-| Proponer una herramienta nueva | `<BIBLIOTECA>/CAPACIDADES.md` |
+| Depurar un fallo | `<BIBLIOTECA>/DEPURACION.md` |
+| Refactorizar sin romper | `<BIBLIOTECA>/REFACTOR.md` |
+| Proponer o configurar una herramienta | `<BIBLIOTECA>/CAPACIDADES.md`, `<BIBLIOTECA>/MCP.md` |
 | Buscar en el código | propón usar `@explore` y espera aprobación |
+
+Las fases del flujo están automatizadas en `.opencode/commands/`. Escribe `/sdd` para ver el
+menú completo y en qué fase estás.
 
 `<BIBLIOTECA>` es la ruta a la carpeta de directrices del sistema. Ponla aquí una sola vez y
 todas las rutas de arriba quedan resueltas: `<RUTA_A_LAS_DIRECTRICES>`.

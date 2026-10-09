@@ -41,10 +41,13 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `EXPECT.md` | Cuándo se da algo por terminado, y la decisión de calidad frente a velocidad. |
 | `SDD.md` | El flujo de 8 fases, las tres formas de SDD y cuándo no usarlo. |
 | `EARS.md` | Cómo se escribe un requisito para que sea verificable, con ejemplos. |
+| `DEPURACION.md` | Método para encontrar la causa de un fallo. Reproducir, aislar, hipótesis, verificar. |
+| `REFACTOR.md` | Cambiar la estructura sin cambiar el comportamiento, sin romper lo que funciona. |
 | `APIS-VERIFICADAS.md` | Inventario de la sintaxis de OpenCode comprobada, con su fecha. |
 | `PIN.md` | La versión exacta contra la que está verificado todo esto. |
 | `PROCEDIMIENTO-ACTUALIZACION.md` | Qué hacer al actualizar OpenCode, con los modos de fallo silencioso. |
 | `CAPACIDADES.md` | Catálogo de MCP, skills y herramientas, con el formato para proponerlas. |
+| `MCP.md` | Cómo se conectan y se comprueban los servidores MCP, y cómo se apagan. |
 | `AGENTES.md` | Catálogo de subagentes: quién necesita cada proyecto y cómo se eligen. |
 | `OPENCODE.md` | Referencia práctica de la herramienta: agentes, comandos, modo Plan. |
 | `aprendido.md` | Errores de proceso, con su causa y la directiva que los previene. |
@@ -72,7 +75,7 @@ coste). Los mismos que están en la plantilla, para poder usarlos aquí.
 | Script | Para qué |
 |---|---|
 | `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla, con agentes según el tipo y marcadores resueltos. |
-| `verificar.ps1` | Recorre los 48 `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
+| `verificar.ps1` | Recorre todos los `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
 
 `nuevo-proyecto.ps1` acepta `-Nombre`, `-Destino`, `-Tipo` (web, api, datos, cli, movil,
 infra, docs), `-Stack`, `-Idioma`, `-Git` y `-Forzar`. No inventa nada del proyecto: lo que
@@ -81,25 +84,35 @@ solo sabes tú queda marcado y se lista al final.
 **Aviso:** el script lleva BOM UTF-8 a propósito. PowerShell 5.1 lee los `.ps1` como ANSI si
 no lo llevan, y los acentos rompen el parser.
 
+### Comandos disponibles aquí
+
+Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flujo. Escribe
+`/sdd` para ver el menú y en qué fase está el proyecto.
+
 ## Estado del trabajo
 
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica (14 documentos) | hecho |
+| 1 · Capa genérica | **hecho** (17 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
-| 3 · Plantilla completa | hecho |
-| 4 · Registro: historial,curso, apuntes | **en curso** |
-| 5 · Spec 000, el sistema aplicado a sí mismo | pendiente |
+| 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
+| 4 · Registro: historial, curso, apuntes | hecho |
+| 5 · Spec 000 | hecho |
+| 6 · Demostración con un proyecto real | **pendiente** |
 
 ### Lo que falta
 
-- `historial/` — copia literal de las directrices de cada proyecto, con su ficha. La carpeta
-  existe; falta el formato y el primer proyecto que archivar.
-- `curso/` — apuntes extraídos del material de origen, organizados por tema. Los PDF
-  originales aún no se han copiado.
-- `specs/000-sistema-de-trabajo/` — la spec de este propio repositorio.
-- Lanzar `reviewer` sobre la capa genérica y la plantilla.
+- **Un proyecto real.** Es el único hueco grande. Dos requisitos de la Spec 000 —RF-1 y
+  RF-11— están escritos pero no demostrados: nadie ha copiado la plantilla y no hay nada en
+  `historial/`. No se pueden cerrar hasta que exista.
+- **`historial/`** solo, si no se llega a crear un proyecto: el formato está listo y no hay
+  nada que archivar.
+
+### Lo que ya no falta
+
+Los comandos `/sdd-*` que automatizan las ocho fases del flujo, y los tres documentos de
+método que faltaban: `DEPURACION.md`, `REFACTOR.md` y `MCP.md`.
 
 ## Las decisiones que gobiernan cómo se trabaja aquí
 

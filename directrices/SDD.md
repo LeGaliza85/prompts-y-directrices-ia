@@ -91,8 +91,14 @@ proyecto/
 └── <código del proyecto>
 ```
 
-Cada spec en su carpeta numerada. La spec activa es la de **mayor número sin marcar como
-`implementada`**.
+Cada spec en su carpeta numerada: `specs/NNN-nombre/`, con `spec.md`, `plan.md` y `tasks.md`.
+
+`NNN` es un número correlativo de tres cifras. La spec **activa** es la de mayor número sin
+marcar como `implementada`: si hay tres, se trabaja sobre la más alta, y las anteriores son
+histórico que no se toca.
+
+El nombre de la carpeta lleva un guion y minúsculas. Se usa tal cual al invocar los comandos
+del sistema: `/sdd-plan 002-mapa-de-calor`.
 
 ## Cuándo no usar SDD
 

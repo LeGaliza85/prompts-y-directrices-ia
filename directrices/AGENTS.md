@@ -89,8 +89,9 @@ lo que la tarea necesita.
 |---|---|
 | Redactar o cambiar una spec | `SDD.md`, `EARS.md` |
 | Decidir si algo está bien hecho | `CONSTITUTION.md`, `EXPECT.md` |
-| Proponer una herramienta nueva | `CAPACIDADES.md` |
-| Delegar trabajo | `AGENTES.md` del sistema |
+| Depurar un fallo | `DEPURACION.md` |
+| Refactorizar sin romper | `REFACTOR.md` |
+| Proponer o configurar una herramienta | `CAPACIDADES.md`, `MCP.md` |
 | Buscar en el código | propón usar `@explore` y espera aprobación |
 
 En un proyecto nuevo, la carga la resuelve el campo `instructions` de `opencode.jsonc`:

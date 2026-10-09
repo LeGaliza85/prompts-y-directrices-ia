@@ -133,6 +133,37 @@ a cuenta.
 
 ---
 
+## 2026-10-09 — Los comandos `/sdd-*` y los tres documentos de método
+
+**Decisión.** Se completan las piezas que faltaban del material de origen: los diez comandos
+que automatizan las fases del SDD, y los tres documentos de método que no tenian versión
+propia.
+
+**Propuso.** El usuario, al preguntar qué faltaba.
+
+**Los comandos.** Diez, en `plantilla/.opencode/commands/` y en `.opencode/commands/` de este
+repositorio: `sdd`, `sdd-constitution`, `sdd-spec`, `sdd-clarify`, `sdd-plan`, `sdd-tasks`,
+`sdd-implement`, `sdd-validate`, `sdd-change`, `sdd-status`.
+
+Cada uno con el agente adecuado en el frontmatter: los de planificación y especificación
+corren con `plan`, que no puede tocar código; los de implementación y validación con `build`.
+La restricción está en el comando, no en que quien lo use se acuerde.
+
+**Los documentos.** `DEPURACION.md` (reproducir, aislar, formular hipótesis con predicción,
+verificar), `REFACTOR.md` (comprobación antes, un cambio cada vez, comprobar después) y
+`MCP.md` (tipos local y remoto, cómo se comprueba que conecta, cómo se apaga).
+
+**Por qué separados.** Los agentes `debugger` y `refactorer` ya existían como ejecutores, pero
+no había método escrito. Un agente que sabe ejecutar y no sabe cómo, inventa el cómo cada vez.
+Y la configuración de MCP estaba dentro de `CAPACIDADES.md`, que es el catálogo: mezclar el
+catálogo con la parte técnica hacía que ninguna de las dos se encontrara.
+
+**Consecuencia.** La tabla de carga de contexto pasa de cuatro filas a seis, y el `AGENTS.md`
+de la plantilla apunta a `.opencode/commands/` como vía para ejecutar el flujo sin recordar
+prompts.
+
+---
+
 ## 2026-10-09 — La plantilla se automatiza con un script
 
 **Decisión.** Se anade `nuevo-proyecto.ps1`: copia la plantilla, elige los agentes segun el

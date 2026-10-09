@@ -14,6 +14,7 @@ Copia esta carpeta entera a la carpeta del proyecto nuevo. Después sustituye ca
 | `docs/constitution.md` | Principios innegociables, con marcadores para el stack. |
 | `specs/000-plantilla/` | Spec, plan y tareas de ejemplo. Sustituir por la primera spec real. |
 | `.agents/skills/sdd/SKILL.md` | La skill con el flujo completo Spec-Driven Development. |
+| `.opencode/commands/` | Los diez comandos `/sdd-*`, uno por fase del flujo. |
 | `.opencode/agents/` | **Trece agentes candidatos.** El proyecto se queda con los que necesite. |
 
 ## Orden para ponerlo en marcha
@@ -77,8 +78,35 @@ planificación no hay spec; sin revisión, el principio 5 no se cumple.
 |---|---|---|
 | `coordinator` | Dirige el flujo SDD repartiendo entre subagentes. | **Opcional.** Solo en specs largas. En el resto, el primario coordina directamente. |
 
+Doce agentes de trabajo mas `coordinator`, que es opcional. Cada uno con el trabajo que hace
+y la restricción de permisos que lo justifica.
+
 El límite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien está mejor
 servido que uno con trece que se pisan.
+
+Si hace falta uno que no está aquí, créalo solo si aporta una **restricción de permisos** o una
+**especialidad** que estos no cubren. Si la diferencia es solo el texto del prompt, es un
+comando; si es solo el modelo, es el campo `model` de un agente existente.
+
+## Las diez fases automatizadas
+
+El flujo SDD tiene un comando por fase. No hay que recordar los prompts:
+
+| Fase | Comando |
+|---|---|
+| Ver el menú y la fase actual | `/sdd` |
+| Constitución | `/sdd-constitution` |
+| Especificación | `/sdd-spec 002-nombre <idea>` |
+| Clarificación | `/sdd-clarify 002-nombre` |
+| Planificación | `/sdd-plan 002-nombre` |
+| Tareas | `/sdd-tasks 002-nombre` |
+| Implementación | `/sdd-implement 002-nombre T3` |
+| Validación | `/sdd-validate 002-nombre` |
+| Cambio de requisito | `/sdd-change 002-nombre <requisito>` |
+| Estado | `/sdd-status 002-nombre` |
+
+Los de planificación y especificación usan el agente `plan`: no tocan código. Los de
+implementación y validación usan `build`.
 
 Si hace falta uno que no está aquí, créalo solo si aporta una **restricción de permisos** o
 una **especialidad** que estos no cubren. Si la diferencia es solo el texto del prompt, es
