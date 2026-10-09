@@ -86,8 +86,10 @@ Las de los MCPs remotos van en variables de entorno o en configuración local. R
 
 - Para una consulta puntual que puedes hacer tú en el navegador.
 - Si el proyecto no va a usar esa capacidad más que una vez.
-- Si activarlo carga más herramientas en el contexto de las que la tarea necesita. Un MCP con
-  cincuenta herramientas describe cada una en el prompt, aunque solo uses una.
+- Si activarlo carga más herramientas en el contexto de las que la tarea necesita. Los
+  servidores con muchas herramientas acaban describiendo cada una en el prompt, aunque solo
+  uses una. No he medido el coste exacto: se nota con servidores muy grandes, y conviene
+  activarlos cuando la tarea los necesita y apagarlos cuando no.
 
 ## Cómo se apaga
 
