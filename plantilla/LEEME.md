@@ -14,7 +14,7 @@ Copia esta carpeta entera a la carpeta del proyecto nuevo. Después sustituye ca
 | `docs/constitution.md` | Principios innegociables, con marcadores para el stack. |
 | `specs/000-plantilla/` | Spec, plan y tareas de ejemplo. Sustituir por la primera spec real. |
 | `.agents/skills/sdd/SKILL.md` | La skill con el flujo completo Spec-Driven Development. |
-| `.opencode/agents/` | **Doce agentes candidatos.** El proyecto se queda con los que necesite. |
+| `.opencode/agents/` | **Trece agentes candidatos.** El proyecto se queda con los que necesite. |
 
 ## Orden para ponerlo en marcha
 
@@ -23,7 +23,7 @@ Copia esta carpeta entera a la carpeta del proyecto nuevo. Después sustituye ca
 2. **`docs/constitution.md`.** Rellena los marcadores. Stack, idioma, dónde se guardan los
    datos, cómo se comprueba. Es el documento que decide los demás.
 3. **`AGENTS.md`.** Sustituye los marcadores. Las secciones que más cuesta rellenar después
-   son *Reglas de dominio y trampas conocidas* y *Datos*.
+   son *Reglas de dominio y trampas conocidas* y *Datos*. **No olvides `<RUTA_A_LAS_DIRECTRICES>`**: sin ella, las cuatro filas de la tabla de carga de contexto apuntan a archivos que no existen en el proyecto.
 4. **Sustituye `<COMANDO_DE_COMPROBACIÓN>`** en los permisos de todos los agentes que
    hayas conservado, y `<RUTAS...>` o `<MÓDULO...>` donde aparezca.
 5. **`specs/000-plantilla/`.** Usa la spec de ejemplo como referencia y bórrala, o
@@ -78,7 +78,7 @@ planificación no hay spec; sin revisión, el principio 5 no se cumple.
 | `coordinator` | Dirige el flujo SDD repartiendo entre subagentes. | **Opcional.** Solo en specs largas. En el resto, el primario coordina directamente. |
 
 El límite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien está mejor
-servido que uno con once que se pisan.
+servido que uno con trece que se pisan.
 
 Si hace falta uno que no está aquí, créalo solo si aporta una **restricción de permisos** o
 una **especialidad** que estos no cubren. Si la diferencia es solo el texto del prompt, es

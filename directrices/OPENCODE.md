@@ -69,7 +69,7 @@ Cierra siempre con: «No modifiques ningún archivo hasta que apruebe el plan.»
 ## El campo `instructions`
 
 OpenCode carga `AGENTS.md` automáticamente, pero **no interpreta referencias `@archivo.md` por sí solo**.
-Para cargar ficheros externos hay que declararlos en `opencode.json`:
+Para cargar ficheros externos hay que declararlos en `opencode.jsonc`:
 
 ```jsonc
 {
@@ -106,7 +106,7 @@ de `.claude/skills/`. Para desactivar toda esta compatibilidad, define la variab
 | Agentes | `~/.config/opencode/agents/` | `.opencode/agents/` |
 | Comandos | `~/.config/opencode/commands/` | `.opencode/commands/` |
 | Skills | `~/.config/opencode/skills/<nombre>/SKILL.md` | `.opencode/skills/<nombre>/SKILL.md`, `.agents/skills/<nombre>/SKILL.md` |
-| MCP | — | `opencode.json` del proyecto, clave `mcp` |
+| MCP | — | `opencode.jsonc` del proyecto, clave `mcp` |
 
 Añadir un agente, comando, skill o MCP es activar una capacidad: consulta antes, siguiendo el principio 1
 de `CONSTITUTION.md` y el formato de propuesta de `CAPACIDADES.md`.

@@ -144,4 +144,4 @@ No incluye los comandos ni el idioma: cambian por proyecto y pertenecen a `AGENT
 
 No impone límites de longitud a ningún archivo. Los límites del curso (30-40 líneas para
 `AGENTS.md`, ~50 para `MEMORY.md`) eran específicos de aquel proyecto; aquí se manejan con
-el campo `instructions` de `opencode.json`, que carga documentos bajo demanda.
+el campo `instructions` de `opencode.jsonc`, que carga documentos bajo demanda.

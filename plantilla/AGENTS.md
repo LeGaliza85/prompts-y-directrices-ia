@@ -59,17 +59,22 @@ obvia pero está invertida aquí, el detalle que ya se rompió una vez.>
 
 ## Cómo cargar el contexto
 
-Los documentos se cargan según la tarea, para no llenar el contexto de golpe:
+Los documentos se cargan según la tarea, para no llenar el contexto de golpe. Los de abajo
+viven en la biblioteca del sistema, no en el proyecto:
 
 | Si la tarea es | Carga |
 |---|---|
-| Redactar o cambiar una spec | `SDD.md`, `EARS.md` |
-| Decidir si algo está bien hecho | `CONSTITUTION.md`, `EXPECT.md` |
-| Proponer una herramienta nueva | `CAPACIDADES.md` |
+| Redactar o cambiar una spec | `<BIBLIOTECA>/SDD.md`, `<BIBLIOTECA>/EARS.md` |
+| Decidir si algo está bien hecho | `docs/constitution.md`, `EXPECT.md` (este proyecto) |
+| Proponer una herramienta nueva | `<BIBLIOTECA>/CAPACIDADES.md` |
 | Buscar en el código | propón usar `@explore` y espera aprobación |
 
-El campo `instructions` de `opencode.jsonc` carga por defecto este archivo, `MEMORY.md` y
-`docs/constitution.md`.
+`<BIBLIOTECA>` es la ruta a la carpeta de directrices del sistema. Ponla aquí una sola vez y
+todas las rutas de arriba quedan resueltas: `<RUTA_A_LAS_DIRECTRICES>`.
+
+Los tres archivos de este proyecto que se cargan siempre son el campo `instructions` de
+`opencode.jsonc`: este archivo, `MEMORY.md` y `docs/constitution.md`. El resto se carga a mano
+cuando la tarea lo pida.
 
 ## Herramientas: cuándo te propongo algo
 

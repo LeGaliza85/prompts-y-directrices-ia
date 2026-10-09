@@ -11,11 +11,11 @@ suposiciones.
 | Superficie | Sintaxis | Estado | Ultima comprobación |
 |---|---|---|---|
 | Reglas: `AGENTS.md` | Archivo de instrucciones del proyecto. OpenCode lo carga automáticamente. | VERIFICADO | 2026-10-09 |
-| `instructions` en `opencode.json` | Carga archivos externos. Admite globs y URLs remotas, con timeout de 5 s. | VERIFICADO | 2026-10-09 |
+| `instructions` en `opencode.jsonc` | Carga archivos externos. Admite globs y URLs remotas, con timeout de 5 s. | VERIFICADO | 2026-10-09 |
 | Comandos: `.opencode/commands/*.md` | Frontmatter con `description`, `agent`, `model`, `subtask`. Argumentos con `$ARGUMENTS`, `$1`, `$2`. | VERIFICADO | 2026-10-09 |
 | Agentes: `.opencode/agents/*.md` | Frontmatter con `description`, `mode`, `permission`, `model`, `temperature`, `steps`, `hidden`, `top_p`. La sintaxis antigua `permissions:` con `action` / `resource` / `effect` NO FUNCIONA: el archivo se carga pero no aplica ninguna restricción, sin error. | VERIFICADO | 2026-10-09 |
 | Skills: `.agents/skills/<nombre>/SKILL.md` | Frontmatter con `name` (obligatorio) y `description` (obligatoria), más `license`, `compatibility`, `metadata`. El nombre cumple `^[a-z0-9]+(-[a-z0-9]+)*$` y coincide con la carpeta. | VERIFICADO | 2026-10-09 |
-| MCP: clave `mcp` en `opencode.json` | Dos tipos: `local` (con `command`) y `remoto` (con `url`). | VERIFICADO | 2026-10-09 |
+| MCP: clave `mcp` en `opencode.jsonc` | Dos tipos: `local` (con `command`) y `remoto` (con `url`). | VERIFICADO | 2026-10-09 |
 
 Ejemplos mínimos de la sintaxis verificada:
 

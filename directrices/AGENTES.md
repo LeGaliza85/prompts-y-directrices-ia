@@ -88,8 +88,9 @@ parte visual que importa, se anade `frontend-reviewer` y ya está.
 
 ## El catálogo completo
 
-Once agentes. Cada uno con el trabajo que hace y la **restricción de permisos** que lo
-justifica, que es lo que de verdad lo convierte en agente y no en un prompt con nombre.
+Doce agentes de trabajo, mas `coordinator`, que es opcional. Cada uno con el trabajo que
+hace y la **restricción de permisos** que lo justifica, que es lo que de verdad lo convierte
+en agente y no en un prompt con nombre.
 
 ### Del flujo SDD
 
@@ -175,8 +176,7 @@ Dados los agentes existentes y la tarea, se decide así:
    tenga `reviewer`.
 4. **¿Se puede hacer con lo que hay?** Entonces no se crea nada.
 
-El límite lo marca la necesidad, no un número. Un proyecto con tres agentes que trabajan
-bien está mejor servido que uno con once que se pisan.
+El limite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien esta mejor servido que uno con trece que se pisan.
 
 ## Primeros pasos en un proyecto nuevo
 

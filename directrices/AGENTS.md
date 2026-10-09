@@ -93,7 +93,7 @@ lo que la tarea necesita.
 | Delegar trabajo | `AGENTES.md` del sistema |
 | Buscar en el código | propón usar `@explore` y espera aprobación |
 
-En un proyecto nuevo, la carga la resuelve el campo `instructions` de `opencode.json`:
+En un proyecto nuevo, la carga la resuelve el campo `instructions` de `opencode.jsonc`:
 
 ```jsonc
 { "instructions": ["AGENTS.md", "MEMORY.md", "docs/constitution.md"] }
