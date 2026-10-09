@@ -64,48 +64,60 @@ de `@`.
 > ninguna restricción: el fallo es silencioso. Verifica la sintaxis contra tu versión
 > instalada. Detalle en `APIS-VERIFICADAS.md`.
 
-## El catálogo base
+## Quién necesita cada proyecto
 
-Cuatro agentes de partida para un proyecto con SDD.
+No hay un equipo fijo. Un proyecto web no necesita lo mismo que uno de datos, igual que un
+edificio no necesita el mismo equipo que una campaña de publicidad. El conjunto de agentes
+lo determina **el trabajo que el proyecto hace**, no una lista de partida.
 
-| Agente | Qué hace | Permisos clave | No debe |
-|---|---|---|---|
-| `coordinator` | Primario. Dirige el flujo SDD, habla contigo y reparte el trabajo entre subagentes. | `permission.task` con globs sobre los subagentes del proyecto. | Escribir código ni editar archivos. |
-| `planner` | Subagente. Redacta spec, plan y tareas. | `edit` limitado a `specs/`. | Escribir código. |
-| `implementer` | Subagente. Implementa una tarea de un plan aprobado, con la comprobación primero. | `edit` y `bash` acotados al alcance de la tarea. | Rediseñar, cambiar el plan o encadenar tareas. |
-| `reviewer` | Subagente. Revisa como QA y valida requisito por requisito. | `edit: deny`; `bash` en lectura para tests. | Modificar archivos. |
+| Tipo de proyecto | Lo que suele necesitar |
+|---|---|
+| Web con interfaz | `planner`, `implementer`, `reviewer`, `frontend-reviewer` |
+| API o backend | `planner`, `implementer`, `reviewer`, `security-auditor`, `tester` |
+| Datos o estadísticas | `planner`, `implementer`, `reviewer`, `debugger` |
+| CLI o herramienta | `planner`, `implementer`, `reviewer` |
+| Móvil | `planner`, `implementer`, `reviewer`, `perf-auditor` |
+| Infraestructura o despliegue | `planner`, `security-auditor`, `migrator`, `reviewer` |
+| Solo documentación | `planner`, `docs-writer`, `reviewer` |
 
-`coordinator` solo delega en los subagentes que el proyecto tenga:
+Todos comparten dos piezas: alguien que **planifique** y alguien que **revise**. Sin
+planificación no hay spec; sin revisión, el principio 5 no se cumple.
 
-```yaml
-permission:
-  edit: deny
-  task:
-    "*": deny
-    "planner": allow
-    "implementer": allow
-    "reviewer": allow
-```
+La tabla es un punto de partida, no una plantilla. Si el proyecto es un backend con una
+parte visual que importa, se anade `frontend-reviewer` y ya está.
 
-El orden importa: las entradas más específicas ganan, así que el glob de denegación va
-antes que los nombres concretos.
+## El catálogo completo
 
-## Bajo demanda
+Once agentes. Cada uno con el trabajo que hace y la **restricción de permisos** que lo
+justifica, que es lo que de verdad lo convierte en agente y no en un prompt con nombre.
 
-Siete agentes que se copian al proyecto solo cuando una spec lo justifica.
+### Del flujo SDD
 
-| Agente | Aporta | Restricción que le da sentido |
+| Agente | Trabajo | Restricción que le da sentido |
+|---|---|---|
+| `planner` | Redacta spec, plan y tareas. | `edit` limitado a `specs/`. Nunca escribe código. |
+| `implementer` | Implementa una tarea de un plan aprobado, comprobación primero. | `edit` y `bash` acotados a la tarea. No redisena. |
+| `reviewer` | Revisa como QA y valida requisito por requisito. | `edit: deny`. No modifica nunca nada. |
+
+### De especialidad
+
+| Agente | Trabajo | Restricción que le da sentido |
 |---|---|---|
 | `tester` | Escribe y ejecuta pruebas sobre lo que ya existe. | `edit` solo en el directorio de tests. |
-| `debugger` | Traza un fallo hasta su causa y la documenta. | `edit` negado: diagnostica, no parchea. |
-| `docs-writer` | Redacta y actualiza documentación a partir del código. | `edit` solo en `docs/` y archivos `*.md`. |
+| `debugger` | Traza un fallo hasta su causa y lo documenta. | `edit` negado: diagnostica, no parchea. |
+| `docs-writer` | Redacta y actualiza documentación desde el código. | `edit` solo en `docs/` y archivos `*.md`. |
 | `security-auditor` | Revisa secretos, entradas sin validar y permisos. | `edit: deny` y sin `webfetch`. |
 | `refactorer` | Cambia estructura sin cambiar comportamiento. | `edit` sobre el módulo acordado, con tests obligatorios. |
-| `perf-auditor` | Mide y señala cuellos de botella con datos. | Solo lectura; puede ejecutar perfiles. |
+| `perf-auditor` | Mide cuellos de botella con datos. | Solo lectura; puede ejecutar perfiles. |
 | `migrator` | Ejecuta una migración de datos o de formato. | `edit` sobre las rutas de la migración, `bash` con glob. |
+| `frontend-reviewer` | Revisa accesibilidad, diseño y vista móvil. | `edit: deny`; puede abrir navegador controlado. |
 
-Un agente de esta lista que llega sin su restricción de permisos es un prompt suelto con
-nombre bonito.
+### Coordinación
+
+`coordinator` —primario— dirige el flujo SDD repartiendo entre subagentes y hablando
+contigo. Es **opcional**: solo se justifica en proyectos con specs largas, de varias fases.
+En el resto, el primario coordina directamente, porque delegar no requiere autorización
+previa (principio 7).
 
 ## El criterio para crear uno nuevo
 
@@ -136,10 +148,29 @@ Los subagentes no ven la conversación del principal. Al delegar hay que pasarle
   consulta si el paralelismo rompe una regla del flujo SDD.
 - Si explicar el encargo ocupa más que hacerlo, hazlo tú.
 
+## Cómo se elige
+
+Dados los agentes existentes y la tarea, se decide así:
+
+1. **¿Es trabajo de planificar, de implementar o de revisar?** Son los tres que todo
+   proyecto con specs necesita. Si el proyecto no tiene ninguno de los tres, le falta algo.
+2. **¿La tarea tiene una restricción de permisos propia?** Un auditor de seguridad que
+   pudiera editar no es un auditor. Si el trabajo necesita un permiso distinto al del que
+   existe, es un agente nuevo.
+3. **¿La tarea se aparta de lo que el proyecto hace?** Revisar accesibilidad en un
+   proyecto que nunca la ha revisado justifica `frontend-reviewer`, aunque el proyecto ya
+   tenga `reviewer`.
+4. **¿Se puede hacer con lo que hay?** Entonces no se crea nada.
+
+El límite lo marca la necesidad, no un número. Un proyecto con tres agentes que trabajan
+bien está mejor servido que uno con once que se pisan.
+
 ## Primeros pasos en un proyecto nuevo
 
-1. Copia los cuatro agentes base a `.opencode/agents/`.
-2. Revisa que la sintaxis de `permission` coincide con la versión de opencode instalada.
-3. Ajusta los globs de `task` de `coordinator` a los agentes que existan de verdad.
-4. Añade agentes de «Bajo demanda» solo cuando una spec lo pida.
+1. Mira la fila de «Quién necesita cada proyecto» que corresponda al tipo de proyecto.
+2. Copia a `.opencode/agents/` los agentes de esa fila, más los que la situación pida.
+3. Sustituye `<COMANDO_DE_COMPROBACIÓN>` en los permisos de `implementer` y `reviewer`.
+4. Revisa que la sintaxis de `permission` coincide con la versión instalada (ver
+   `PIN.md` y `APIS-VERIFICADAS.md`).
+5. Con el tiempo, anade o quita según lo que el proyecto vaya necesitando.
 5. Anota en `MEMORY.md` qué subagentes hay y por qué, para no volver a crearlos.

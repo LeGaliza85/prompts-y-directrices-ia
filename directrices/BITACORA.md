@@ -133,6 +133,39 @@ a cuenta.
 
 ---
 
+## 2026-10-09 — Los agentes los recluta el proyecto, no una lista de partida
+
+**Decisión.** Se abandona el conjunto fijo de cuatro agentes. La plantilla ofrece doce
+candidatos y el proyecto se queda con los que su trabajo requiera. El límite lo marca la
+ne necesidad, no un número.
+
+**Propuso.** El usuario, con el argumento de que un edificio necesita arquitecto, aparejador
+y albaniles, y una campana de publicidad director, disenador y editor: el equipo lo define
+la tarea.
+
+**Afecta a.** `directrices/AGENTES.md`, `plantilla/.opencode/agents/`, `plantilla/LEEME.md`.
+
+**Por qué.** El modelo anterior tenia una «base obligatoria» de cuatro agentes heredada del
+curso. La justificacion honesta era solo la frontera de permisos, y el mas debil de los
+cuatro —`coordinator`— ha pasado a opcional: su trabajo consiste en repartir entre
+subagentes, y desde que delegar no requiere autorizacion previa el primario puede hacerlo
+directamente.
+
+**Como se decide ahora.** Tabla por tipo de proyecto (web, API, datos, CLI, movil, infra,
+documentacion) como punto de partida, y un procedimiento de cuatro pasos. Dos agentes son
+comunes a todos: alguien que planifique y alguien que revise. Sin planificacion no hay
+spec; sin revision, el principio 5 no se cumple.
+
+**Catalogo completo.** Once de trabajo —`planner`, `implementer`, `reviewer`, `tester`,
+`debugger`, `docs-writer`, `security-auditor`, `refactorer`, `perf-auditor`, `migrator`,
+`frontend-reviewer`— mas `coordinator`, opcional.
+
+**Consecuencia.** Cada agente del catalogo tiene escrita la restriccion de permisos que lo
+justifica, porque esa es la unica razon valida para que exista como agente y no como
+comando.
+
+---
+
 ## 2026-10-09 — La verificación repetida se automatiza
 
 **Decisión.** El principio 5 gana un criterio concreto: cualquier comprobación que se haga
