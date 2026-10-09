@@ -99,15 +99,22 @@ con una palabra cuando hagan falta.
 
 ```jsonc
 {
-  "mcp": {
-    "chrome-devtools": {
-      "type": "local",
-      "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
-    },
-    // "context7": { "type": "remote", "url": "https://mcp.context7.com/mcp" },
-    // "github": { "type": "remote", "url": "https://api.githubcopilot.com/mcp/" },
-    // "figma": { "type": "remote", "url": "https://mcp.figma.com/mcp" }
-  }
+  "$schema": "https://opencode.ai/config.json",
+  // Ninguno activo: todos comentados a proposito. Escribir el nombre
+  // del que haga falta en el proyecto.
+  // "mcp": {
+  //   "chrome-devtools": {
+  //     "type": "local",
+  //     "command": ["npx", "-y", "chrome-devtools-mcp@latest", "--no-usage-statistics"]
+  //   },
+  //   "context7": {
+  //     "type": "remote",
+  //     "url": "https://mcp.context7.com/mcp",
+  //     "headers": { "CONTEXT7_API_KEY": "<TU_API_KEY>" }
+  //   },
+  //   "github": { "type": "remote", "url": "https://api.githubcopilot.com/mcp/" },
+  //   "figma": { "type": "remote", "url": "https://mcp.figma.com/mcp" }
+  // }
 }
 ```
 

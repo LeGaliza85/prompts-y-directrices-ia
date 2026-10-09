@@ -8,8 +8,8 @@
 
 | Archivo | Qué es | Dónde vive |
 |---|---|---|
-| `directrices/AGENTS.md` | Instrucción maestra del proyecto. Qué haces, cómo cargas el contexto. | En este repositorio y copiado a cada proyecto |
-| `directrices/AGENTES.md` | Este catálogo. Qué subagentes hay, cómo se crean y cuándo se usan. | Solo aquí |
+| `directrices/AGENTS.md` (sin E) | Instruccion maestra del proyecto: que haces y como cargas el contexto | En este repositorio y copiado a cada proyecto |
+| `directrices/AGENTES.md` (con E, este archivo) | Catalogo de subagentes: cuales hay, como se crean y cuando se usan | Solo en este repositorio |
 
 Dos archivos distintos que se diferencian en una letra. Confirma la E antes de editar: si
 sobrescribes el `AGENTS.md` sin E, pierdes la instrucción del proyecto.
