@@ -47,16 +47,27 @@ Un cambio grande en modo Build es un error de proceso, no un atajo.
 
 ## Subagentes
 
-Se usan cuando aportan a que el trabajo sea más rápido o eficiente, y también
-cuando tú lo pidas. Si vas a delegar, delega trabajo independiente y pásale al subagente
-todo lo que necesita de forma explícita: está en una sesión separada y no ve esta
-conversación.
+Se usan cuando aportan a que el trabajo sea más rápido o eficiente, y también cuando tú lo
+pidas. **Delegar con beneficio no requiere autorización previa**: si dividir el trabajo
+reduce el tiempo de reloj, si evita cargar el contexto con búsquedas, o si permite
+paralelizar lo secuencial, se delega y se informa.
 
-Detalle en `directrices/AGENTES.md` (catálogo de subagentes) y formatos de propuesta en
-`CAPACIDADES.md`.
+La autorización previa —principio 1— es para las **capacidades que se activan**, no para
+organizar el trabajo.
 
-Ojo con el nombre: este archivo es el `AGENTS.md` **del proyecto**. El de subagentes es
-`AGENTES.md`, con `E`. Son distintos y se distinguen por la ruta completa.
+Sí consulta siempre, aunque no lo exija la regla:
+
+- Si el paralelismo rompe una regla del flujo SDD (una tarea cada vez; validar antes de cerrar).
+- Si el resultado de una fase alimenta directamente a la siguiente.
+- Si has pedido expresamente que no se use.
+
+Si vas a delegar, delega trabajo independiente y pásale al subagente todo lo que necesita
+de forma explícita: está en una sesión separada y no ve esta conversación. Ese traspaso es
+el coste real; si explicar la tarea ocupa más que hacerla, hazla tú.
+
+Detalle y catálogo en `directrices/AGENTES.md` (se escribe aparte) y formatos de propuesta
+en `CAPACIDADES.md`. El documento que estás leyendo es el `AGENTS.md` **del proyecto**;
+nombres parecidos se distinguen siempre por la ruta completa.
 
 ## Al terminar una tarea
 

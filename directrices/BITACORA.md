@@ -108,6 +108,57 @@ aplican ninguna restricción: el fallo es silencioso.
 
 ---
 
+## 2026-10-09 — Delegar con beneficio no requiere autorización previa
+
+**Decisión.** El principio 7 se amplía: cuando dividir el trabajo en agentes independientes
+reduce el tiempo de reloj, evita cargar el contexto con tareas de búsqueda, o permite
+paralelizar lo que de otro modo sería secuencial, se delega y se informa. Sin consultar
+antes.
+
+**Propuso.** El usuario, tras comprobar que no se delegaba cuando era útil.
+**Afecta a.** `CONSTITUTION.md` principio 7, `AGENTS.md`, `CAPACIDADES.md`.
+
+**Por qué.** La autorización previa del principio 1 protege de activar una **capacidad**
+que consume contexto o arranca procesos. Delegar no activa nada: reorganiza el trabajo.
+Aplicarle la misma fricción hacía que el método se aplicara poco, que es justo el
+resultado que se quería evitar.
+
+**Qué se consulta igualmente.** Tres casos, porque la delegación no los resuelve: cuando
+rompe una regla del flujo (fases 6 y 7 de SDD), cuando una fase alimenta directamente a la
+siguiente, y cuando el usuario ha pedido expresamente que no se use.
+
+**El coste real.** Cada subagente es una sesión sin contexto compartido: hay que pasarle
+todo explícitamente. Si lo que se transmite ocupa más que el trabajo en sí, delegar no sale
+a cuenta.
+
+---
+
+## 2026-10-09 — La verificación repetida se automatiza
+
+**Decisión.** El principio 5 gana un criterio concreto: cualquier comprobación que se haga
+a mano dos veces se propone como herramienta externa o script. Y se extiende más allá de
+los tests: cualquier tarea repetida y automatizable.
+
+**Propuso.** El usuario.
+**Afecta a.** `EXPECT.md` (condición de verificación), `CONSTITUTION.md` principio 5,
+`CAPACIDADES.md`.
+
+**Por qué.** La verificación manual que se repite **se repite peor**: cada vez se hacen
+menos pasos y se deja de detectar lo que se detectaba al principio. No es solo tiempo
+perdido, es fiabilidad perdida.
+
+**El alcance.** La tabla de herramientas cubre linter, tipos, tests, accesibilidad,
+navegador controlado, perfilado y seguridad. Y fuera del código: generar datos de prueba,
+poblar una base de datos, validar un formato, convertir archivos, ejecutar el proyecto en
+condiciones concretas.
+
+**El criterio para elegir herramienta.** El mismo que para un requisito: si se puede
+ejecutar y produce un resultado, es una comprobación; si solo es una impresión, no lo es.
+
+**«Lo haría más rápido a mano» es la señal para automatizarlo**, no para saltárselo.
+
+---
+
 ## 2026-10-09 — Sin `MEMORY.md` en la raíz de este repositorio
 
 **Decisión.** La capa genérica define el protocolo de memoria, pero este repo no tiene un

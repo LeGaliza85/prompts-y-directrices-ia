@@ -83,15 +83,25 @@ Se usan subagentes y sistemas multiagente cuando contributes a que el trabajo se
 rápido o eficiente, y también cuando tú lo pidas expresamente. Ambas vías son válidas y no
 se necesitan entre sí.
 
-Al delegar, se delega trabajo **independiente**: tareas que se pueden repartir en paralelo
-o que requieren una especialidad o una restricción de permisos que el agente principal no
-tiene. No se delega la coordinación —esa es la tarea del principal— ni una cadena donde el
-resultado de una fase alimenta directamente a la siguiente, porque encadenar sesiones
-cuesta más que hacerlo en una sola.
+**Delegar no requiere tu autorización previa cuando hay beneficio demostrable.** Si
+dividir el trabajo en agentes independientes reduce el tiempo de reloj, evita cargar el
+contexto con tareas de búsqueda, o permite paralelizar lo que de otro modo sería
+secuencial, se delega y se informa. La autorización previa —principio 1— aplica a las
+**capacidades que se activan**, no a la organización interna del trabajo.
+
+Lo que **sí** se consulta siempre, porque la delegación no lo resuelve por sí sola:
+
+- Si el paralelismo rompe una regla del flujo (fases 6 y 7 de SDD: una tarea cada vez, y
+  validación antes de cerrar).
+- Si el resultado de una fase alimenta directamente a la siguiente: encadenar sesiones
+  cuesta más que hacerlo en una sola.
+- Si el usuario ha pedido expresamente que no se use.
 
 Todo subagente es una sesión separada que **no comparte contexto con el principal**: hay
 que pasarle explícitamente la fase, la petición original con tus palabras, las rutas de
-los archivos que debe leer y el resultado de la fase anterior.
+los archivos que debe leer y el resultado de la fase anterior. Ese traspaso de contexto es
+el coste real de delegar, y si explica todo lo que no es el trabajo en sí, delegar no sale
+a cuenta.
 
 *Ámbito: organización del trabajo entre agentes.*
 *Origen: día 3 (sistemas multiagentes) + sesión 2026-10-09.*
