@@ -29,8 +29,8 @@ lo que se está haciendo.
 
 ## Cómo se crea
 
-Un subagente es un archivo Markdown con frontmatter YAML. Sintaxis verificada para
-opencode 1.3.11:
+Un subagente es un archivo Markdown con frontmatter YAML. Sintaxis verificada para la
+versión instalada (1.4.0, ver `PIN.md`):
 
 ```yaml
 ---

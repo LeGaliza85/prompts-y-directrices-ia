@@ -48,7 +48,7 @@ errores reales revisando la línea, no solo la alerta.
 ## 2026-10-09 — El material del curso usa sintaxis obsoleta de OpenCode
 
 **Qué pasó.** Los cuatro agentes multiagente del curso están escritos con
-`permissions:` y `action`/`resource`/`effect`. En OpenCode 1.3.11 la sintaxis es
+`permissions:` y `action`/`resource`/`effect`. En OpenCode 1.4.0 la sintaxis es
 `permission:` con mapa `clave: valor`, y la acción para delegar es `task`, no `subagent`.
 
 **Por qué.** El curso se grabó contra una versión anterior. Copiar los agentes tal cual

@@ -1,8 +1,10 @@
 # OpenCode — Referencia práctica del sistema
 
-> Verificado contra **OpenCode 1.3.11** —binario `opencode-cli.exe` 1.3.11, plugin `@opencode-ai/plugin` 1.4.0,
-> documentación oficial al 8 de octubre de 2026. Este documento describe la herramienta. El procedimiento
-> está en `AGENTS.md`.
+> Verificado contra **OpenCode 1.4.0** —`opencode --version`. Ojo: los metadatos del binario
+> dicen 1.3.11, pero el número que manda es el de `--version`. Plugin
+> `@opencode-ai/plugin` 1.4.0, documentación oficial al 8 de octubre de 2026. Detalle de
+> versiones en `PIN.md`; cómo revalidar tras una actualización, en
+> `PROCEDIMIENTO-ACTUALIZACION.md`.
 
 ## Agentes disponibles
 
@@ -111,6 +113,8 @@ de `CONSTITUTION.md` y el formato de propuesta de `CAPACIDADES.md`.
 
 ## Aviso de versiones
 
-Las APIs de OpenCode cambian entre versiones. Este documento se verificó el 8-oct-2026 contra la versión
-1.3.11. Si algo no funciona, la causa más probable es un cambio de versión: consulta
+Las APIs de OpenCode cambian entre versiones. Este documento se verificó el 9-oct-2026
+contra la versión 1.4.0. Si algo no funciona, la causa más probable es un cambio de
+versión: consulta `PIN.md` y `APIS-VERIFICADAS.md`, y sigue el procedimiento de
+`PROCEDIMIENTO-ACTUALIZACION.md`.
 `APIS-VERIFICADAS.md` y `PROCEDIMIENTO-ACTUALIZACION.md` en esta misma carpeta.
