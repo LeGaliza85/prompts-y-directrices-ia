@@ -91,6 +91,92 @@ comprobacion visual sigue siendo necesaria.
 ## 2026-10-09 — Delegar en paralelo acelera, pero hay que revisar el resultado
 
 **Qué pasó.** Tres subagentes escribieron tres documentos independientes en paralelo y los
+tres pasaron el verificador de caracteres. La revisión posterior encontró dos errores que el
+script no detecta:
+
+1. `CAPACIDADES.md`: el bloque de ejemplo de `opencode.jsonc` tenía Chrome DevTools
+   **activo** y los demás comentados. El documento proclama que nada se precarga por el
+   principio 1, y su propio ejemplo lo incumplía.
+2. `AGENTES.md`: la tabla que distingue los dos archivos puso la **misma ruta** en las dos
+   filas —la confusión de nombres que existe el documento entero para prevenir.
+
+**Por qué.** El script comprueba caracteres y palabras en inglés. No comprueba lógica,
+coherencia interna ni si un ejemplo contradice la regla que lo rodea.
+
+**Directiva que lo previene.** Un subagente acelera la producción; no sustituye la revisión.
+Después de recibir un documento de un subagente, se comprueba al menos:
+
+- Que el ejemplo cumple la regla que ilustra, no que la contradice.
+- Que las tablas de conceptos no repitan valores que deberían distinguirse.
+- Que lo que afirma de otros archivos coincida con lo que esos archivos dicen.
+
+Y el beneficio sigue siendo real: tres documentos independientes en paralelo frente a tres
+secuenciales. El error no fue delegar, fue no revisar lo delegado.
+
+---
+
+## 2026-10-09 — PowerShell 5.1 lee los `.ps1` como ANSI si no llevan BOM
+
+**Qué pasó.** El script `nuevo-proyecto.ps1` tenía un patrón con caracteres acentuados
+(`ÁÉÍÓÚÑ`) en una expresión regular. Al ejecutarlo, el parser falló con errores de sintaxis
+en esa misma línea.
+
+**Por qué.** PowerShell 5.1 interpreta un `.ps1` como ANSI (cp1252) salvo que el archivo
+empiece por un BOM UTF-8. Sin BOM, cada carácter acentuado se convierte en basura y la
+expresión regular deja de ser válida.
+
+**Directiva que lo previene.** Todo `.ps1` con texto no ASCII debe escribirse con BOM:
+
+```powershell
+[System.IO.File]::WriteAllText($ruta, $texto, (New-Object System.Text.UTF8Encoding $true))
+```
+
+Alternativa si no se puede controlar el encoding: escribir los caracteres acentuados como
+escapes `\uXXXX` dentro del patrón, para que la fuente sea ASCII puro. Es más feo pero
+inmune al encoding.
+
+**Alcance.** Afecta a cualquier script que se vaya a ejecutar con `powershell -File`, no a
+scripts embebidos en una sesión.
+
+---
+
+## 2026-10-09 — Un marcador con tilde no lo sustituye un patrón ASCII
+
+**Qué pasó.** `nuevo-proyecto.ps1` debía reemplazar `<TECNOLOGÍAS Y VERSIONES CLAVE>`, pero
+la clave usada en el script era `<TECNOLOGIAS...>` sin tilde. La sustitución no ocurrió y **no
+dio error**: el marcador se quedó en el archivo generado.
+
+Peor: el listado de marcadores pendientes tampoco lo detectó, porque su patrón
+`<[A-Z][A-Z0-9_ \-]*>` solo acepta ASCII, así que un marcador con `Í` dentro no encajaba y no
+se listaba. Dos filtros que fallaban en silencio, uno detrás del otro.
+
+**Por qué.** El marcador con tilde es correcto en español, pero un patrón pensado para ASCII
+no lo ve. Y un fallo silencioso en dos puntos seguidos parece que no hay fallo.
+
+**Directiva que lo previene.**
+
+1. Los patrones que recorran texto en español incluyen los acentos:
+   `<[A-ZÁÉÍÓÚÑa-z][^<>]{0,60}>`, o mejor, `[^<>]` a secas cuando no hace falta restringir.
+2. Cuando una sustitución no se aplica, se comprueba el resultado, no la ausencia de error.
+   `-replace` no falla si no encuentra nada: devuelve el texto tal cual.
+3. Los marcadores pendientes se listan con un patrón que no pueda excluir por encoding.
+
+---
+
+## 2026-10-09 — El informe de pendientes debe ser corto o se ignora
+
+**Qué pasó.** La primera versión del listado de marcadores mostró 55 entradas. La mayoría no
+eran para rellenar: eran ejemplos de formato dentro de la skill, la spec de ejemplo y el
+bloque de recomendación del asesor.
+
+**Por qué.** El script buscaba marcadores en todos los archivos, incluidos los que los usan
+como plantilla. Un listado donde 40 de 55 no aplican hace que nadie lo lea.
+
+**Directiva que lo previene.** Lista blanca, no lista negra: se enumeran los archivos que la
+persona tiene que editar y solo se buscan marcadores ahí. Añadir un archivo nuevo a la lista
+blanca es una decisión; dejar que todos entren por defecto pone el ruido en el informe.
+
+**Qué pasó.** Tres subagentes escribieron tres documentos independientes en paralelo y los
 tres pasaron el verificador de caracteres. La revisión posterior encontró dos errores
 reales que el script no detecta:
 

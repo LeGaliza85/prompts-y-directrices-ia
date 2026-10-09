@@ -133,6 +133,41 @@ a cuenta.
 
 ---
 
+## 2026-10-09 — La plantilla se automatiza con un script
+
+**Decisión.** Se anade `nuevo-proyecto.ps1`: copia la plantilla, elige los agentes segun el
+tipo de proyecto, sustituye los marcadores que se pueden saber de antemano, inicializa git y
+lista lo que queda por rellenar.
+
+**Propuso.** El usuario, preguntando si se podia automatizar sin tener que hacer nada.
+
+**Por qué.** En el plan de la Spec 000 estaba registrado como alternativa descartada, con la
+nota de reevaluarlo en el cuarto proyecto. La pregunta lo adelanta: el coste de copiar a mano
+y editar siete archivos se paga en cada proyecto, no en el cuarto.
+
+**Que no hace, a proposito.** No inventa nada del proyecto. El stack, los comandos, las
+trampas de dominio y el formato de datos solo los sabe quien lo pide. El script resuelve lo
+mecanico y lista los huecos: rellenarlos por su cuenta produciria un `AGENTS.md` que parece
+completo y no dice nada de este proyecto.
+
+**Consecuencia.** El informe de pendientes usa lista blanca: solo los archivos que la persona
+edita. La primera version listaba 55 marcadores, de los cuales 40 eran ejemplos de formato
+dentro de la skill y la spec de ejemplo. Un informe asi se ignora entero.
+
+**Fallos encontrados al probarlo, y corregidos:**
+
+1. El script no llevaba BOM, asi que PowerShell 5.1 lo leia como ANSI y el parser fallaba con
+   los acentos del patron.
+2. La clave de sustitucion de `<TECNOLOGIAS Y VERSIONES CLAVE>` no llevaba tilde, y
+   `-replace` no falla cuando no encuentra: el marcador se quedaba en el archivo generado sin
+   ningun aviso.
+3. El listado de pendientes tampoco lo detectaba, porque su patron solo aceptaba ASCII. Dos
+   filtros que fallaban en silencio seguidos parecian que no habia fallo.
+
+Los tres estan en `aprendido.md`, porque los tres volveran a ocurrir.
+
+---
+
 ## 2026-10-09 — Los agentes los recluta el proyecto, no una lista de partida
 
 **Decisión.** Se abandona el conjunto fijo de cuatro agentes. La plantilla ofrece doce

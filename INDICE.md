@@ -7,15 +7,25 @@ aquí se propone, se aprueba y se registra antes de escribirse en disco.
 
 ## Para empezar en 30 segundos
 
-**Si vienes a trabajar en un proyecto ya creado:** copia `plantilla/` y sigue el
-`plantilla/LEEME.md`.
+**Si vienes a crear un proyecto nuevo:**
 
-**Si quieres entender cómo se trabaja aquí:** lee, en este orden, `directrices/CONSTITUTION.md`
-(los 9 principios) y `directrices/AGENTS.md` (qué hago en concreto).
+```powershell
+.\nuevo-proyecto.ps1 -Nombre "mi-proyecto" -Tipo web -Stack "React, TypeScript" -Git
+```
+
+Copia la plantilla, elige los agentes de ese tipo, sustituye los marcadores e inicializa git.
+Después te lista exactamente qué queda por rellenar. Detalle en `plantilla/LEEME.md`.
+
+**Si vienes a trabajar en un proyecto ya creado:** lee `directrices/AGENTS.md`.
+
+**Si quieres entender cómo se trabaja aquí:** `directrices/CONSTITUTION.md` (los 9 principios)
+y `directrices/SDD.md` (el flujo).
 
 **Si quieres ver qué se decidió y por qué:** `directrices/BITACORA.md`.
 
 **Si algo no funciona y crees que es la versión:** `directrices/PIN.md`.
+
+**Antes de dar cualquier documento por bueno:** `powershell -File verificar.ps1`.
 
 ## Qué hay
 
@@ -56,6 +66,20 @@ candidatos de los que el proyecto se queda con los que necesite.
 
 `reviewer.md` (revisa sin modificar nada) y `tooling-advisor.md` (propone herramientas con su
 coste). Los mismos que están en la plantilla, para poder usarlos aquí.
+
+## Herramientas
+
+| Script | Para qué |
+|---|---|
+| `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla, con agentes según el tipo y marcadores resueltos. |
+| `verificar.ps1` | Recorre los 48 `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
+
+`nuevo-proyecto.ps1` acepta `-Nombre`, `-Destino`, `-Tipo` (web, api, datos, cli, movil,
+infra, docs), `-Stack`, `-Idioma`, `-Git` y `-Forzar`. No inventa nada del proyecto: lo que
+solo sabes tú queda marcado y se lista al final.
+
+**Aviso:** el script lleva BOM UTF-8 a propósito. PowerShell 5.1 lee los `.ps1` como ANSI si
+no lo llevan, y los acentos rompen el parser.
 
 ## Estado del trabajo
 
