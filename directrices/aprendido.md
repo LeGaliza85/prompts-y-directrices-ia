@@ -277,25 +277,3 @@ como plantilla. Un listado donde 40 de 55 no aplican hace que nadie lo lea.
 persona tiene que editar y solo se buscan marcadores ahí. Añadir un archivo nuevo a la lista
 blanca es una decisión; dejar que todos entren por defecto pone el ruido en el informe.
 
-**Qué pasó.** Tres subagentes escribieron tres documentos independientes en paralelo y los
-tres pasaron el verificador de caracteres. La revisión posterior encontró dos errores
-reales que el script no detecta:
-
-1. `CAPACIDADES.md`: el bloque de ejemplo de `opencode.jsonc` tenía Chrome Devtools
-   **activo** y los demás comentados. El documento proclama que nada se precarga por el
-   principio 1, y su propio ejemplo lo incumplía.
-2. `AGENTES.md`: la tabla que distingue los dos archivos puso la **misma ruta** en las dos
-   filas —la confusión de nombres que existe el documento entero para prevenir.
-
-**Por qué.** El script comprueba caracteres y palabras en inglés. No comprueba lógica,
-coherencia interna ni si un ejemplo contradice la regla que lo rodea.
-
-**Directiva que lo previene.** Un subagente acelera la producción; no sustituye la revisión.
-Después de recibir un documento de un subagente, se comprueba al menos:
-
-- Que el ejemplo cumple la regla que ilustra, no que la contradice.
-- Que las tablas de conceptos no repitan valores que deberían distinguirse.
-- Que lo que afirma de otros archivos coincida con lo que esos archivos dicen.
-
-Y el beneficio sigue siendo real: tres documentos independientes en paralelo frente a tres
-secuenciales. El error no fue delegar, fue no revisar lo delegado.

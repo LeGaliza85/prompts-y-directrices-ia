@@ -70,17 +70,18 @@ el proyecto.
 
 ### Cómo se resuelve
 
-Se responde a tres preguntas con **hechos**, no con impresiones. La respuesta se escribe
+Se responde a dos preguntas con **hechos**, no con impresiones. La respuesta se escribe
 en `docs/constitution.md` como orden de sacrificios.
 
 | Pregunta | Si **sí** | Si **no** |
 |---|---|---|
 | ¿Es para aprender y no para entregar? | Orden C | — |
-| ¿Existe ya algo funcionando que no puedes romper? | Prioridad A | Prioridad B |
-| ¿Lo mantienen otros después de ti? | Prioridad A | Prioridad B |
+| ¿Existe algo funcionando que no se puede romper? | Orden A | — |
 
-Las dos últimas no suelen estar juntas, así que en la práctica hay dos proyectos, no
-cuatro.
+**No hay un orden de "velocidad primero".** Se descartó al decidir que los proyectos no tienen
+fecha: sin plazo no hay conflicto entre terminar rápido y terminar bien. Si algún día un
+proyecto lo tuviera, ese orden habría que escribirlo — y con la condición de que
+**recortar alcance nunca incluye recortar la verificación**.
 
 ### Orden A — calidad primero
 
@@ -90,16 +91,6 @@ Se reduce **alcance** antes que calidad de lo entregado:
 2. Se recorta detalle: se resuelve lo importante, lo accesorio queda pendiente.
 3. Registrado siempre qué quedó fuera.
 4. Si el mínimo es inalcanzable, se para y se dice.
-
-### Orden B — velocidad primero
-
-Solo aplica si hay una base que no se puede romper y no hay tiempo para ambas cosas:
-
-1. Sin tests nuevos.
-2. Sin refactor.
-3. Sin comprobar los casos límite; se documentan como pendientes.
-4. **Se declara por escrito que la entrega no está verificada.** Eso deja de ser una
-   entrega.
 
 ### Orden C — aprender primero
 

@@ -12,7 +12,7 @@ Si no existe, este aviso sobra y puedes seguir por `INDICE.md`.
 
 | Carpeta | Qué hay |
 |---|---|
-| `directrices/` | La capa genérica: 17 documentos que gobiernan cómo se trabaja en cualquier proyecto |
+| `directrices/` | La capa genérica: 20 documentos que gobiernan cómo se trabaja en cualquier proyecto |
 | `plantilla/` | El esqueleto que se copia a cada proyecto nuevo. 33 archivos |
 | `historial/` | Copia literal de las directrices de cada proyecto, con su ficha |
 | `curso/` | Material de origen intacto y apuntes extraídos |
@@ -31,7 +31,7 @@ contenido es texto, así que un error de proceso aquí contamina directamente to
 proyectos futuros que copien la plantilla.
 
 **Todo error de proceso se registra.** En `directrices/aprendido.md`, con su causa y la
-directiva que lo previene. Ahora hay doce entradas; casi todas se descubrieron construyendo
+directiva que lo previene. Ahora hay once entradas; casi todas se descubrieron construyendo
 de verdad, no leyendo.
 
 ## Antes de dar cualquier documento por bueno
@@ -40,7 +40,7 @@ de verdad, no leyendo.
 powershell -File verificar.ps1
 ```
 
-Recorre los 95 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
+Recorre los 100 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
 palabras en inglés dentro de texto español. Puede fallar con falsos positivos si se toca un
 documento sin haberlo leído primero: conviene leer lo que cambias.
 
@@ -58,6 +58,6 @@ No inventa nada del proyecto: lo que solo sabe quien lo pide queda marcado y se 
 - **No copies nada de material externo sin verificarlo.** El material de origen usa una
   sintaxis de permisos obsoleta que produce archivos que se cargan sin error y no aplican
   nada. El fallo es silencioso. Comprueba contra `directrices/APIS-VERIFICADAS.md`.
-- **No repitas los errores de `aprendido.md`.** Ahí están los doce, con por qué pasaron.
+- **No repitas los errores de `aprendido.md`.** Ahí están las once entradas, con por qué pasaron.
 - **No anadas un `MEMORY.md` en la raíz para "completar" la estructura.** Aquí no hay estado de
   implementación que recordar; `PROXIMA-SESION.md` y `aprendido.md` hacen esa función.

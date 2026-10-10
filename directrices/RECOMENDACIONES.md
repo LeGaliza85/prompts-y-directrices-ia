@@ -3,7 +3,7 @@
 La tercera pregunta que había que responder: qué añadiría el agente y qué recomendaría. Con
 datos del propio repositorio, no de opinión.
 
-**Fecha del análisis:** 2026-10-11, con 18 documentos, 33 archivos de plantilla, 13 agentes,
+**Fecha del análisis:** 2026-10-11, con 20 documentos, 33 archivos de plantilla, 13 agentes,
 10 comandos y un proyecto de prueba real.
 
 ---
@@ -113,7 +113,7 @@ que ganarse el sitio por algo parecido.
 
 ## Sobre el coste de todo esto
 
-El repositorio tiene 18 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
+El repositorio tiene 20 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
 "aprender de un curso". Funciona, y la prueba real lo demuestra.
 
 **El riesgo real ya no es que falte nada: es que una biblioteca de directrices crezca más que

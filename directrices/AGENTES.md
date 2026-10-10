@@ -77,11 +77,12 @@ lo determina **el trabajo que el proyecto hace**, no una lista de partida.
 | Datos o estadísticas | `planner`, `implementer`, `reviewer`, `debugger` |
 | CLI o herramienta | `planner`, `implementer`, `reviewer` |
 | Móvil | `planner`, `implementer`, `reviewer`, `perf-auditor` |
-| Infraestructura o despliegue | `planner`, `security-auditor`, `migrator`, `reviewer` |
+| Infraestructura o despliegue | `planner`, `implementer`, `reviewer`, `security-auditor`, `migrator` |
 | Solo documentación | `planner`, `docs-writer`, `reviewer` |
 
-Todos comparten dos piezas: alguien que **planifique** y alguien que **revise**. Sin
-planificación no hay spec; sin revisión, el principio 5 no se cumple.
+Todos comparten tres piezas: alguien que **planifique**, alguien que **implemente** y alguien
+que **revise**. Sin planificación no hay spec; sin implementación no hay código; sin revisión,
+el principio 5 no se cumple. Un proyecto sin alguna de las tres no encaja en este flujo.
 
 La tabla es un punto de partida, no una plantilla. Si el proyecto es un backend con una
 parte visual que importa, se anade `frontend-reviewer` y ya está.
@@ -185,9 +186,9 @@ El limite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien 
 3. Sustituye `<COMANDO_DE_COMPROBACIÓN>` en los permisos de `implementer` y `reviewer`.
 4. Revisa que la sintaxis de permisos coincide con la versión instalada del agente.
 5. Con el tiempo, añade o quita según lo que el proyecto vaya necesitando.
+6. Anota en `MEMORY.md` qué subagentes hay y por qué, para no volver a crearlos.
 
 **Los subagentes son la parte más atada a la herramienta.** No todos los agentes los tienen:
 Cursor y Windsurf no tienen el concepto, y ahí el reparto se hace en el agente principal. Los
 criterios de este catálogo siguen siendo válidos como criterio, pero no como instalación. Ver
 `PORTABILIDAD.md`.
-5. Anota en `MEMORY.md` qué subagentes hay y por qué, para no volver a crearlos.

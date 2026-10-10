@@ -113,7 +113,7 @@ Esto es lo que de verdad justifica el sistema:
 | `REFACTOR.md` | Método de refactor, anterior a los agentes |
 | `verificar.ps1` | PowerShell puro, sin dependencias |
 
-**Nueve documentos de diecisiete no mencionan ninguna herramienta.** Es la medida de
+**Siete documentos de veinte no mencionan ninguna herramienta.** Es la medida de
 portabilidad del sistema, y está aquí para que quede escrita.
 
 ## Con otros modelos de lenguaje

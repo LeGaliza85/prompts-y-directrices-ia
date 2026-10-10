@@ -64,10 +64,13 @@ Igual que con `REFACTOR.md`: sin comprobación que respalde, no se toca.
 
 ## Revisión
 
-Cada pocas semanas, mira las entradas y borra las que:
+Cada pocas semanas, revisa la lista. Para cada entrada, una de estas tres:
 
-- Ya se aplicaron: se borran, porque ya están en el código.
-- Resultaron no ser molestia: se borran, y ese no-respuesta es información.
-- Llevan mucho tiempo sin bite: no son urgentes. Se quedan.
+- **Ya se aplicó.** Se borra: ya está en el código.
+- **Resultó no ser molestia.** Se borra, y ese no-respuesta es información: la idea queda
+  archivada.
+- **Lleva mucho tiempo sin biting y nadie la ha tocado.** Se queda: no es urgente, pero
+  tampoco se descarta.
 
-Una lista que se recorta es una lista que se lee.
+Una lista que se recorta es una lista que se lee. Pero **se recorta lo que sobra, no lo que
+simplemente lleva tiempo esperando**: esa espera es el dato.

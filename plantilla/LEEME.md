@@ -114,15 +114,13 @@ un comando; si es solo el modelo, es el campo `model` de un agente existente.
 
 ## Cómo copiarla
 
-```powershell
-Copy-Item -Recurse -Force "plantilla\*" "C:\ruta\del\proyecto\"
-```
-
-Después, en la carpeta del proyecto:
+El destino tiene que existir antes: `Copy-Item` con un destino que no existe falla.
 
 ```powershell
-Remove-Item -Recurse -Force ".git"   # si la copia arrastró el repositorio
-git init
+$ruta = "C:\ruta\del\proyecto"
+New-Item -ItemType Directory -Path $ruta -Force | Out-Null
+Copy-Item -Recurse -Force "plantilla\*" $ruta
+Remove-Item -Recurse -Force "$ruta\.git" -ErrorAction SilentlyContinue   # si arrastró el repo
 ```
 
 ## Aviso de sintaxis

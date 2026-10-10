@@ -65,6 +65,8 @@ Constitución → Spec → Clarificación → Plan → Tareas → Implementació
 | 3 | — (lista en el chat) | Ambigüedades detectadas | Soluciones |
 | 4 | `plan.md` | Archivos, funciones, decisiones justificadas, estrategia de comprobación | Código |
 | 5 | `tasks.md` | Tareas de 20-30 min con su «hecho cuando» | Código |
+| 6 | El código de cada tarea | Solo lo que pide la tarea aprobada | Cambios de comportamiento no previstos |
+| 7 | El informe de validación | Qué requisito cubre cada comprobación y su resultado | Arreglos: solo detecta |
 | 8 | Revisa spec, plan y tareas | El requisito nuevo, en su sitio | Cambios directos en código |
 
 **La frontera de la fase 2 es la que más se olvida:** la spec describe el **qué** y el **por

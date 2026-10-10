@@ -23,7 +23,7 @@ modelos.
 ella. En la capa genérica quedaban **cuatro**, y tres eran exemples de estructura de proyecto
 que se podían escribir con un marcador.
 
-**Medición después del cambio.** Cinco documentos de dieciocho no mencionan ninguna
+**Medición después del cambio.** Siete documentos de veinte no mencionan ninguna
 herramienta: `DEPURACION.md`, `EARS.md`, `EXPECT.md`, `MEMORY.md` y `REFACTOR.md`. Los otros
 trece la mencionan en una nota, en un ejemplo, o son sobre la herramienta.
 

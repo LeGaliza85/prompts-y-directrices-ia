@@ -77,11 +77,13 @@ Tres detalles que cambian la decisión:
 - **Un MCP local es un proceso más en tu máquina**, vivo durante toda la sesión aunque no
   se use. Un MCP remoto no consume recursos locales, pero llama a la red en cada uso y
   depende de que el servicio esté disponible.
-- **El contexto es el coste que se olvida.** Un MCP con cincuenta herramientas describe
-  cada una de ellas en el prompt. Las skills añaden su `SKILL.md` al contexto **solo
-  cuando se cargan**, no desde el principio. Un subagente no consume contexto del
-  principal porque trabaja en su propia sesión, aunque el traspaso de información para
-  arrancarlo tenga su propio coste.
+- **El contexto es el coste que se olvida.** Los servidores con muchas herramientas acaban
+  describiendo cada una en el prompt, aunque solo uses una. No he medido cuánto cuesta cada
+  herramienta: se nota con servidores muy grandes y conviene activarlos cuando la tarea los
+  necesita y apagarlos cuando no. Las skills añaden su `SKILL.md` al contexto **solo cuando
+  se cargan**, no desde el principio. Un subagente no consume contexto del principal porque
+  trabaja en su propia sesión, aunque el traspaso de información para arrancarlo tenga su
+  propio coste.
 
 ---
 
@@ -159,11 +161,14 @@ npx skills add <paquete>
 | `grill-me` | Matt Pocock | Interroga una propuesta antes de aceptarla | Antes de dar por buena una decisión técnica dudosa | Bajo |
 | `frontend-design` | Anthropic | Criterios de interfaz y maquetación | Al construir o revisar una interfaz | Alto |
 | `web-design-guidelines` | Vercel | Reglas concretas de diseño web | Al revisar una interfaz ya escrita | Medio |
-| `systematic-debugging` | — | Método ordenado para depurar | Cuando un fallo no se reproduce a la primera | Medio |
+| `systematic-debugging` | Obra de Jesse Vincent | Método ordenado para depurar | Cuando un fallo no se reproduce a la primera | Medio |
 
-Las dos primeras son de proceso: no añaden código, añaden método. Las otras tres cargan
-bastante contexto, así que se piden solo si la tarea es de interfaz o de depuración, y no
-«por si acaso».
+Las dos primeras son de proceso: no añaden código, añaden método. `frontend-design` es la que
+más contexto carga de las cinco, así que se pide solo si la tarea es de interfaz y no «por si
+acaso».
+
+La columna *Contexto* es una estimación del tamaño del `SKILL.md`, no una medición. No he medido
+cuántos tokens gasta cada una: es una impresión a partir de lo que ocupan.
 
 ---
 

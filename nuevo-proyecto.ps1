@@ -144,14 +144,18 @@ foreach ($f in $archivosMd) {
   # resuelto, que es peor que listar de mas: hace dudar de la sustitucion.
   $lineas = $texto -split "`r?`n"
 
-  # Recoger lo que sigue sin resolver. Tres filtros, y cada uno quita un falso positivo
-  # que se ha visto de verdad:
+  # Recoger lo que sigue sin resolver.
+  #
+  # El criterio NO puede ser "donde esta el marcador" sino "si es un marcador", y eso se
+  # decide por el ARCHIVO, no por la posicion en la linea. Un filtro por posicion
+  # descartaba 40 de 43 marcadores reales: backticks, comas y texto alrededor los hacian
+  # parecer que estaban en medio de una frase.
+  #
   #   1. Solo mayusculas: `<COMANDO>` si, `<idea>` no. Un marcador de proyecto va en
   #      mayusculas; en minusculas suele ser el uso de ejemplo de un comando.
   #   2. Ni dentro de una tabla ni de un bloque de codigo, donde lo que hay entre < y >
-  #      es un argumento de ejemplo o un valor ilustrativo.
-  #   3. Con el marcador al principio o al final de la linea. En medio de una frase
-  #      ("y `<RUTAS...>` donde aparezca") es texto, no un hueco.
+  #      es un argumento ilustrativo, no un hueco.
+  #   3. Sin limite de longitud: un marcador de 70 caracteres sigue siendo un marcador.
   $enCodigo = $false
   for ($i = 0; $i -lt $lineas.Count; $i++) {
     $linea = $lineas[$i]
@@ -159,11 +163,7 @@ foreach ($f in $archivosMd) {
     if ($enCodigo) { continue }
     if ($linea -match '^\s*\|') { continue }
 
-    foreach ($m in [regex]::Matches($linea, '<[A-ZÁÉÍÓÚÑ][^<>]{0,60}>')) {
-      $antes = $linea.Substring(0, $m.Index).Trim()
-      $despues = $linea.Substring($m.Index + $m.Length).Trim()
-      # Solo si no hay texto a ambos lados del marcador.
-      if ($antes -ne '' -and $despues -ne '') { continue }
+    foreach ($m in [regex]::Matches($linea, '<[A-ZÁÉÍÓÚÑ][^<>]{0,200}>')) {
       $pendientes.Add("$($f.FullName.Replace("$objetivo\", '')) :L$($i + 1) $($m.Value)")
     }
   }

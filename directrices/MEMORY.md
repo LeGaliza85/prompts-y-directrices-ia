@@ -94,8 +94,9 @@ archivo, ni en el repo. Si un secreto se escribe por error, se rota.
 - **Confundir error de código con error de proceso.** Un bug va en la memoria del
   proyecto donde ocurrió. Un fallo en nuestra forma de trabajar va en
   `directrices/aprendido.md`.
-- **Copiar un umbral sin derivarlo.** Ver la entrada de 2026-10-09 en `aprendido.md`: se
-  heredó un límite de líneas sin comprobar qué medía.
+- **Copiar un umbral sin derivarlo.** Se heredó un límite de líneas sin comprobar qué medía.
+  Los números heredados son la primera cosa que hay que verificar: ver `CONSTITUTION.md`,
+  sección «Lo que este documento no hace».
 
 ## Lo que este repo no usa
 
