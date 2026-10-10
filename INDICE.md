@@ -114,7 +114,7 @@ devuelve límite de uso en menos de un segundo. Detalle y causas en `directrices
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica | **hecho** (20 documentos) |
+| 1 · Capa genérica | **hecho** (21 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |

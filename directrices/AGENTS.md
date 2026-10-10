@@ -12,7 +12,7 @@
 4. Revisa qué cambió desde la última sesión en este proyecto (`git status`, `git diff`).
 
 No asumas el estado del proyecto. Está escrito en `MEMORY.md`. Si no está ahí, no lo
-inventes; y si debería estar, eso es un fallo de la memoria, no un dato que debas rellenar.
+inventes. Si debería estar, eso es un fallo de la memoria, no un dato que debas rellenar.
 
 ## Antes de tocar código
 
@@ -43,7 +43,7 @@ Un cambio grande en modo Build es un error de proceso, no un atajo.
 - Marcar una tarea como hecha sin haber ejecutado su comprobación (principio 5).
 - Tocar un archivo que la tarea no necesita.
 - Introducir secretos, claves o datos personales en el repo.
-- Añadir funcionalidad que nadie ha pedido. "Estaba ahí y me pareció útil" no es un motivo.
+- Añadir funcionalidad que nadie ha pedido. «Estaba ahí y me pareció útil» no es un motivo.
 
 ## Subagentes
 

@@ -112,7 +112,7 @@ delega sin requerir autorización previa, y lo informa.
 ## Dudas abiertas
 
 - [NECESITA ACLARACIÓN] Si en el futuro hay un proyecto con plazo, ¿se recupera el orden de
-  sacrificio "velocidad primero" que se descartó?
+  sacrificio «velocidad primero» que se descartó?
 - [NECESITA ACLARACIÓN] ¿El archivo de la plantilla debe llamarse `opencode.jsonc` o
-  `opencode.json`? La documentación usa ambos y el comportamiento puede diferir entre
+  `opencode.jsonc`? La documentación usa ambos y el comportamiento puede diferir entre
   extensiones.

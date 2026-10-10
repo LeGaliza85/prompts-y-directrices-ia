@@ -4,7 +4,7 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
+    «*»: ask
   webfetch: deny
 ---
 

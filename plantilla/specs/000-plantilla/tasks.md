@@ -6,7 +6,7 @@ marcar y parar.
 ---
 
 - [ ] **T1. Función pura de filtrado.** RF-1, RF-2, RF-5
-  - Hecho cuando: `filtrar(sesiones, texto)` devuelve lo que dice la spec, con los cinco
+  - Hecho cuando: `filtrar(sesiones, texto)` devuelve lo que dice la spec, con los cuatro
     casos límite cubiertos por un test que pasa.
 
 - [ ] **T2. Detección de filtro activo.** RF-5, RF-6, RF-7
@@ -23,7 +23,7 @@ marcar y parar.
 
 - [ ] **T5. Mensaje de sin resultados.** RF-4
   - Hecho cuando: con filtro activo y cero coincidencias se muestra el mensaje; con la
-    lista vacía desde el principio se muestra el mensaje de "no hay sesiones", que es
+    lista vacía desde el principio se muestra el mensaje de «no hay sesiones», que es
     otro. Comprobado a mano.
 
 - [ ] **T6. Comprobación de accesibilidad y cierre.** todos

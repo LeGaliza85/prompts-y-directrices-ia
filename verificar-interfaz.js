@@ -91,14 +91,6 @@ async function abrirChrome(rutaChrome = null) {
   throw new Error(`Chrome arranco pero el puerto ${PUERTO_CDP} no responde.`);
 }
 
-/** Chrome ya abierto: si el puerto responde, lo reutiliza en vez de arrancar otro. */
-async function chromeYaAbierto() {
-  try {
-    const r = await fetch(`http://127.0.0.1:${PUERTO_CDP}/json/version`);
-    return r.ok;
-  } catch { return false; }
-}
-
 /**
  * Cliente minimo del protocolo CDP.
  *
@@ -200,10 +192,13 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
     }
   }
 
+  // La captura se guarda a disco tal cual. Antes se fazia
+  // Buffer.from(base64).toString('base64'), que es una ida y vuelta identidad: no
+  // convertia nada y el PNG nunca se podia abrir.
   let captura = null;
   try {
     const { data } = await s('Page.captureScreenshot', { format: 'png' });
-    captura = Buffer.from(data, 'base64').toString('base64');
+    captura = Buffer.from(data, 'base64');
   } catch { /* la captura es opcional */ }
 
   await cliente.enviar('Target.closeTarget', { targetId });
@@ -227,12 +222,14 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
 // Sin comprobaciones, decir "OK" no significaria nada: se comprueba que no se ha
 // comprobado. Por eso el uso directo exige un archivo con los pasos.
 async function principal() {
-  const [url, rutaPasos] = process.argv.slice(2);
+  const [url, rutaPasos, rutaCaptura] = process.argv.slice(2);
 
   if (!url || !rutaPasos) {
-    console.error('Uso: node verificar-interfaz.js <url> <archivo-de-comprobaciones.js>');
+    console.error('Uso: node verificar-interfaz.js <url> <archivo-de-comprobaciones.js> [captura.png]');
     console.error('');
     console.error('El archivo debe exportar `pasos`: un array de { nombre, expresion }.');
+    console.error('El tercer argumento, si se da, es donde se guarda la captura. Por');
+    console.error('defecto, verificacion.png en la carpeta actual.');
     console.error('Ejemplo:');
     console.error('  module.exports = { pasos: [');
     console.error('    { nombre: "abre", expresion: "document.title.length > 0" },');
@@ -253,12 +250,22 @@ async function principal() {
     process.exit(1);
   }
 
-  try {
+try {
     const r = await comprobar(url, pasos, { movil: true });
     r.resultados.forEach((x) => console.log(`  ${x.ok ? 'OK   ' : 'FALLA'} ${x.nombre}`));
     if (r.erroresConsola.length) {
       console.log(`  consola: ${r.erroresConsola.join(' | ')}`);
     }
+
+    // La captura se escribe a disco. Sin ella, el script comprueba numeros y no dice
+    // nada de si la pagina se VE bien: un OK no distingue una interfaz correcta de una
+    // que desborda, ilegible o con el contraste justo.
+    if (r.captura) {
+      const ruta = rutaCaptura || 'verificacion.png';
+      require('node:fs').writeFileSync(ruta, r.captura);
+      console.log(`  captura: ${ruta}`);
+    }
+
     console.log(r.ok ? 'VEREDICTO: APROBADO' : 'VEREDICTO: CAMBIOS NECESARIOS');
     chrome.parar();
     process.exit(r.ok ? 0 : 1);
@@ -278,7 +285,6 @@ module.exports = {
   conectar,
   esperar,
   abrirChrome,
-  chromeYaAbierto,
   PUERTO_CDP,
   ANCHO_MOVIL,
 };

@@ -42,8 +42,8 @@ Copia esta carpeta entera a la carpeta del proyecto nuevo. Después sustituye ca
 | Infraestructura o despliegue | `planner`, `security-auditor`, `migrator`, `reviewer` |
 | Solo documentación | `planner`, `docs-writer`, `reviewer` |
 
-Es un punto de partida, no una plantilla. Un backend con una parte visual que importa anade
-`frontend-reviewer`. Un proyecto con datos que migrar de formato anade `migrator`.
+Es un punto de partida, no una plantilla. Un backend con una parte visual que importa añade
+`frontend-reviewer`. Un proyecto con datos que migrar de formato añade `migrator`.
 
 Dos piezas son comunes a todos: alguien que **planifique** y alguien que **revise**. Sin
 planificación no hay spec; sin revisión, el principio 5 no se cumple.
@@ -78,7 +78,7 @@ planificación no hay spec; sin revisión, el principio 5 no se cumple.
 |---|---|---|
 | `coordinator` | Dirige el flujo SDD repartiendo entre subagentes. | **Opcional.** Solo en specs largas. En el resto, el primario coordina directamente. |
 
-Doce agentes de trabajo mas `coordinator`, que es opcional. Cada uno con el trabajo que hace
+Doce agentes de trabajo más `coordinator`, que es opcional. Cada uno con el trabajo que hace
 y la restricción de permisos que lo justifica.
 
 El límite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien está mejor
@@ -107,10 +107,6 @@ El flujo SDD tiene un comando por fase. No hay que recordar los prompts:
 
 Los de planificación y especificación usan el agente `plan`: no tocan código. Los de
 implementación y validación usan `build`.
-
-Si hace falta uno que no está aquí, créalo solo si aporta una **restricción de permisos** o
-una **especialidad** que estos no cubren. Si la diferencia es solo el texto del prompt, es
-un comando; si es solo el modelo, es el campo `model` de un agente existente.
 
 ## Cómo copiarla
 

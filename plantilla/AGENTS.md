@@ -24,7 +24,7 @@
 <Lo que es fácil hacer mal y no se puede deducir leyendo el código: la regla que parece
 obvia pero está invertida aquí, el detalle que ya se rompió una vez.>
 
-**Añade aquí las trampas de tu proyecto, y Borra las de ejemplo cuando no apliquen.**
+**Añade aquí las trampas de tu proyecto, y borra las de ejemplo cuando no apliquen.**
 
 ### Trampa de ejemplo: la lógica compartida entre pruebas y navegador
 

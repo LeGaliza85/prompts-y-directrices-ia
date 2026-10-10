@@ -8,8 +8,8 @@
 
 | Archivo | Qué es | Dónde vive |
 |---|---|---|
-| `directrices/AGENTS.md` (sin E) | Instruccion maestra del proyecto: que haces y como cargas el contexto | En este repositorio y copiado a cada proyecto |
-| `directrices/AGENTES.md` (con E, este archivo) | Catalogo de subagentes: cuales hay, como se crean y cuando se usan | Solo en este repositorio |
+| `directrices/AGENTS.md` (sin E) | Instrucción maestra del proyecto: qué haces y cómo cargas el contexto | En este repositorio y copiado a cada proyecto |
+| `directrices/AGENTES.md` (con E, este archivo) | Catálogo de subagentes: cuáles hay, cómo se crean y cuándo se usan | Solo en este repositorio |
 
 Dos archivos distintos que se diferencian en una letra. Confirma la E antes de editar: si
 sobrescribes el `AGENTS.md` sin E, pierdes la instrucción del proyecto.
@@ -85,11 +85,11 @@ que **revise**. Sin planificación no hay spec; sin implementación no hay códi
 el principio 5 no se cumple. Un proyecto sin alguna de las tres no encaja en este flujo.
 
 La tabla es un punto de partida, no una plantilla. Si el proyecto es un backend con una
-parte visual que importa, se anade `frontend-reviewer` y ya está.
+parte visual que importa, se añade `frontend-reviewer` y ya está.
 
 ## El catálogo completo
 
-Doce agentes de trabajo, mas `coordinator`, que es opcional. Cada uno con el trabajo que
+Doce agentes de trabajo, más `coordinator`, que es opcional. Cada uno con el trabajo que
 hace y la **restricción de permisos** que lo justifica, que es lo que de verdad lo convierte
 en agente y no en un prompt con nombre.
 
@@ -98,7 +98,7 @@ en agente y no en un prompt con nombre.
 | Agente | Trabajo | Restricción que le da sentido |
 |---|---|---|
 | `planner` | Redacta spec, plan y tareas. | `edit` limitado a `specs/`. Nunca escribe código. |
-| `implementer` | Implementa una tarea de un plan aprobado, comprobación primero. | `edit` y `bash` acotados a la tarea. No redisena. |
+| `implementer` | Implementa una tarea de un plan aprobado, comprobación primero. | `edit` y `bash` acotados a la tarea. No rediseña. |
 | `reviewer` | Revisa como QA y valida requisito por requisito. | `edit: deny`. No modifica nunca nada. |
 
 ### De especialidad
@@ -177,7 +177,7 @@ Dados los agentes existentes y la tarea, se decide así:
    tenga `reviewer`.
 4. **¿Se puede hacer con lo que hay?** Entonces no se crea nada.
 
-El limite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien esta mejor servido que uno con trece que se pisan.
+El límite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien está mejor servido que uno con trece que se pisan.
 
 ## Primeros pasos en un proyecto nuevo
 

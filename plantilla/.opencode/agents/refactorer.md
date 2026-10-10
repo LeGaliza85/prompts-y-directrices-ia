@@ -3,11 +3,11 @@ description: Cambia la estructura del código sin cambiar su comportamiento. Usa
 mode: subagent
 permission:
   edit:
-    "*": deny
-    "<MÓDULO_ACORDADO>/**": allow
+    «*»: deny
+    «<MÓDULO_ACORDADO>/**»: allow
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
   webfetch: deny
 ---
 
@@ -35,7 +35,7 @@ comprobar.
 
 ## Lo que no haces
 
-No aprovechas el refactor para "mejorar" algo que no te han pedido. No anades abstracciones
+No aprovechas el refactor para «mejorar» algo que no te han pedido. No añades abstracciones
 para un caso que aún no existe. No cambias el formato de los datos.
 
 ## Respuesta

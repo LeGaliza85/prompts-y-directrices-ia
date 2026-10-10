@@ -51,17 +51,17 @@ esté vacío, lo oculta.
 
 - El filtro responde al escribir, sin botón de aplicar.
 - La lista filtrada se recalcula en cada pulsación: con unas 200 sesiones no hay
-  perdida perceptible, así que no hace falta optimizar el algoritmo.
+  pérdida perceptible, así que no hace falta optimizar el algoritmo.
 - El campo de búsqueda es accesible con teclado y tiene etiqueta asociada.
 
 ## Casos límite
 
-- Texto que coincide con parte de una palabra (" estu " debe encontrar "Estudiar").
+- Texto que coincide con parte de una palabra (« estu » debe encontrar «Estudiar»).
 - Sesiones con el tema vacío o con solo espacios: no deberían coincidir con ninguna
   búsqueda salvo que el filtro también esté vacío.
-- Búsqueda con acentos: "estudio" y "estúdio" se comportan igual.
-- Lista vacía desde el principio: el mensaje de "sin resultados" no debe confundirse con
-  el de "no hay sesiones todavía".
+- Búsqueda con acentos: «estudio» y «estúdio» se comportan igual.
+- Lista vacía desde el principio: el mensaje de «sin resultados» no debe confundirse con
+  el de «no hay sesiones todavía».
 
 ## Fuera de alcance
 
@@ -74,15 +74,15 @@ esté vacío, lo oculta.
 
 - Los siete requisitos funcionales comprobados con un test o con una comprobación manual
   documentada.
-- Los cinco casos límite recorridos.
+- Los cuatro casos límite recorridos.
 - Comprobación de la accesibilidad del campo con teclado.
 - `MEMORY.md` actualizado con la decisión de filtrar en memoria frente a recalcular sobre
   los datos guardados.
 
 ## Dudas abiertas
 
-- [NECESITA ACLARACIÓN] ¿El filtro debe aplicarse también a la fecha formateada ("12 de
-  marzo") o solo al tema? La especificación actual dice solo al tema; confirmar antes de
+- [NECESITA ACLARACIÓN] ¿El filtro debe aplicarse también a la fecha formateada («12 de
+  marzo») o solo al tema? La especificación actual dice solo al tema; confirmar antes de
   implementar.
 - [NECESITA ACLARACIÓN] ¿Qué hace exactamente el botón de limpiar cuando el campo ya está
   vacío y no hay filtro: no aparece, o aparece desactivado?

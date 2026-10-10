@@ -17,7 +17,7 @@ demás.
 
 ## Los conceptos que importan trabajar con esto
 
-**Parámetros.** Las "conexiones neuronales" que almacenan lo aprendido. Más parámetros, más
+**Parámetros.** Las «conexiones neuronales» que almacenan lo aprendido. Más parámetros, más
 capacidad de representar patrones complejos.
 
 **Tokens.** La unidad en que se procesa la información, y la que se usa para cobrar. El

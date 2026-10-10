@@ -3,9 +3,9 @@ description: Redacta la spec, el plan y las tareas de una petición. No escribe 
 mode: subagent
 permission:
   edit:
-    "*": deny
-    "specs/**": allow
-    "docs/constitution.md": allow
+    «*»: deny
+    «specs/**»: allow
+    «docs/constitution.md»: allow
   bash: deny
   webfetch: deny
 ---

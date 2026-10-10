@@ -34,8 +34,8 @@ sostiene. Deshacer y tomar otro camino es más rápido que reparar.
 
 ## Lo que no es refactorizar
 
-- **"Aprovechar" para arreglar algo.** No te lo han pedido. Va en otra tarea.
-- **Anadir una abstracción para un caso que aún no existe.** Cuando llegue el segundo caso, se
+- **«Aprovechar» para arreglar algo.** No te lo han pedido. Va en otra tarea.
+- **Añadir una abstracción para un caso que aún no existe.** Cuando llegue el segundo caso, se
   abstrae. Antes, es especulación.
 - **Cambiar el formato de los datos.** Eso rompe a quien los lee, y requiere migración.
 - **Reescribir porque el código no te gusta.** El criterio no es el gusto, es que el cambio
@@ -55,7 +55,7 @@ La comprobación al final de cada paso es lo que distingue un refactor de una ap
 
 **Sí.**
 
-- Antes de anadir una funcionalidad a código que la va a dificultar.
+- Antes de añadir una funcionalidad a código que la va a dificultar.
 - Cuando el mismo código aparece por tercera vez.
 - Cuando un cambio pequeño obliga a tocar muchos sitios.
 

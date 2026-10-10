@@ -9,13 +9,13 @@ aceptación— y después usas esa especificación para guiar la implementación
 resultado.
 
 No es documentación que se escribe después de codificar. La spec está **viva**: guía la
-implementación, se comprueba contra el resultado, y se modifica cuando el requisito cambia.
+implementación, se comprueba contra el resultado y se modifica cuando el requisito cambia.
 
 ## Las tres formas
 
 | Forma | Cómo funciona | Cuándo |
 |---|---|---|
-| **Spec-first** | Escribes la spec, generas el código una vez, y desde entonces editas el código directamente. | Prototipos. La spec muere al empezar el código. |
+| **Spec-first** | Escribes la spec, generas el código una vez y desde entonces editas el código directamente. | Prototipos. La spec muere al empezar el código. |
 | **Spec-anchored** | La spec se mantiene viva: se conserva y se actualiza para seguir guiando el código. | **Por defecto.** |
 | **Spec-as-source** | Se edita solo la spec; el código se genera a partir de ella y no se toca a mano. | Solo con generación automática fiable. |
 
@@ -43,14 +43,14 @@ Constitución → Spec → Clarificación → Plan → Tareas → Implementació
 
 ## Las reglas del flujo
 
-- **Nunca se pasa de fase sin tu aprobación explícita**, ni de la spec ni del plan con sus
+- **Nunca se pasa de fase sin tu aprobación explícita**: ni de la spec ni del plan con sus
   tareas.
 - **La spec manda.** Lo que no está en la spec no se implementa. Si falta una decisión, se
   para y se pregunta.
 - **Un cambio de requisito va primero a la spec**, luego al plan y las tareas, y por último
   al código. Ese es el paso 8, y es el que evita que el código y la spec se separen sin
   que nadie lo note.
-- **Una tarea cada vez.** Implementar dos tareas y esperar que "salgan bien" es cómo se
+- **Una tarea cada vez.** Implementar dos tareas y esperar que «salgan bien» es cómo se
   pierde el hilo de qué está verificado y qué no.
 - **Al terminar cada fase, `MEMORY.md` se actualiza.**
 - La clarificación puede repetirse tras el plan o las tareas si algo sigue sin quedar claro.
@@ -100,7 +100,7 @@ Cada spec en su carpeta numerada: `specs/NNN-nombre/`, con `spec.md`, `plan.md` 
 
 `NNN` es un número correlativo de tres cifras. La spec **activa** es la de mayor número sin
 marcar como `implementada`: si hay tres, se trabaja sobre la más alta, y las anteriores son
-histórico que no se toca.
+el histórico que no se toca.
 
 El nombre de la carpeta lleva un guion y minúsculas. Se usa tal cual al invocar los comandos
 del sistema: `/sdd-plan 002-mapa-de-calor`.
@@ -123,6 +123,6 @@ se paga en todo.
 - Cualquier cambio que afecte a datos o a APIs.
 - Cualquier cosa que resulte problemática si se implementa al revés.
 
-**La regla práctica:** si el error sería caro, escribe la spec. Si es caro deshacerlo, no.
+**La regla práctica:** si el error fuera caro, escribe la spec. Si es caro deshacerlo, no.
 
 Una spec de media hora sale más barata que una implementación que hay que revertir.

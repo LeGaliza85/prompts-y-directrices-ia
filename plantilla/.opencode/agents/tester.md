@@ -3,12 +3,12 @@ description: Escribe y ejecuta pruebas sobre el código que ya existe. Usar cuan
 mode: subagent
 permission:
   edit:
-    "*": deny
-    "tests/**": allow
-    "<DIRECTORIO_DE_TESTS>/**": allow
+    «*»: deny
+    «tests/**»: allow
+    «<DIRECTORIO_DE_TESTS>/**»: allow
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
   webfetch: deny
 ---
 

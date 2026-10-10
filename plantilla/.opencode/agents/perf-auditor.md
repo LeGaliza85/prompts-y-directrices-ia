@@ -4,7 +4,7 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
+    «*»: ask
   webfetch: deny
 ---
 
@@ -23,7 +23,7 @@ cuello de botella y con qué evidencia.
 
 ## Lo que no haces
 
-No optimizas. No aplicas una mejora "de paso". No cambies una estructura de datos porque
+No optimizas. No aplicas una mejora «de paso». No cambies una estructura de datos porque
 te parece más elegante: si no hay una medida que la justifique, es una opinión.
 
 Tampoco persigas el último 5 %. Una mejora que complica el código para ganar lo que nadie

@@ -1,115 +1,109 @@
-# PROXIMA-SESION.md — Estado al cerrar la sesión del 2026-10-10
+# PRÓXIMA SESIÓN
 
-Actualizado por el agente al terminar la sesión. **Este archivo es lo primero que se lee al
-abrir el repo**: si estás aquí, léelo entero antes de tocar nada.
+**Fecha:** 2026-10-10
+**Estado:** verificador en verde. 101 archivos, 0 incidencias.
+**Último commit:** `18ef8d9` — el trabajo de esta sesión está sin commitear.
 
----
+## Lee esto primero
 
-## Para la próxima sesión: tres cosas que hay que hacer
+El `AGENTS.md` de la raíz manda empezar por este fichero. Si algo aquí no cuadra con lo
+que veas, gana lo que veas: este texto envejece, el repo no.
 
-El usuario pidió expresamente que se le recuerden estas tres. Están en este orden:
+## Qué se ha hecho en esta sesión
 
-### 1. Verificar todo lo hecho hasta ahora, buscando fallos
+### Código
 
-**Qué.** Pasar el revisor por la capa genérica, la plantilla y el proyecto de prueba. No es la
-comprobación de `verificar.ps1` —eso solo mira caracteres y palabras sueltas— sino revisión de
-fondo: contradicciones internas, referencias rotas, ejemplos que incumplen su propia regla,
-tablas que no discriminan, sintaxis desactualizada.
+Cuatro cosas muertas eliminadas y una rota:
 
-**Dónde quedó.** Los tres documentos ya están definidos. Queda ejecutarlos.
+- `verificar-interfaz.js`: fuera `chromeYaAbierto()`, que se definía y no se llamaba.
+- La captura convertía el base64 a texto y de vuelta al
+  base64: una ida y vuelta identidad. No convertía nada y el PNG no se podía abrir. Ahora
+  entrega un bloque de bytes real y **se escribe en disco**. Comprobado: PNG de 18.886 bytes
+  con la firma correcta. Antes la devolvía y nadie la consumía.
+- `verificar.ps1`: fuera `$excepciones`, variable muerta, y el mensaje final que remitía
+  a un mecanismo de excepciones inexistente.
+- `watchdog.ps1`: fuera `$previos`, variable muerta.
 
-**Herramienta.** El agente `reviewer` en `.opencode/agents/reviewer.md`. Revisa sin modificar
-nada, que es justo lo que hace falta: detecta, no arregla.
+### `verificar.ps1` (%d4 controles nuevos)
 
-**Estado.** Ya se hizo una pasada y corrigió cinco fallos. Esta es una segunda pasada, sobre
-lo que se añadió después: los 10 comandos `/sdd-*`, los tres documentos de método, el script
-de arranque y el proyecto de prueba.
+Cada uno nace de un defecto encontrado a mano. Automatizan lo que se buscaba con la vista:
 
-### 2. Asegurar que el sistema funciona fuera de OpenCode y con otros modelos
+1. **Comillas angulares desbalanceadas.** Se cuenta por archivo, no por línea, porque una
+   cita abierta al final de una línea y cerrada en la siguiente es correcta. Eran 8 casos
+   reales de este repo.
+2. **Rutas inexistentes.** Dos reglas: con barra se resuelve contra el repo; sin barra se
+   busca ese nombre en todo el repo, porque `tasks.md` en prosa significa «el de tu
+   proyecto», no «uno de esta carpeta». La primera versión daba más de treinta falsos positivos.
+3. **Párrafos duplicados.** Se juntan las líneas antes de comparar, porque el mismo texto
+   partido en puntos distintos no se ve comparando líneas sueltas. Pilla el duplicado de
+   `plantilla/LEEME.md` que se había escapado.
+4. **Cifras desincronizadas.** Tres documentos dar tres números distintos (17, 20 y 21) es
+   lo que pasaba. Se comprueba contra el recuento real.
 
-**Por qué importa.** Hoy casi todo está verificado contra OpenCode 1.4.0 y contra nada más.
-Los requisitos de la Spec 000 no dicen "en OpenCode": dicen "con agentes de IA". Si el sistema
-sirve solo aquí, está a medio hacer.
+### Texto
 
-**Qué es portable y qué no.**
+- 83 líneas de comillas rectas normalizadas a angulares, en cuarenta ficheros.
+- 14 correcciones de sintaxis y 45 de erratas y tildes.
+- `plantilla/LEEME.md`: párrafo duplicado eliminado, `QA` traducido, `anade`/`mas`
+  corregidos.
+- Cifras sincronizadas a 21 documentos y 101 archivos, en `AGENTS.md`, `INDICE.md` y
+  `PROXIMA-SESION.md`.
+- Corregida la referencia al fichero de configuracion, que no existe con ese nombre.
+- «cinco casos límite» → cuatro, en los tres ficheros que lo decían.
 
-| Portable | Anclado a OpenCode |
-|---|---|
-| Los 9 principios | `opencode.jsonc` y su campo `instructions` |
-| `SDD.md`, `EARS.md` | La carpeta `.opencode/` |
-| `EXPECT.md`, `MEMORY.md` | El frontmatter de agentes y comandos |
-| La spec, el plan, las tareas | La skill `sdd` con su `description` |
-| `verificar.ps1` (es PowerShell puro) | — |
+### `nuevo-proyecto.ps1`
 
-**`AGENTS.md` sí es estándar**: lo leen varios agentes, no solo OpenCode. Es el punto más
-fuerte de portabilidad del sistema.
+El último paso imprimía `<COMANDO_DE_COMPROBACION>` sin tilde, mientras el fichero tiene
+`<COMANDO_DE_COMPROBACIÓN>` con tilde: copiar y pegar no encontraba nada. Ahora **lee los
+marcadores del proyecto generado** y avisa de los que quedan dentro de bloques
+`permission:`, que son los que no funcionan.
 
-**Qué hacer.**
+## Lo que se-rise mal y quedó documentado
 
-1. Revisar qué documentos mencionan OpenCode por su nombre y si ese dato podría ir en un
-   apartado en vez de en el cuerpo.
-2. Anadir a cada documento que dependa de la herramienta una nota de qué cambia en otros
-   agentes: Cursor usa `.cursor/rules/`, Claude Code usa `CLAUDE.md`, otros leen `AGENTS.md`.
-3. Comprobar que la constitución genérica y `SDD.md` no mencionan la herramienta en ningún
-   sitio donde no haga falta.
-4. Dejar escrito qué habría que adaptar para usar la capa genérica con otro agente, aunque no
-   se adapte ahora.
+Se afirmó que los 13 agentes estaban rotos por faltarles `tools:`. **Estaban bien**: la
+lista real es `description`, `mode` y `permission`. Después se afirmó que el scaffolder no
+sustituía sus marcadores y que era un fallo silencioso. Al extraer el regex del propio
+script y probarlo contra el fichero real, salía **una coincidencia**: el marcador se
+detecta y se avisa. El script cumplía su diseño, que es no inventar lo que solo sabe quien
+pide el proyecto.
 
-### 3. Preguntar al agente qué añadiría y qué recomendaría
+Está en `aprendido.md`, con la causa. La lección: **antes de decir que algo está roto,
+ejecutar la comprobación y enseñar la salida.** Y extraer los patrones de los ficheros,
+no escribirlos de memoria.
 
-**Por qué.** El sistema está construido desde el curso y desde lo que ha ido haciendo falta,
-pero nadie se ha parado a mirarlo desde fuera con lo aprendido. El usuario quiere esa
-opinión explícita, no implícita.
+## Estado de las tareas
 
-**Cómo responderlo.** Con lo que **no** está y se echa de menos, no con una lista de deseos.
-Lo que sobra también cuenta: si hay algo que no aporta, decirlo.
+`specs/000-sistema-de-trabajo/tasks.md`: T1 a T12 hechas, **T13 pendiente**.
 
----
+## Qué queda
 
-## Estado del trabajo
+1. **T13.** Terminar `C:\Proyectos\divisor` con subagentes. Rellenar sus marcadores y
+   comprobar que los agentes cargan y funcionan. Los marcadores sin rellenar **son lo
+   correcto**: la prueba es llenarlos y ver que el permiso pasa a funcionar.
+2. **Segunda pasada de `tasks.md`.** T1 a T12 están hechas y siguen como ruido. Quitar las
+   completadas y dejar solo lo que queda.
+3. **Medir liveness con datos.** `watchdog.ps1` está probado contra un log sintético,
+   nunca contra un subagente real atascado. T13 es la oportunidad.
 
-| Bloque | Estado |
-|---|---|
-| 0 · Andamiaje | hecho |
-| 1 · Capa genérica (17 documentos) | hecho |
-| 2 · Blindaje contra desactualización | hecho |
-| 3 · Plantilla (33 archivos, 10 comandos) | hecho |
-| 4 · Registro: historial, curso | hecho |
-| 5 · Spec 000 | hecho |
-| 6 · Prueba con proyecto real | **hecho** |
-| 7 · Correcciones que reveló la prueba | **pendiente** |
-| 8 · Portabilidad a otros agentes | **pendiente** |
+## Antes de dar algo por bueno
 
-## Lo que dejó la prueba, sin corregir
+```powershell
+powershell -File verificar.ps1
+```
 
-Estos cuatro salieron de `historial/prueba-del-sistema` y quedan anotados en
-`directrices/aprendido.md`, pero **no se han aplicado al sistema**:
+Ha dado 0 incidencias en 101 archivos. Si aparece algo, mira primero si el texto tiene un
+carácter corrupto antes de tocar el patrón.
 
-1. **El patrón de exportación doble.** La lógica compartida entre `node --test` y el navegador
-   lo necesita. No está en la plantilla como trampa conocida. Es el fallo más caro de los
-   cuatro porque **los tests pasan y la página se rompe**.
-2. **El pendiente falso del script.** `nuevo-proyecto.ps1` lista `<idea>` y `<requisito>` del
-   LEEME como marcadores por rellenar, y no lo son.
-3. **La verificación de interfaz sin MCP.** El CDP directo funcionó y el MCP no se pudo activar
-   desde una sesión abierta. El método está en `aprendido.md` pero no es una herramienta del
-   repo.
-4. **Sin memoria del proyecto al cerrar.** El `MEMORY.md` de la prueba quedó sin rellenar. No
-   es un fallo del sistema, es un fallo de proceso: la última tarea era rellenarlo.
+## Acceso remoto
 
-## Lo que no se ha probado
+Se-mm tenancyó, sin ejecutar: Tailscale + `opencode web`, y RustDesk como alternativa.
+**No se instaló nada.** Hechos verificados y guardados:
 
-- **El flujo con agentes.** En la prueba el agente primario hizo todo a mano. Que el catálogo
-  de 13 agentes y los 10 comandos funcionen Delegando no está comprobado.
-- **La constitución de un proyecto con tests reales.** La de la prueba se escribió a medida,
-  no se generó con `/sdd-constitution`.
-- **`historial/` con más de un proyecto.** Se archiva uno. El formato no está probado frente a
-  un segundo.
+- `opencode web` y `opencode serve` existen. `--hostname` por defecto `127.0.0.1`.
+- No hay flag `--auth`, pero el binario contiene `OPENCODE_SERVER_PASSWORD` y
+  `OPENCODE_SERVER_USERNAME`, que sí sirven para protegerlo.
+- ZED 1.23.2 está instalado. **No tiene cliente móvil**: su modelo es cliente → servidor
+  por `ssh://`, y el cliente es el propio ZED. Para usar ZED desde el móvil hay que
+  controlar el escritorio, no conectar ZED.
 
-## Notas para quien retome
-
-- **La versión real de OpenCode es 1.4.0**, no la que marcan los metadatos del binario (1.3.11).
-  Manda `opencode --version`. Detalle en `directrices/PIN.md`.
-- **Este repo ya tiene `AGENTS.md` en la raíz**, que antes no tenía y por eso una sesión nueva
-  arrancaba sin instrucciones. Fue la razón de crear este archivo.
-- **Sigue sin haber `MEMORY.md` en la raíz**, a propósito: aquí no hay estado de
-  implementación que recordar. Este archivo hace esa función.
+Nada de esto se ha aplicado. Queda como decisión, no como tarea hecha.

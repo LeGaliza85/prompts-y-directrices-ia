@@ -3,8 +3,8 @@ description: Implementa UNA tarea de un plan aprobado, con la comprobación prim
 mode: subagent
 permission:
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
   webfetch: deny
 ---
 

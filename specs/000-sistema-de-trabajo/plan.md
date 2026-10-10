@@ -6,8 +6,8 @@ Plan de esta spec. Marca qué requisito cubre cada parte.
 
 | Archivo | Qué contiene | Requisitos |
 |---|---|---|
-| `directrices/` (14 archivos) | Capa genérica: principios, instrucción, memoria, criterios, flujo, requisitos, catálogos, blindaje y registros | RF-1 a RF-8 |
-| `plantilla/` (23 archivos) | Esqueleto copiable para un proyecto nuevo | RF-1 |
+| `directrices/` (21 archivos) | Capa genérica: principios, instrucción, memoria, criterios, flujo, requisitos, catálogos, blindaje y registros | RF-1 a RF-8 |
+| `plantilla/` (33 archivos) | Esqueleto copiable para un proyecto nuevo | RF-1 |
 | `.opencode/agents/` | `reviewer` y `tooling-advisor`, con permisos de escritura denegados | RF-5, RF-6 |
 | `verificar.ps1` | Comprobador de documentos | RF-8 |
 | `curso/` | Material de origen intacto y apuntes extraídos | — |
@@ -61,6 +61,6 @@ muestra bien los acentos.
 
 ## Qué no cubre este plan
 
-Tres requisitos dependen de que exista un proyecto real. RF-11 no tiene nada que archivar
+Dos requisitos dependen de que exista un proyecto real. RF-11 no tiene nada que archivar
 todavía, y RF-1 solo se demuestra cuando alguien copie la plantilla. Se marcarán como
 cumplidos cuando ocurra, no antes.

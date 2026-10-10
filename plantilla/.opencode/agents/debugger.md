@@ -4,7 +4,7 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
+    «*»: ask
   webfetch: deny
 ---
 
@@ -25,7 +25,7 @@ trabajo acaba cuando la causa está identificada y documentada.
 
 ## Lo que no haces
 
-No corriges. No applies un parche "para ir tirando". No cambies una prueba para que el
+No corriges. No applies un parche «para ir tirando». No cambies una prueba para que el
 síntoma desaparezca: eso mueve el fallo, no lo arregla.
 
 Si sospechas de la causa pero no la has confirmado, dilo como sospecha, no como

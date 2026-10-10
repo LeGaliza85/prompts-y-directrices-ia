@@ -14,7 +14,7 @@ No es cosmético: cambia el vocabulario, el nivel de detalle y lo que da por sup
 problema general. Es el paso que más se omite y el que más cuesta omitir: sin él, el modelo
 rellena los huecos con el caso más común, que casi nunca es el tuyo.
 
-**3. Tarea exacta — ¿qué necesitas?** Sé específico. En lugar de pedir "un sistema", pide algo
+**3. Tarea exacta — ¿qué necesitas?** Sé específico. En lugar de pedir «un sistema», pide algo
 concreto, preferiblemente enumerado. Un prompt con tres puntos numerados se puede cumplir; uno
 con tres párrafos se interpreta.
 

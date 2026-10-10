@@ -4,9 +4,9 @@ El material de `directrices/` y `plantilla/` está escrito contra **una versión
 OpenCode**. Si la versión instalada cambia, los ejemplos dejan de ser fiables hasta
 revalidarlos.
 
-**Qué significa "verificado" aquí:** comprobado contra la documentación oficial, **no**
-ejecutado. Ver la sección «Límite» más abajo: es la diferencia entre "esto es lo que dice la
-documentación" y "esto lo he visto funcionar", y solo lo segundo es una prueba.
+**Qué significa «verificado» aquí:** comprobado contra la documentación oficial, **no**
+ejecutado. Ver la sección «Límite» más abajo: es la diferencia entre «esto es lo que dice la
+documentación» y «esto lo he visto funcionar», y solo lo segundo es una prueba.
 
 **Regla:** si la versión instalada cambia, este archivo se actualiza **antes** de fiarse de
 cualquier ejemplo del repo, y el cambio se registra en `BITACORA.md`.

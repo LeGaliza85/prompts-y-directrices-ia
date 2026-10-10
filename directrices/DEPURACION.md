@@ -35,9 +35,9 @@ Preguntas que ayudan:
 Una hipótesis útil tiene una **predicción**: qué se observaría si fuera cierta y qué se
 observaría si fuera falsa.
 
-*Mal:* "algo va mal con las fechas". No se puede comprobar.
-*Bien:* "la fecha se desplaza un día porque se construye en UTC; si es eso, una sesión
-registrada a las 00:30 en zona horaria positiva aparece con fecha del día anterior".
+*Mal:* «algo va mal con las fechas». No se puede comprobar.
+*Bien:* «la fecha se desplaza un día porque se construye en UTC; si es eso, una sesión
+registrada a las 00:30 en zona horaria positiva aparece con fecha del día anterior».
 
 Sin predicción no hay forma de descartarla, así que no es una hipótesis: es una sospecha.
 
@@ -55,7 +55,7 @@ La causa raíz, con la evidencia que la sostiene. No el síntoma.
 
 ## Los fallos que se cometen
 
-**Parchear el síntoma.** Silenciar el error, inicializar el valor que debería llegar, o
+**Parchear el síntoma.** Silenciar el error, inicializar el valor que debería llegar o
 envolver en un `try`. El fallo sigue ahí, solo ha cambiado de sitio. Suele aparecer después,
 más caro.
 
@@ -65,10 +65,10 @@ lo causaba. Un cambio, una comprobación.
 **Fiarse de la intuición sobre dónde está.** El rendimiento y los fallos no están donde la
 gente cree. La medición manda.
 
-**Confundir explicación con excusa.** "Pasa a veces" no es una explicación. "Pasa cuando la
-petición tarda más de X" sí lo es, y apunta a algo concreto.
+**Confundir explicación con excusa.** «Pasa a veces» no es una explicación. «Pasa cuando la
+petición tarda más de X» sí lo es, y apunta a algo concreto.
 
-**No verificar el arreglo con el caso que lo descubrió.** Se arregla, el test unitario pasa, y
+**No verificar el arreglo con el caso que lo descubrió.** Se arregla, el test unitario pasa y
 el caso original sigue roto. El test que se escribió no cubría el fallo real.
 
 ## Cuándo parar
@@ -76,8 +76,8 @@ el caso original sigue roto. El test que se escribió no cubría el fallo real.
 Si tras tres hipótesis descartadas sigue sin aparecer la causa, **para y dilo**. Seguir
 insistiendo gasta tiempo y produce arreglos aleatorios que esconden la causa.
 
-Vale más entregar "no he encontrado la causa, esto es lo que he descartado y esto es lo que
-sospecho" que un arreglo que parece funcionar.
+Vale más entregar «no he encontrado la causa, esto es lo que he descartado y esto es lo que
+sospecho» que un arreglo que parece funcionar.
 
 ## Cómo se comprueba que está arreglado
 

@@ -12,7 +12,7 @@ cuesta tres pasos donde bastaría uno.
 Una entrada entra aquí si cumple **las dos** condiciones:
 
 1. **Funciona.** No hay nada roto. Si hay un fallo, va a `aprendido.md`.
-2. **Muele.** Alguien perdió tiempo con ello. No es "podría ser más elegante".
+2. **Muele.** Alguien perdió tiempo con ello. No es «podría ser más elegante».
 
 La segunda condición es la difícil. «Se podría mejorar» no es motivo suficiente: casi todo se
 podría mejorar, y una lista así crece sin priorizar y se lee menos que nada.
@@ -26,7 +26,7 @@ puedes señalar el momento, no hay entrada.
 ## AAAA-MM-DD — <qué molesta, en una frase>
 
 **Dónde.** <archivo, comando o paso>
-**Cuesta.** <tiempo, pasos oipanidad concreta>
+**Cuesta.** <tiempo, pasos inconvenidad concreta>
 **Propuesta.** <qué cambiar>
 **Probado.** <si se probó en serio, o "no, es una idea suelta">
 ```
@@ -43,21 +43,21 @@ ideas de alguien que nunca va a mirar.
 
 - **Errores.** Aunque ya estén corregidos. Van a `aprendido.md`, que es donde se busca cuando
   algo falla.
-- **Funcionalidad que falta.** Eso es una spec nueva, o una entrada en laSpec 000.
-- **Estilo.** Si son dos opinions sobre cómo escribir algo, es una conversación, no un archivo.
+- **Funcionalidad que falta.** Eso es una spec nueva, o una entrada en la Spec 000.
+- **Estilo.** Si son dos opiniones sobre cómo escribir algo, es una conversación, no un archivo.
 - **Propuestas sin motivo.** Si no puedes decir qué tiempo perdiste, espera a que lo pierdas.
 
 ## Cómo se aplica
 
 Al leer este archivo antes de empezar una tarea:
 
-1. ¿Alguna entrada toca lo que voy a tocar? entonces propón el cambio **en la misma tarea**, con
+1. ¿Alguna entrada toca lo que voy a tocar? Entonces propón el cambio **en la misma tarea**, con
    su comprobación.
 2. ¿Alguna entrada toca algo que ya estás cambiando? Aprovéchalo y aplícala: el coste es cero.
-3. ¿Ninguna? sigue con la tarea y no pienses en esto.
+3. ¿Ninguna? Sigue con la tarea y no pienses en esto.
 
-**Regla:** un cambio de este archivo **no abre una tarea nueva**. Se aplica opportunisticamente,
-cuando ya se está tocando esa zona. Abrir una tarea para "mejorar algo" es cómo se accumulate
+**Regla:** un cambio de este archivo **no abre una tarea nueva**. Se aplica oportunamente,
+cuando ya se está tocando esa zona. Abrir una tarea para «mejorar algo» es cómo se accumulate
 deuda de refactor que nunca se paga.
 
 Igual que con `REFACTOR.md`: sin comprobación que respalde, no se toca.
@@ -67,9 +67,9 @@ Igual que con `REFACTOR.md`: sin comprobación que respalde, no se toca.
 Cada pocas semanas, revisa la lista. Para cada entrada, una de estas tres:
 
 - **Ya se aplicó.** Se borra: ya está en el código.
-- **Resultó no ser molestia.** Se borra, y ese no-respuesta es información: la idea queda
+- **Resultó no ser molestia.** Se borra, y esa «no respuesta» es información: la idea queda
   archivada.
-- **Lleva mucho tiempo sin biting y nadie la ha tocado.** Se queda: no es urgente, pero
+- **Lleva mucho tiempo sin que nadie la haya tocado.** Se queda: no es urgente, pero
   tampoco se descarta.
 
 Una lista que se recorta es una lista que se lee. Pero **se recorta lo que sobra, no lo que

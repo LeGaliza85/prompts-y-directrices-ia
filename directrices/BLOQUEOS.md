@@ -17,7 +17,7 @@ Se lanzaba un subagente para trabajar en otro directorio. A los pocos minutos de
 
 ## Cómo se intentaba diagnosticar
 
-Mirando la interfaz y esperando más. Cuando el subagente no volvía, la única opciones eran
+Mirando la interfaz y esperando más. Cuando el subagente no volvía, la únicas opciones eran
 esperar o cancelar a mano. El trabajo se perdía.
 
 ## Por qué no se podía saber
@@ -29,14 +29,14 @@ esperar o cancelar a mano. El trabajo se perdía.
 | Un diálogo de permiso esperaba respuesta | Habría que pulsar ESC |
 | Había un límite de uso por paralelizar | Habría que delegar menos |
 
-Las cuatro eran **igualmente plausibles**, y ninguna se comprobaba. Se.cancelaba por
+Las cuatro eran **igualmente plausibles**, y ninguna se comprobaba. Se cancelaba por
 descarte: se cancelaba y se probaba otra cosa.
 
 ## Consecuencia práctica
 
 Un atasco de tres minutos costaba tres minutos. Uno de nueve minutos, nueve. Y no había
-forma de diferenciar "el subagente está pensando" de "el subagente está muerto": ambos se
-veían igual desde fuera, que era no.ver nada.
+forma de diferenciar «el subagente está pensando» de «el subagente está muerto»: ambos se
+veían igual desde fuera, que era no ver nada.
 
 ---
 
@@ -135,7 +135,7 @@ powershell -File watchdog.ps1 -Umbral 45 -CancelarSegundos 120
 
 ### Cancela en caliente
 
-`POST /session/<id>/abort` al servidor local de opencode. Verificado: devuelve 200. Un
+`POST /session/<id>/abort` al servidor local de OpenCode. Verificado: devuelve 200. Un
 comando de la CLI abriría una sesión nueva, que es justo lo que no se quiere mientras la otra
 está colgada.
 
@@ -168,7 +168,7 @@ distinción funciona en los dos sentidos.
 
 Documentados porque los repetiría cualquiera que lo replique:
 
-1. **El log no se lee con `ReadAllLines`.** Opencode lo tiene abierto en exclusiva; hay que
+1. **El log no se lee con `ReadAllLines`.** OpenCode lo tiene abierto en exclusiva; hay que
    usar `FileShare.ReadWrite`. Un vigilante que solo lee con el log cerrado solo sirve cuando
    el agente ya está parado: justo cuando no sirve.
 

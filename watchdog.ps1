@@ -31,28 +31,37 @@
   El script distingue las cinco por la clase de bloqueo:
 
     - Con "stream error" en el log  -> es 1, 2, 3 o 4. Se lee el mensaje y se dice cuál.
-    - Sin error y con silencio       -> es 5. Se cancela y se registra.
+    - Sin error y con silencio       -> se INFORMA. No se cancela sola.
 
-  ACCION: cancela la sesion por POST /session/<id>/abort (verificado, devuelve 200). Con
-  -SinCancelar solo avisa.
+  ACCION: por defecto NO cancela nada. Con -Cancelar, y solo sobre sesiones que tienen un
+  error de causa leida, cancela por POST /session/<id>/abort.
 
-  NO PIERDE INFORMACION: solo cancela subagentes que no han hecho nada. Si un subagente ha
-  hecho tool calls, se avisa pero no se toca, porque ahí hay trabajo que perder.
+  POR QUE NO HAY UMBBRAL DE TIEMPO. El log no distingue un agente trabajando en silencio
+  de un usuario que se fue y volvio. Medido el 2026-10-10 sobre 27.948 eventos: 426
+  silencios de trabajo por encima de 30 s, el mayor de 1873 s. Cualquier corte por debajo
+  de eso mata trabajo real. Por eso se informa el silencio MEDIDO de cada sesion y se
+  deja la decision a quien lee. Principio 10 de CONSTITUTION.md.
+
+  NO PIERDE INFORMACION: nunca se toca una sesion con herramientas registradas. Si ha
+  hecho tool calls, se informa el silencio y nada mas.
 
 .PARAMETER Umbral
-  Segundos de silencio para considerar sospechoso. Por defecto 90.
+  Sin efecto. Se mantiene vacio a proposito: no hay medicion que lo justifique. Quien lo
+  ponga dice de donde sale.
 
 .PARAMETER CancelarSegundos
-  Segundos de silencio para cancelar. 0 desactiva la cancelación. Por defecto 240.
+  Sin efecto. Se mantiene a 0 por el mismo motivo. No hay periodo de gracia que elegir.
 
 .PARAMETER Intervalo
-  Segundos entre lecturas. Por defecto 15.
+  Segundos entre lecturas. Por defecto 15. Cadencia del bucle, no un juicio sobre el
+  silencio de nadie.
 
-.PARAMETER SinCancelar
-  Solo informa, no cancela.
+.PARAMETER Cancelar
+  Pasar de informar a cancelar. Cancela SOLO las sesiones cuya clase sea 'error', es
+  decir, las que tienen una causa leida del propio mensaje de error.
 
 .PARAMETER UnaVez
-  Informe puntual y salida. Código 1 si hay un atasco crítico.
+  Informe puntual y salida. Código 1 si hay un error de causa conocida.
 
 .PARAMETER Log
   Ruta del log. Por defecto, la ubicación estándar.
@@ -64,10 +73,16 @@
 #>
 [CmdletBinding()]
 param(
-  [int]$Umbral = 90,
-  [int]$CancelarSegundos = 240,
+  # Sin valor por defecto a proposito: no hay medicion que lo justifique. Quien lo ponga
+  # dice de donde sale. Si no se pasa, se informa del silencio MEDIDO de cada sesion y
+  # ningun corte decide nada. Principio 10 de CONSTITUTION.md.
+  [int]$Umbral = 0,
+  # Cancelacion automatica desactivada por defecto. No hay periodo de gracia que elegir:
+  # el log no distingue un agente trabajando en silencio de un usuario ausente, asi que
+  # cualquier umbral seria una invencion. Para cancelar hay que pedirlo explicito.
+  [int]$CancelarSegundos = 0,
   [int]$Intervalo = 15,
-  [switch]$SinCancelar,
+  [switch]$Cancelar,
   [switch]$UnaVez,
   [string]$Log,
   [string]$Registro
@@ -145,7 +160,20 @@ function Get-Sesiones {
     if ($id -and -not $ses.ContainsKey($id)) { $ses[$id] = @{ Loops = 0; Tools = 0 }; $orden.Add($id) }
     if ($id -and $ts) { $ses[$id].Ultima = $ts }
     if ($id -and $l -match 'message=loop session\.id=') { $ses[$id].Loops++ }
-    if ($id -and $l -match 'message=(bash|read|write|edit|glob|grep|patch|webfetch|websearch)\b') { $ses[$id].Tools++ }
+    # Las herramientas no se registran con su nombre: se registran como
+    # message=evaluated permission=<herramienta>. Verificado el 2026-10-10 sobre
+    # 27.948 eventos del log, donde aparecen 7.889 evaluaciones y CERO apariciones de
+    # message=bash, message=read y demas. Contarlas por nombre era contar cero siempre.
+    #
+    # Trampa: la linea de evaluated lleva run= pero NO session.id. Comprobado sobre el
+    # log. Por eso no se puede indexar por $id directamente: se cuenta como cero. Se
+    # atribuye a la sesion mas reciente vista, igual que ya se hace con los stream error,
+    # que tienen el mismo hueco. Es una atribucion por proximidad, no una certeza.
+    if ($l -match 'message=evaluated permission=') {
+      $destino = $id
+      if (-not $destino -and $orden.Count -gt 0) { $destino = $orden[$orden.Count - 1] }
+      if ($destino -and $ses.ContainsKey($destino)) { $ses[$destino].Tools++ }
+    }
 
     # Errores de stream. NO llevan session.id: es el mismo problema que el
     # "evaluated" sin id. Por eso se atribuyen a la subsesion mas reciente que este
@@ -192,33 +220,33 @@ function Get-Sesiones {
 }
 
 function Get-Estado {
-  param($Sesiones, [datetime]$AhoraUtc, [int]$Umbral, [int]$CancelarSeg)
+  param($Sesiones, [datetime]$AhoraUtc)
 
   $salida = New-Object System.Collections.Generic.List[object]
   foreach ($s in $Sesiones) {
     if (-not $s.Ultima) { continue }
+    # El silencio es un dato MEDIDO, no un veredicto. Se informa cual es; ningun corte
+    # decide por ti. Antes habia umbrales de 90 y 240 segundos que eran invencion: el log
+    # no distingue un agente trabajando callado de un usuario que se fue, asi que ningun
+    # numero puede separarlos. Medido el 2026-10-10: 426 silencios de trabajo por encima
+    # de 30 s, con el mayor en 1873 s. Cualquier umbral por debajo de eso corta trabajo.
     $silencio = [int]($AhoraUtc - $s.Ultima).TotalSeconds
     $nadaHizo = ($s.Tools -eq 0 -and $s.Loops -le 1)
 
-    $clase = 'ok'; $causa = $null; $accion = ''
-    if ($s.Cancelada) { $clase = 'cancelada' }
+    $clase = 'activa'; $causa = $null; $accion = ''
+    if ($s.Cancelada) {
+      $clase = 'cancelada'
+    }
     elseif ($s.Error) {
       # Error de stream: la causa se lee del propio error, no se infiere del silencio.
-      $clase = 'error'; $causa = $s.Error
-      $accion = $s.Error.Cambio
+      $clase = 'error'; $causa = $s.Error; $accion = $s.Error.Cambio
     }
-    elseif ($nadaHizo -and $CancelarSeg -gt 0 -and $silencio -ge $CancelarSeg) {
-      $clase = 'ATASCO'
-      $causa = @{ Id = 'stream-esteril'; Texto = 'El modelo abrió el stream y no devolvió nada. Sin error ni tool calls.' }
-      $accion = 'Se cancela y el agente principal retoma la tarea.'
-    }
-    elseif ($nadaHizo -and $silencio -ge $Umbral) {
-      $clase = 'sospechoso'
-      $causa = @{ Id = 'stream-esteril'; Texto = 'Silencio sin hacer nada. Todavía dentro del margen.' }
-      $accion = 'Esperar. Si llega al umbral de cancelación, se cancela.'
-    }
-    elseif ($silencio -ge $CancelarSeg -and $CancelarSeg -gt 0) {
-      $clase = 'pensando'
+    elseif ($nadaHizo) {
+      # Dato, no diagnostico: el log no registra herramientas y como maximo una vuelta.
+      # Se muestra para que lo veas. No dispara ninguna accion.
+      $clase = 'sin-trabajo-registrado'
+      $causa = @{ Id = 'sin-trabajo'; Texto = 'Sin herramientas registradas y una vuelta de loop como maximo.' }
+      $accion = 'Observar. No se cancela sola.'
     }
 
     $salida.Add([pscustomobject]@{
@@ -255,20 +283,23 @@ function Accionar {
   param($Estados, [switch]$SoloInformar)
 
   $n = 0
-  foreach ($e in ($Estados | Where-Object { $_.Clase -in @('ATASCO', 'error') })) {
+  foreach ($e in ($Estados | Where-Object { $_.Clase -eq 'error' })) {
     $s = $e.Sesion
-    # NUNCA se toca un subagente que ha hecho trabajo: ahí hay información que perder.
-    if (-not $e.NadaHizo -and $e.Clase -eq 'ATASCO') {
-      Write-Host ("  >> AVISO: {0} lleva {1}s parado pero HA HECHO trabajo ({2} tools). No se toca." -f $s.Slug, $e.Silencio, $s.Tools) -ForegroundColor Yellow
+    # NUNCA se toca una sesion con trabajo: ahi hay informacion que perder. Las de clase
+    # 'error' pueden tenerla, asi que se comprueba antes de cancelar.
+    if (-not $e.NadaHizo) {
+      Write-Host ("  >> AVISO: {0} tiene error registrado pero HA HECHO trabajo ({1} tools). No se cancela." -f $s.Slug, $s.Tools) -ForegroundColor Yellow
+      Registrar -Linea ("- **AVISO** `{0}`: error con trabajo hecho ({1} tools). No se toca." -f $s.Slug, $s.Tools)
+      $n++
       continue
     }
     $causa = $e.Causa
     $cancelo = $false
-    if ($e.Clase -eq 'ATASCO' -and -not $SoloInformar) { $cancelo = Cancelar-Sesion -Id $s.Id }
+    if ($e.Clase -eq 'error' -and $Cancelar) { $cancelo = Cancelar-Sesion -Id $s.Id }
 
     if ($cancelo) {
       Write-Host ("  >> CANCELADO {0}  causa: {1}" -f $s.Slug, $causa.Texto) -ForegroundColor Red
-      Registrar -Linea ("- **CANCELADO** `{0}` tras {1}s sin actividad. Causa: {2} Accion: {3}" -f $s.Slug, $e.Silencio, $causa.Texto, $causa.Cambio)
+      Registrar -Linea ("- **CANCELADO** `{0}`. Causa: {1} Accion: {2}" -f $s.Slug, $causa.Texto, $causa.Cambio)
       $n++
     } elseif ($e.Clase -eq 'error') {
       Write-Host ("  >> ERROR {0}: {1}" -f $s.Slug, $causa.Texto) -ForegroundColor Red
@@ -276,36 +307,40 @@ function Accionar {
       Registrar -Linea ("- **ERROR** `{0}` ({1}): {2} Cambiar: {3}" -f $s.Slug, $causa.Id, $causa.Texto, $causa.Cambio)
       $n++
     } else {
-      Write-Host ("  >> SOSPECHOSO {0}: {1} lleva {2}s" -f $s.Slug, $causa.Texto, $e.Silencio) -ForegroundColor Yellow
+      Write-Host ("  >> SIN TRABAJO REGISTRADO {0}: {1} lleva {2}s" -f $s.Slug, $causa.Texto, $e.Silencio) -ForegroundColor Yellow
     }
   }
   return $n
 }
 
 function Mostrar {
-  param($Estados, [datetime]$AhoraUtc, [int]$Umbral, [int]$CancelarSeg)
+  param($Estados, [datetime]$AhoraUtc)
 
-  $ok = $Estados | Where-Object { $_.Clase -eq 'ok' }
-  $sosp = $Estados | Where-Object { $_.Clase -eq 'sospechoso' }
-  $atas = $Estados | Where-Object { $_.Clase -eq 'ATASCO' }
+  # Sin umbrales: se informa de lo medido y de lo observado en el log. Las clases son
+  # hechos (hay error, no hay herramientas registradas, esta cancelada), no veredictos.
   $err = $Estados | Where-Object { $_.Clase -eq 'error' }
+  $sin = $Estados | Where-Object { $_.Clase -eq 'sin-trabajo-registrado' }
+  $can = $Estados | Where-Object { $_.Clase -eq 'cancelada' }
+  $act = $Estados | Where-Object { $_.Clase -eq 'activa' }
 
   Write-Host ''
-  Write-Host ("[WATCHDOG] {0}  aviso {1}s  cancelar {2}s" -f $AhoraUtc.ToString('HH:mm:ss'), $Umbral, $CancelarSeg) -ForegroundColor Cyan
+  Write-Host ("[WATCHDOG] {0}  sesiones: {1} ({2} activas, {3} sin trabajo registrado)" -f
+    $AhoraUtc.ToString('HH:mm:ss'), $Estados.Count, @($act).Count, @($sin).Count) -ForegroundColor Cyan
 
   foreach ($e in $err) {
     Write-Host ("  ERROR    {0,-16} {1}" -f $e.Sesion.Slug, $e.Causa.Texto) -ForegroundColor Red
+    Write-Host ("           silencio {0}s  loops={1} tools={2}" -f $e.Silencio, $e.Sesion.Loops, $e.Sesion.Tools) -ForegroundColor DarkGray
   }
-  foreach ($a in $atas) {
-    Write-Host ("  ATASCO   {0,-16} hace {1}s  loops={2} tools={3}" -f $a.Sesion.Slug, $a.Silencio, $a.Sesion.Loops, $a.Sesion.Tools) -ForegroundColor Red
+  foreach ($s in ($sin | Sort-Object Silencio -Descending)) {
+    Write-Host ("  sin trabbajo {0,-14} silencio {1}s  loops={2} tools={3}" -f $s.Sesion.Slug, $s.Silencio, $s.Sesion.Loops, $s.Sesion.Tools) -ForegroundColor Yellow
   }
-  foreach ($s in $sosp) {
-    Write-Host ("  sospecha {0,-16} hace {1}s" -f $s.Sesion.Slug, $s.Silencio) -ForegroundColor Yellow
+  foreach ($o in ($act | Sort-Object Silencio -Descending | Select-Object -First 3)) {
+    Write-Host ("  activa   {0,-16} silencio {1}s  loops={2} tools={3}" -f $o.Sesion.Slug, $o.Silencio, $o.Sesion.Loops, $o.Sesion.Tools) -ForegroundColor DarkGray
   }
-  foreach ($o in ($ok | Sort-Object Silencio -Descending | Select-Object -First 3)) {
-    Write-Host ("  ok       {0,-16} hace {1}s  loops={2} tools={3}" -f $o.Sesion.Slug, $o.Silencio, $o.Sesion.Loops, $o.Sesion.Tools) -ForegroundColor DarkGray
+  foreach ($c in $can) {
+    Write-Host ("  cancelada {0,-15} silencio {1}s  loops={2} tools={3}" -f $c.Sesion.Slug, $c.Silencio, $c.Sesion.Loops, $c.Sesion.Tools) -ForegroundColor DarkGray
   }
-  if (-not $err -and -not $atas -and -not $sosp) { Write-Host '  sin incidencias' -ForegroundColor Green }
+  if (-not $err -and -not $sin -and -not $can) { Write-Host '  sin incidencias' -ForegroundColor Green }
 }
 
 # --- Ejecucion ---------------------------------------------------------------
@@ -313,32 +348,31 @@ function Mostrar {
 if ($UnaVez) {
   $l = Leer-Log
   if (-not $l) { Write-Error 'No se pudo leer el log.'; exit 1 }
-  $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc ([datetime]::UtcNow) -Umbral $Umbral -CancelarSeg $CancelarSegundos
-  Mostrar -Estados $est -AhoraUtc ([datetime]::UtcNow) -Umbral $Umbral -CancelarSeg $CancelarSegundos
-  if ($est | Where-Object { $_.Clase -in @('ATASCO', 'error') }) { exit 1 }
+  $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc ([datetime]::UtcNow)
+  Mostrar -Estados $est -AhoraUtc ([datetime]::UtcNow)
+  if ($est | Where-Object { $_.Clase -in @('error') }) { exit 1 }
   exit 0
 }
 
 Write-Host 'Watchdog de subagentes. Ctrl+C para salir.' -ForegroundColor Cyan
-Write-Host "  aviso a ${Umbral}s | cancelar a ${CancelarSegundos}s | cada ${Intervalo}s" -ForegroundColor DarkGray
-Write-Host "  solo informa: $($SinCancelar.IsPresent)" -ForegroundColor DarkGray
+Write-Host "  modo: $(if ($Cancelar) { 'avisa y CANCELA si se pide' } else { 'solo informa. No cancela nada.' })" -ForegroundColor DarkGray
+Write-Host "  revision cada ${Intervalo}s" -ForegroundColor DarkGray
 Write-Host "  registro: $Registro" -ForegroundColor DarkGray
 Write-Host ''
 
-$previos = @{}
 while ($true) {
   $l = Leer-Log
   if ($l) {
     $ahora = [datetime]::UtcNow
-    $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc $ahora -Umbral $Umbral -CancelarSeg $CancelarSegundos
-    $problemas = $est | Where-Object { $_.Clase -in @('ATASCO', 'error') }
-    # Solo imprime si hay problema, o si el estado ha cambiado. Evita ruido.
+    $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc $ahora
+    # "Problema" es solo lo que tiene causa leida de un error real. El silencio y la
+    # ausencia de trabajo se INFORMAN, pero no son un problema: no hay medicion que los
+    # separe de una sesion que simplemente esta trabajando callada.
+    $problemas = $est | Where-Object { $_.Clase -eq 'error' }
     $firma = ($problemas | ForEach-Object { "$($_.Sesion.Id):$($_.Clase)" }) -join ','
     if ($firma -ne $script:prevFirma) {
-      Mostrar -Estados $est -AhoraUtc $ahora -Umbral $Umbral -CancelarSeg $CancelarSegundos
-      if ($problemas) {
-        Accionar -Estados $est -SoloInformar:$SinCancelar | Out-Null
-      }
+      Mostrar -Estados $est -AhoraUtc $ahora
+      if ($problemas) { Accionar -Estados $est -SoloInformar:(-not $Cancelar) | Out-Null }
       $script:prevFirma = $firma
     }
   }

@@ -42,7 +42,7 @@ marcar y parar.
   - Hecho cuando: los PDF están en `curso/originales/` con su hash, y `curso/apuntes/` tiene
     lo extraído organizado por tema.
 
-- [ ] **T10. Revisión completa.** todos
+- [x] **T10. Revisión completa.** todos
   - Hecho cuando: `reviewer` ha recorrido la capa genérica y la plantilla buscando
     incoherencias, referencias rotas, ejemplos que contradicen su regla y sintaxis
     desactualizada, con su informe. **Pendiente: segunda pasada** sobre lo añadido después
@@ -57,7 +57,7 @@ marcar y parar.
     `verificar-interfaz.js` es ahora una herramienta del repo, probada contra el proyecto de
     prueba.
 
-- [ ] **T12. Portabilidad a otros agentes y modelos.** RF-1, RF-6, RF-10
+- [x] **T12. Portabilidad a otros agentes y modelos.** RF-1, RF-6, RF-10
   - Hecho cuando: cada documento que dependa de la herramienta lleva una nota de qué cambia en
     otros agentes; la constitución y `SDD.md` no nombran la herramienta donde no hace falta; y
     queda escrito qué habría que adaptar para usar la capa genérica con otro agente.
@@ -72,7 +72,7 @@ marcar y parar.
 
 - **T1 a T9 — hechas.** El detalle está en `BITACORA.md`.
 - **La prueba real** cerro los requisitos que dependían de un proyecto: RF-1 y RF-11.
-- **T10** queda como segunda pasada del revisor, sobre lo añadido después.
+- **T10** se hizo en dos pasadas: la primera el 2026-10-09, la segunda sobre los añadidos después.
 
 ## Para la próxima sesión
 

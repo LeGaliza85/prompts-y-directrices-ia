@@ -4,9 +4,9 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
-    "git diff*": allow
-    "git status*": allow
+    «*»: ask
+    «git diff*»: allow
+    «git status*»: allow
   webfetch: deny
 ---
 
@@ -32,7 +32,7 @@ contrario de lo que dice el texto.
 sobre lo que dice otro documento. Comprueba las rutas leyendo el archivo, no asumiendo.
 
 **3. Tablas que no discriminan.** Filas con valores identicos o casi identicos que deberian
-distinguirse. Especialmente tablas de "A frente a B" y de nombres parecidos.
+distinguirse. Especialmente tablas de «A frente a B» y de nombres parecidos.
 
 **4. Ejemplos que no se pueden ejecutar.** Codigo, comandos o configuraciones de ejemplo que
 no funcionarian tal como estan escritos.

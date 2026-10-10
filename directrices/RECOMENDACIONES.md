@@ -3,7 +3,7 @@
 La tercera pregunta que había que responder: qué añadiría el agente y qué recomendaría. Con
 datos del propio repositorio, no de opinión.
 
-**Fecha del análisis:** 2026-10-11, con 20 documentos, 33 archivos de plantilla, 13 agentes,
+**Fecha del análisis:** 2026-10-11, con 21 documentos, 33 archivos de plantilla, 13 agentes,
 10 comandos y un proyecto de prueba real.
 
 ---
@@ -21,8 +21,8 @@ donde bastaría uno, una tarea que se repite, un agente que nunca se usa.
 de los errores no mejora nunca de lo que ya va bien. Y el caso más frecuente es ese: no está
 roto, es incómodo.
 
-**Formato:** fecha · qué molesta · cuánto cuesta · propuesta · qué se probationó en vez de
-como se probó en vez de aplicar. La última columna es la importante: distingue lo que se
+**Formato:** fecha · qué molesta · cuánto cuesta · propuesta · qué se probó en vez de
+aplicar. La última columna es la importante: distingue lo que se
 probó porque funcionó de lo que se cambió porque se le ocurrió a alguien.
 
 ### 2. El último 20% del script, no el primero
@@ -30,7 +30,7 @@ probó porque funcionó de lo que se cambió porque se le ocurrió a alguien.
 **Qué falta.** `nuevo-proyecto.ps1` copia, elige agentes y resuelve marcadores. Se detiene
 justo antes de la parte que más valor tiene: **escribir la constitución**.
 
-Es el paso que más cuesta y el que másHrancía. Lo escribí a mano en el proyecto de prueba en
+Es el paso que más cuesta y el que más ahorraía. Lo escribí a mano en el proyecto de prueba en
 diez minutos, y esos diez minutos se repiten en cada proyecto.
 
 **Qué haría.** Un comando `/sdd-constitution` ya existe, pero requiere que el agente pregunte.
@@ -73,7 +73,7 @@ si sirve para distintos.
 
 **Por qué no.** `frontend-reviewer` existe para un proyecto web con interfaz. Los dos proyectos
 que han pasado por aquí ya lo traían sin necesitarlo. **La plantilla trae trece candidatos y
-cada proyecto borra la mayoría.** Añadir un cuarto specialized sería más de lo mismo.
+cada proyecto borra la mayoría.** Añadir un cuarto agente especializado sería más de lo mismo.
 
 La restricción de permisos que justifica a cada agente es real, pero el criterio es que la
 necesidad sea del proyecto, no que el catálogo sea amplio.
@@ -86,7 +86,7 @@ que ya se ve.
 
 ### Más verificación automática
 
-Temptador y equivocado. El sistema ya tiene: verificador de caracteres, script de arranque,
+Tentador y equivocado. El sistema ya tiene: verificador de caracteres, script de arranque,
 herramienta de interfaz en navegador real, revisor y asesor. **El cuello de botella ya no es
 falta de comprobación automática: es que las comprobaciones no miran lo que importa.**
 
@@ -113,8 +113,8 @@ que ganarse el sitio por algo parecido.
 
 ## Sobre el coste de todo esto
 
-El repositorio tiene 20 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
-"aprender de un curso". Funciona, y la prueba real lo demuestra.
+El repositorio tiene 21 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
+«aprender de un curso». Funciona, y la prueba real lo demuestra.
 
 **El riesgo real ya no es que falte nada: es que una biblioteca de directrices crezca más que
 la necesidad que la justifica.** Cada documento que se añade es contexto que un agente lee y

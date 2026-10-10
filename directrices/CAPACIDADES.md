@@ -201,7 +201,7 @@ también aplica aquí.
 |---|---|
 | Estilo y formato del código | linter / formateador |
 | Tipos | comprobador estático de tipos |
-| Pruebas unitarias y de integración | framework de tests |
+| Pruebas unitarias y de integración | marco de pruebas |
 | Accesibilidad de la interfaz | revisor automático de accesibilidad |
 | Comportamiento real en el navegador | navegador controlado |
 | Rendimiento | perfilador / auditor |

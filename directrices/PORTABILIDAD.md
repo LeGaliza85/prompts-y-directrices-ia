@@ -40,7 +40,7 @@ una lista de archivos a cargar.
 
 **La alternativa universal**: si el agente no tiene forma de cargar archivos por configuración,
 basta con que `AGENTS.md` lo diga con claridad. Un agente tiene sus herramientas para leer
-archivos; lo único que hay que ensure es que entienda que **debe** leerlos. No hace falta
+archivos; lo único que hay que asegurar es que entienda que **debe** leerlos. No hace falta
 configuración, solo instrucción.
 
 ### 2. La carpeta `.opencode/`
@@ -60,7 +60,7 @@ configuración, solo instrucción.
 
 **Los subagentes son lo más atado.** Cursor y Windsurf no tienen el concepto equivalente: ahí el
 reparto de trabajo lo hace el agente principal en una sola sesión. La capa genérica sobrevive
-—el principio 7 habla de "cuando aporta"—, pero **el catálogo de 13 agentes no aplica**.
+—el principio 7 habla de «cuando aporta»—, pero **el catálogo de 13 agentes no aplica**.
 
 ### 3. El frontmatter de los agentes
 

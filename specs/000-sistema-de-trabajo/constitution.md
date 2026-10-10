@@ -9,7 +9,7 @@ concreta.
 ## 1. Este repositorio no tiene código de producción
 
 No hay aplicación, no hay servidor, no hay base de datos. El producto son **instrucciones**.
-Eso cambia qué significa "terminado": aquí una directiva está terminada cuando es
+Eso cambia qué significa «terminado»: aquí una directiva está terminada cuando es
 **aplicable sin interpretación**, no cuando hay un test que pase.
 
 Consecuencia: no existe `MEMORY.md` en la raíz. Sus equivalentes son `aprendido.md`
@@ -36,7 +36,7 @@ obsoleta que produce archivos que se cargan sin error pero no aplican ninguna re
 ## 4. Los documentos se dividen para poder cargarse por separado
 
 La instrucción no vive en un archivo único. Se divide en documentos que se cargan según la
-tarea, usando el campo `instructions` de `opencode.json` y la referencia explícita en
+tarea, usando el campo `instructions` de `opencode.jsonc` y la referencia explícita en
 `AGENTS.md`.
 
 Razón: OpenCode **no** interpreta `@archivo.md` por sí solo. Sin decírselo, una referencia

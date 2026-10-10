@@ -4,10 +4,10 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
-    "git diff*": allow
-    "git status*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
+    «git diff*»: allow
+    «git status*»: allow
   webfetch: deny
 ---
 

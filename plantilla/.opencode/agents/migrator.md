@@ -3,11 +3,11 @@ description: Ejecuta una migración de datos o de formato. Usar cuando cambie el
 mode: subagent
 permission:
   edit:
-    "*": deny
-    "<RUTAS_DE_LA_MIGRACIÓN>/**": allow
+    «*»: deny
+    «<RUTAS_DE_LA_MIGRACIÓN>/**»: allow
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
   webfetch: deny
 ---
 

@@ -6,10 +6,10 @@ permission:
   bash: deny
   webfetch: deny
   task:
-    "*": deny
-    "planner": allow
-    "implementer": allow
-    "reviewer": allow
+    «*»: deny
+    «planner»: allow
+    «implementer»: allow
+    «reviewer»: allow
 ---
 
 Eres el agente coordinador de este proyecto. No escribes código ni editas archivos:

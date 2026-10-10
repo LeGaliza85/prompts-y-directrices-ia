@@ -38,7 +38,7 @@ que el modelo no puede cumplir.
 
 **Nota sobre el propio archivo.** Al redactar esta entrada se repitió el error: se coló
 un carácter corrupto en la frase «acentos, [corrupto] los que». El barrido lo detectó.
-Dos Lessons: (1) citar un carácter ilegible es escreverlo de verdad, así que se describe
+Dos lecciones: (1) citar un carácter ilegible es escribirlo de verdad, así que se describe
 con su nombre y su código en lugar de pegarlo; (2) un archivo que documenta errores
 contiene ejemplos que disparan su propio detector, así que hay que distinguirlos de los
 errores reales revisando la línea, no solo la alerta.
@@ -62,28 +62,28 @@ se documenta como tal en esa tabla, con la fecha de la última comprobación.
 
 ## 2026-10-09 — Manipular caracteres de un archivo escrito con WriteAllLines corrompe los acentos
 
-**Que paso.** Para corregir dos filas de una tabla en un archivo UTF-8, se leyeron las
-lineas con ReadAllLines, se reasigno por indice y se escribieron con WriteAllLines. Las dos
-lineas salieron sin tildes y con el contenido roto. Un intento posterior de insertar los
-acentos caracter a caracter produjo basura ilegible.
+**Qué pasó.** Para corregir dos filas de una tabla en un archivo UTF-8, se leyeron las
+líneas con ReadAllLines, se reasignó por índice y se escribieron con WriteAllLines. Las dos
+líneas salieron sin tildes y con el contenido roto. Un intento posterior de insertar los
+acentos carácter a carácter produjo basura ilegible.
 
-**Por que.** WriteAllLines con un encoding sin BOM escribe UTF-8, pero el problema real fue
-otro: la edicion por indice de lineas ya escritas no es una operacion segura cuando el texto
-tiene acentos y la herramienta intermedia los reinterpreta. La segunda causa es mas
-simple: se construyeron cadenas concatenando caracteres por codigo Unicode y la expresion
+**Por qué.** WriteAllLines con un encoding sin BOM escribe UTF-8, pero el problema real fue
+otro: la edición por índice de líneas ya escritas no es una operación segura cuando el texto
+tiene acentos y la herramienta intermedia los reinterpreta. La segunda causa es más
+simple: se construyeron cadenas concatenando caracteres por código Unicode y la expresión
 salió mal.
 
-**Directiva que lo previene.** No se editan lineas sueltas de un archivo de texto con
-manipulacion de arrays de caracteres, ni se insertan acentos por codigo Unicode.
+**Directiva que lo previene.** No se editan líneas sueltas de un archivo de texto con
+manipulación de arrays de caracteres, ni se insertan acentos por código Unicode.
 
-1. Cambios pequenos y localizados: herramienta de edicion con old/new string.
+1. Cambios pequeños y localizados: herramienta de edición con old/new string.
 2. Cambios de estructura un bloque grande: reescritura completa del archivo con la
    herramienta de escritura.
-3. Para verificar que quedo bien: leer el archivo con la herramienta de lectura y comprobar
+3. Para verificar que quedó bien: leer el archivo con la herramienta de lectura y comprobar
    que los acentos son correctos, no solo que no haya caracteres corruptos.
 
 El patrón que funciona: editar con la herramienta de archivos, nunca con el intérprete de
-PowerShell. El mismo script que verifica caracteres no detecta acentos perdidos, asi que la
+PowerShell. El mismo script que verifica caracteres no detecta acentos perdidos, así que la
 comprobacion visual sigue siendo necesaria.
 
 ---
@@ -99,7 +99,7 @@ vías normales de compartir código sin compilación. Sin ellas, el archivo se c
 `<script src>` y `module` no existe en el navegador.
 
 Lo peligroso: **los tests seguían verdes**. El fallo solo aparecía al abrir la página. Una
-comprobación que pasa y otra que no se ha hecho parecen "todo bien".
+comprobación que pasa y otra que no se ha hecho parecen «todo bien».
 
 **Directiva que lo previene.** Para compartir lógica entre Node y navegador sin compilación,
 patrón de exportación doble:
@@ -138,7 +138,7 @@ preguntarse **cuál de los dos codifica la intención correcta**. Un test escrit
 puede fijar un comportamiento más estricto de lo que la especificación pide.
 
 Si el test estaba mal, se corrige el test y se deja escrito el porqué en un comentario, para
-que la próxima vez no se "corrija" otra vez en la dirección equivocada.
+que la próxima vez no se «corrija» otra vez en la dirección equivocada.
 
 ---
 
@@ -276,4 +276,75 @@ como plantilla. Un listado donde 40 de 55 no aplican hace que nadie lo lea.
 **Directiva que lo previene.** Lista blanca, no lista negra: se enumeran los archivos que la
 persona tiene que editar y solo se buscan marcadores ahí. Añadir un archivo nuevo a la lista
 blanca es una decisión; dejar que todos entren por defecto pone el ruido en el informe.
+
+
+## 2026-10-10 - Afirmar un bug sin comprobarlo cuesta más que no buscarlo
+
+**Qué pasó.** Al revisar los agentes de la plantilla se afirmó que los 13 estaban rotos
+porque les faltaba 	ools:. La comprobación estaba mal: la lista real de campos es
+description, mode y permission. Todos los agentes estaban bien.
+
+Peor encore: se afirmó que 
+uevo-proyecto.ps1 no sustituye sus marcadores y que era un
+fallo silencioso. Se llegaba a esa conclusión comparando cadenas escritas a mano. Al
+extraer el regex del propio script y probarlo contra el fichero real, se obtiene una
+coincidencia: el marcador se detecta y se avisa. El script cumple.
+
+**Por qué.** Tres errores de método encadenados: un campo inventado, una comparación de
+cadenas mal normalizada por la codificación de la consola, y una extracción del patrón
+que devolvió la línea entera en vez del patrón. En los tres casos se ve en pantalla
+algo plausible, y sobre esa pantalla se construyó una conclusión rotunda. Peor es que
+«crítico» y «fallo silencioso» son palabras que se quedan: una vez escritas, ya no
+se reexaminan solas.
+
+Además, el marcador se queda sin sustituir **a propósito**: la Constitución dice que el
+script no inventa lo que solo sabe quien pide el proyecto. Confundir «no lo rellena» con
+«se le olvidó» convierte una decisión en un fallo.
+
+**Directiva que lo previene.**
+
+1. Antes de decir que algo está roto, ejecutar la comprobación contra el fichero real y
+   enseñar la salida. Si la comprobación no se ha ejecutado, no se afirma.
+2. Extraer los patrones de los ficheros, no escribirlos de memoria. Un regex tecleado a
+   mano prueba otra cosa.
+3. Las palabras «crítico», «silencioso» y «siempre» obligan a una comprobación doble.
+4. Comprobar contra la regla del repo, no contra la que uno cree. Aquí `tools:` parecía
+   obligatorio y la fuente de verdad, `APIS-VERIFICADAS.md`, decía otra cosa.
+
+**Segunda vuelta, el mismo día.** La lección no se aprendió a la primera. Cinco errores
+más, todos del mismo tipo, y conviene dejarlos por separado porque cada uno enseña una
+cosa distinta:
+
+1. **Busqué `tools=` en el log y salió 0.** Dije que el watchdog estaba roto por eso.
+   Falso: el watchdog no busca `tools=`, **cuenta** eventos (`watchdog.ps1:148`). Mi
+   lectura del código era erronea. Contar no es lo mismo que buscar; hay que leer qué
+   hace la línea, no qué palabra contiene.
+2. **Simulé la regla del watchdog y dio 0 falsos positivos de 29 sesiones.** Iba a
+   anunciar que «cancelaría trabajo legítimo». La simulación dijo lo contrario y tuve que
+   retirarlo. Si la comprobación no sostiene la afirmación, la afirmación se cae.
+3. **Extraje el patrón con un `-replace` que devolvió la línea entera**, y el test falló
+   con 0 coincidencias por mi culpa, no por el patrón. Un test que falla hay que arreglarlo
+   antes de leer el resultado como si fuera verdad.
+4. **Propuse un umbral de 240 s y cacheos de 90 s y 10 min sin fuente ninguna.** Los
+   números me sonaron razonables y los presenté como diseño. Eran opiniones.
+5. **`$S` y `$s` son la misma variable en PowerShell.** El análisis de subagentes se
+   destruyó a sí mismo y estuve a punto de presentar una tabla de datos vacíos. Medio
+   análisis perdido por un nombre de variable.
+
+**Directiva que lo previene.** Principio 10 de la Constitución: ninguna cifra se da sin
+origen, y se declara si es medido, heredado o estimado. De aquí se derivan estas cuatro,
+que son las que habrían parado los cinco errores de arriba:
+
+- Si la comprobación no se ha ejecutado, no se afirma. Sin excepciones.
+- Si se ejecutó y **no sostiene** lo que ibas a decir, se dice que no lo sostiene. Un
+  resultado que contradice la propia teoría es un resultado, no un fallo del test.
+- Ningún umbral, espera o límite entra en el diseño sin medición que lo justifique. Si no
+  se puede medir, se quita el número del diseño en lugar de ajustarlo.
+- Un script que analiza se revisa antes de leer su salida: nombres de variables colisionados,
+  patrones mal extraídos y expresiones que devuelven basura producen informes que parecen
+  correctos.
+
+Y una quinta, sobre la presentación: **avisar de que un dato no se tiene también es un
+resultado.** «No he podido medir el tiempo de arranque de los subagentes porque mi script
+se rompió» es una respuesta válida. Inventar el número para no dejar el hueco no lo es.
 

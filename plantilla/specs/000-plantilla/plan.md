@@ -43,7 +43,7 @@ explícito para que no se cuele después.
 
 - Campo de búsqueda sobre la lista, con etiqueta asociada y `autocomplete="off"`.
 - Botón de limpiar a la derecha del campo. Visible solo cuando hay texto (RF-7).
-- Mensaje de "sin resultados" bajo la lista, visible solo cuando el filtro está activo y no
+- Mensaje de «sin resultados» bajo la lista, visible solo cuando el filtro está activo y no
   hay coincidencias (RF-4).
 - El recuento o la racha, si la pantalla los muestra, **no** cambian con el filtro: el
   filtro afecta a la lista, no a los totales.
@@ -69,7 +69,7 @@ expresión regular: el texto del campo puede contener caracteres que la romperí
 
 ## Comprobación
 
-- Test de la función pura `filtrar`: los cinco casos límite de la spec.
+- Test de la función pura `filtrar`: los cuatro casos límite de la spec.
 - Comprobación manual de RF-6 y RF-7, que son de interfaz.
 - Comprobación de accesibilidad: el campo se alcanza con Tab y tiene etiqueta.
 

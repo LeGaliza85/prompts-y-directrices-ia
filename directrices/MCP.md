@@ -34,7 +34,7 @@ En `opencode.jsonc`, en la clave `mcp`:
 ```
 
 **Nada se precarga.** Por el principio 1, activar un MCP requiere aprobación. Cuando se
-apruebe uno, se anade su bloque, se comprueba que funciona, y se registra en
+apruebe uno, se añade su bloque, se comprueba que funciona, y se registra en
 `MEMORY.md` con la fecha y el motivo.
 
 Un bloque de ejemplo, comentado, para que se vea la forma sin activar nada:

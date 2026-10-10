@@ -4,10 +4,10 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
-    "<COMANDO_DE_COMPROBACIÓN>*": allow
-    "git diff*": allow
-    "git status*": allow
+    «*»: ask
+    «<COMANDO_DE_COMPROBACIÓN>*»: allow
+    «git diff*»: allow
+    «git status*»: allow
   webfetch: deny
 ---
 
@@ -15,7 +15,7 @@ Eres el agente revisor. Revisas sin modificar nunca ningún archivo. Sigue la sk
 
 ## Si te piden revisar una spec
 
-Revísala como un QA profesional y lista:
+Revísala como un revisor de calidad y lista:
 
 1. Ambigüedades que quedan: requisitos que no se pueden verificar.
 2. Contradicciones entre requisitos.

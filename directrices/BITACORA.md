@@ -18,9 +18,9 @@ genérica.
 modelos.
 
 **El hallazgo que cambió el documento.** Al medirlo, la mayoría de las 61 menciones de
-"OpenCode" estaban en los documentos **sobre** la herramienta —`OPENCODE.md`, `PIN.md`,
+«OpenCode» estaban en los documentos **sobre** la herramienta —`OPENCODE.md`, `PIN.md`,
 `APIS-VERIFICADAS.md`, `MCP.md`, `PROCEDIMIENTO-ACTUALIZACION.md`—, que por definición tratan de
-ella. En la capa genérica quedaban **cuatro**, y tres eran exemples de estructura de proyecto
+ella. En la capa genérica quedaban **cuatro**, y tres eran ejemplos de estructura de proyecto
 que se podían escribir con un marcador.
 
 **Medición después del cambio.** Siete documentos de veinte no mencionan ninguna
@@ -36,7 +36,7 @@ lo leen varios agentes, y OpenCode acepta `CLAUDE.md` si no encuentra `AGENTS.md
 punto de portabilidad del sistema, y hasta ahora no estaba escrito en ningún sitio.
 
 **La conclusión incómoda.** Los subagentes son lo más atado: Cursor y Windsurf no tienen el
-concepto. El principio 7 sobrevive —habla de "cuando aporta", no de cómo—, pero **el catálogo
+concepto. El principio 7 sobrevive —habla de «cuando aporta», no de cómo—, pero **el catálogo
 de trece agentes no es portable**, y eso no estaba dicho.
 
 **Con otros modelos.** No hay diferencia de compatibilidad: los documentos son texto. Lo que
@@ -61,7 +61,7 @@ dejar rastro.
 
 **La contradicción con una decisión anterior, resuelta.** En esta bitácora consta que este repo
 **no** tendría `MEMORY.md` en la raíz porque no hay estado de implementación que recordar. Se
-mantiene: sigue sin haberlo. Lo que se anade no es memoria de proyecto, es *traspaso entre
+mantiene: sigue sin haberlo. Lo que se añade no es memoria de proyecto, es *traspaso entre
 sesiones*, que es otra cosa. `PROXIMA-SESION.md` dice qué queda por hacer; una memoria diría
 en qué estado está el código, y aquí no hay código.
 
@@ -204,7 +204,7 @@ a cuenta.
 ## 2026-10-09 — Los comandos `/sdd-*` y los tres documentos de método
 
 **Decisión.** Se completan las piezas que faltaban del material de origen: los diez comandos
-que automatizan las fases del SDD, y los tres documentos de método que no tenian versión
+que automatizan las fases del SDD, y los tres documentos de método que no tenían versión
 propia.
 
 **Propuso.** El usuario, al preguntar qué faltaba.
@@ -234,36 +234,36 @@ prompts.
 
 ## 2026-10-09 — La plantilla se automatiza con un script
 
-**Decisión.** Se anade `nuevo-proyecto.ps1`: copia la plantilla, elige los agentes segun el
+**Decisión.** Se añade `nuevo-proyecto.ps1`: copia la plantilla, elige los agentes según el
 tipo de proyecto, sustituye los marcadores que se pueden saber de antemano, inicializa git y
 lista lo que queda por rellenar.
 
-**Propuso.** El usuario, preguntando si se podia automatizar sin tener que hacer nada.
+**Propuso.** El usuario, preguntando si se podía automatizar sin tener que hacer nada.
 
 **Por qué.** En el plan de la Spec 000 estaba registrado como alternativa descartada, con la
 nota de reevaluarlo en el cuarto proyecto. La pregunta lo adelanta: el coste de copiar a mano
 y editar siete archivos se paga en cada proyecto, no en el cuarto.
 
-**Que no hace, a proposito.** No inventa nada del proyecto. El stack, los comandos, las
+**Qué no hace, a propósito.** No inventa nada del proyecto. El stack, los comandos, las
 trampas de dominio y el formato de datos solo los sabe quien lo pide. El script resuelve lo
-mecanico y lista los huecos: rellenarlos por su cuenta produciria un `AGENTS.md` que parece
+mecánico y lista los huecos: rellenarlos por su cuenta produciría un `AGENTS.md` que parece
 completo y no dice nada de este proyecto.
 
 **Consecuencia.** El informe de pendientes usa lista blanca: solo los archivos que la persona
-edita. La primera version listaba 55 marcadores, de los cuales 40 eran ejemplos de formato
-dentro de la skill y la spec de ejemplo. Un informe asi se ignora entero.
+edita. La primera versión listaba 55 marcadores, de los cuales 40 eran ejemplos de formato
+dentro de la skill y la spec de ejemplo. Un informe así se ignora entero.
 
 **Fallos encontrados al probarlo, y corregidos:**
 
-1. El script no llevaba BOM, asi que PowerShell 5.1 lo leia como ANSI y el parser fallaba con
-   los acentos del patron.
-2. La clave de sustitucion de `<TECNOLOGIAS Y VERSIONES CLAVE>` no llevaba tilde, y
+1. El script no llevaba BOM, así que PowerShell 5.1 lo leía como ANSI y el parser fallaba con
+   los acentos del patrón.
+2. La clave de sustitución de `<TECNOLOGIAS Y VERSIONES CLAVE>` no llevaba tilde, y
    `-replace` no falla cuando no encuentra: el marcador se quedaba en el archivo generado sin
-   ningun aviso.
-3. El listado de pendientes tampoco lo detectaba, porque su patron solo aceptaba ASCII. Dos
-   filtros que fallaban en silencio seguidos parecian que no habia fallo.
+   ningún aviso.
+3. El listado de pendientes tampoco lo detectaba, porque su patrón solo aceptaba ASCII. Dos
+   filtros que fallaban en silencio seguidos parecían que no había fallo.
 
-Los tres estan en `aprendido.md`, porque los tres volveran a ocurrir.
+Los tres están en `aprendido.md`, porque los tres volverán a ocurrir.
 
 ---
 
@@ -271,31 +271,31 @@ Los tres estan en `aprendido.md`, porque los tres volveran a ocurrir.
 
 **Decisión.** Se abandona el conjunto fijo de cuatro agentes. La plantilla ofrece doce
 candidatos y el proyecto se queda con los que su trabajo requiera. El límite lo marca la
-ne necesidad, no un número.
+necesidad, no un número.
 
 **Propuso.** El usuario, con el argumento de que un edificio necesita arquitecto, aparejador
-y albaniles, y una campana de publicidad director, disenador y editor: el equipo lo define
+y albañiles, y una campaña de publicidad director, diseñador y editor: el equipo lo define
 la tarea.
 
 **Afecta a.** `directrices/AGENTES.md`, `plantilla/.opencode/agents/`, `plantilla/LEEME.md`.
 
 **Por qué.** El modelo anterior tenia una «base obligatoria» de cuatro agentes heredada del
-curso. La justificacion honesta era solo la frontera de permisos, y el mas debil de los
+curso. La justificación honesta era solo la frontera de permisos, y el más débil de los
 cuatro —`coordinator`— ha pasado a opcional: su trabajo consiste en repartir entre
-subagentes, y desde que delegar no requiere autorizacion previa el primario puede hacerlo
+subagentes, y desde que delegar no requiere autorización previa el primario puede hacerlo
 directamente.
 
-**Como se decide ahora.** Tabla por tipo de proyecto (web, API, datos, CLI, movil, infra,
-documentacion) como punto de partida, y un procedimiento de cuatro pasos. Dos agentes son
-comunes a todos: alguien que planifique y alguien que revise. Sin planificacion no hay
-spec; sin revision, el principio 5 no se cumple.
+**Cómo se decide ahora.** Tabla por tipo de proyecto (web, API, datos, CLI, móvil, infra,
+documentación) como punto de partida, y un procedimiento de cuatro pasos. Dos agentes son
+comunes a todos: alguien que planifique y alguien que revise. Sin planificación no hay
+spec; sin revisión, el principio 5 no se cumple.
 
 **Catalogo completo.** Once de trabajo —`planner`, `implementer`, `reviewer`, `tester`,
 `debugger`, `docs-writer`, `security-auditor`, `refactorer`, `perf-auditor`, `migrator`,
-`frontend-reviewer`— mas `coordinator`, opcional.
+`frontend-reviewer`— más `coordinator`, opcional.
 
-**Consecuencia.** Cada agente del catalogo tiene escrita la restriccion de permisos que lo
-justifica, porque esa es la unica razon valida para que exista como agente y no como
+**Consecuencia.** Cada agente del catálogo tiene escrita la restricción de permisos que lo
+justifica, porque esa es la única razón válida para que exista como agente y no como
 comando.
 
 ---

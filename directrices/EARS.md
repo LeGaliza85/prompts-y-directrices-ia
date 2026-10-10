@@ -10,7 +10,7 @@ suficiente y qué lento es un fallo. «El sistema responde en menos de 200 ms en
 95» sí.
 
 La diferencia parece de redacción pero no lo es. Un requisito no verificable **pasa el
-control de calidad**: parece específico, se lee bien, y llega a la implementación. El error
+control de calidad**: parece específico, se lee bien y llega a la implementación. El error
 solo aparece cuando ya es caro corregirlo — o nunca aparece.
 
 Un requisito con criterio medible se convierte casi directamente en un test. Esa es la

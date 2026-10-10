@@ -4,7 +4,7 @@ mode: subagent
 permission:
   edit: deny
   bash:
-    "*": ask
+    «*»: ask
   webfetch: deny
 ---
 
@@ -36,5 +36,5 @@ Por severidad, y cada hallazgo con:
 - Qué está expuesto y cómo se podría explotar, en concreto.
 - Qué se espera.
 
-No modifiques nada. No "lo arreglo mientras estaba" es un fallo de este agente: corrige
+No modifiques nada. No «lo arreglo mientras estaba» es un fallo de este agente: corrige
 quien tiene permisos para ello, y así queda registrado quién cambió qué.

@@ -216,4 +216,22 @@ Write-Host "  1. docs/constitution.md: decide el stack, el idioma y como se comp
 Write-Host "  2. AGENTS.md: comandos, trampas conocidas y formato de datos"
 Write-Host "  3. <RUTA_A_LAS_DIRECTRICES> en AGENTS.md y LEEME.md"
 Write-Host "  4. Primera spec en specs/001-nombre/ (ver .agents/skills/sdd/SKILL.md)"
-Write-Host "  5. Sustituye <COMANDO_DE_COMPROBACION> en los permisos de los agentes"
+
+# Los marcadores que quedan en los permisos se imprimen LEIDOS del fichero generado,
+# no escritos a mano. La version anterior escribia <COMANDO_DE_COMPROBACION> sin tilde
+# mientras el fichero tiene <COMANDO_DE_COMBACIÓN> con tilde: copiar y pegar no
+# encontraba nada y el nombre que aparecia no existia en el proyecto.
+$MarcEnPermisos = Get-ChildItem (Join-Path $objetivo '.opencode\agents') -Filter *.md -File -ErrorAction SilentlyContinue |
+  ForEach-Object {
+    $tx = [System.IO.File]::ReadAllText($_.FullName, [System.Text.Encoding]::UTF8)
+    if ($tx -notmatch '(?s)permission:.*?---') { return }
+    foreach ($m in [regex]::Matches($tx, '<[A-ZÀ-ÿ][^<>]{0,80}>')) {
+      "$($_.Name): $($m.Value)"
+    }
+  } | Sort-Object -Unique
+
+if ($MarcEnPermisos) {
+  Write-Host "  5. Marcadores SIN SUSTITUIR dentro de permisos (no funcionan hasta rellenarlos):" -ForegroundColor Yellow
+  $MarcEnPermisos | ForEach-Object { Write-Host "       $_" -ForegroundColor Yellow }
+  Write-Host "     Si un permiso se queda sin sustituir, ese agente no puede ejecutar ese comando." -ForegroundColor DarkGray
+}

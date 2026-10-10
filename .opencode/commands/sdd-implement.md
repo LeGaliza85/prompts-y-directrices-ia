@@ -12,7 +12,7 @@ Implementa **SOLO** la tarea $2 de `specs/$1/tasks.md`, siguiendo `specs/$1/plan
 3. Ejecuta la comprobación y **muéstrame el resultado real**, no un resumen.
 4. Marca $2 como hecha en `tasks.md` e indica qué requisitos cubre.
 
-**Después PÁRATE.** No empieces T3, ni "aproveches" para arreglar otra cosa.
+**Después PÁRATE.** No empieces T3, ni «aproveches» para arreglar otra cosa.
 
 Si la tarea o el plan son incorrectos o imposibles, **para y explícalo**. No improvises una
 solución distinta a la aprobada.

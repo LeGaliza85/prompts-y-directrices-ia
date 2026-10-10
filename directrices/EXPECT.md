@@ -26,7 +26,7 @@ plantéate instalar una herramienta externa —con su aprobación, según el pri
 |---|---|
 | Formato y estilo del código | linter / formateador |
 | Tipos | comprobador estático de tipos |
-| Tests unitarios y de integración | framework de tests |
+| Tests unitarios y de integración | marco de pruebas |
 | Accesibilidad de la interfaz | revisor automático de accesibilidad |
 | Comportamiento real en el navegador | navegador controlado (p. ej. Chrome DevTools) |
 | Rendimiento | perfilador / auditor |
@@ -58,7 +58,7 @@ registra como requisito nuevo —pero no se deja a medias y en silencio.
 Ninguna clave, token ni dato personal introducido.
 
 ### Limpieza
-No quedan archivos de depuración, código muerto ni imports sin usar **que hayas
+No quedan archivos de depuración, código muerto ni importaciones sin usar **que hayas
 introducido tú**. Lo que ya existía no es asunto tuyo, salvo que lo estés tocando.
 
 ---
@@ -78,7 +78,7 @@ en `docs/constitution.md` como orden de sacrificios.
 | ¿Es para aprender y no para entregar? | Orden C | — |
 | ¿Existe algo funcionando que no se puede romper? | Orden A | — |
 
-**No hay un orden de "velocidad primero".** Se descartó al decidir que los proyectos no tienen
+**No hay un orden de «velocidad primero».** Se descartó al decidir que los proyectos no tienen
 fecha: sin plazo no hay conflicto entre terminar rápido y terminar bien. Si algún día un
 proyecto lo tuviera, ese orden habría que escribirlo — y con la condición de que
 **recortar alcance nunca incluye recortar la verificación**.

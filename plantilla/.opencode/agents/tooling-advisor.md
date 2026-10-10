@@ -1,5 +1,5 @@
 ---
-description: Examina el proyecto y propone comandos, skills, servidores MCP o agentes que podrian ayudar, con su coste. Solo lectura: no instala ni activa nada nunca. Usar al empezar un proyecto, al atascarse, o cuando una tarea se repita a mano.
+description: Examina el proyecto y propone comandos, skills, servidores MCP o agentes que podrían ayudar, con su coste. Solo lectura: no instala ni activa nada nunca. Usar al empezar un proyecto, al atascarse, o cuando una tarea se repita a mano.
 mode: subagent
 permission:
   edit: deny

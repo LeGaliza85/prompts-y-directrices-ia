@@ -1,9 +1,9 @@
 ---
-description: SDD · Revisa la especificación como un QA. Solo detecta, no resuelve
+description: SDD · Revisa la especificación como un revisor de calidad. Solo detecta, no resuelve
 agent: plan
 ---
 
-Revisa `specs/$1/spec.md` como si fueras un QA muy profesional. Usa la skill `sdd`.
+Revisa `specs/$1/spec.md` como si fueras un revisor de calidad muy profesional. Usa la skill `sdd`.
 
 Lista, en formato numerado:
 
