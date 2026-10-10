@@ -57,6 +57,7 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `OPENCODE.md` | Referencia práctica de la herramienta: agentes, comandos, modo Plan. |
 | `aprendido.md` | Errores de proceso, con su causa y la directiva que los previene. |
 | `BITACORA.md` | Registro de decisiones con su razonamiento y su alternativa descartada. |
+| `BLOQUEOS.md` | Qué pasa cuando un subagente se queda parado, cómo se detecta y cómo se recupera. |
 | `IMPROVE.md` | Lo que funciona pero molesta. Va en `aprendido.md` lo que falla; aquí lo que incomoda. |
 | `RECOMENDACIONES.md` | Qué añadiría el agente y qué no, con el coste y el riesgo de crecer. |
 
@@ -83,6 +84,8 @@ coste). Los mismos que están en la plantilla, para poder usarlos aquí.
 |---|---|
 | `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla, con agentes según el tipo y marcadores resueltos. |
 | `verificar.ps1` | Recorre todos los `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
+| `verificar-interfaz.js` | Comprueba una web en un Chrome real, incluida la vista móvil. Sin instalar nada. |
+| `vigilar-agentes.ps1` | Detecta subagentes atascados y los cancela solo. Ver `BLOQUEOS.md`. |
 
 `nuevo-proyecto.ps1` acepta `-Nombre`, `-Destino`, `-Tipo` (web, api, datos, cli, movil,
 infra, docs), `-Stack`, `-Idioma`, `-Git` y `-Forzar`. No inventa nada del proyecto: lo que
