@@ -1,4 +1,4 @@
-﻿param([string]$Ruta = ".")
+param([string]$Ruta = ".")
 
 # Verificador de documentos: detecta lo que la relectura visual no caza.
 #   1. Caracteres cirilicos / CJK / reemplazo - tipografia colada en texto espanol.
@@ -60,8 +60,11 @@ foreach ($f in $archivos) {
     }
     if ($enBloqueCodigo) { continue }
 
+    # El codigo en linea (`modelID=...`) no es texto: camelCase ahi es correcto.
+    # Comprobarlo daba falsos positivos. Se quita antes de mirar.
+    $sinCodigo = [regex]::Replace($linea, '`[^`\r\n]*`', ' ')
     foreach ($nombre in $patrones.Keys) {
-      if ($regex[$nombre].IsMatch($linea)) {
+      if ($regex[$nombre].IsMatch($sinCodigo)) {
         Write-Host ("  [{0}] {1}:{2}" -f $nombre, $relativo, ($i + 1))
         Write-Host ("      {0}" -f $linea.Trim())
         $fallos++

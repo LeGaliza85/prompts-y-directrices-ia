@@ -53,6 +53,7 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `PORTABILIDAD.md` | Qué se lleva a otro agente y qué hay que adaptar. Empieza por aquí si no usas OpenCode. |
 | `CAPACIDADES.md` | Catálogo de MCP, skills y herramientas, con el formato para proponerlas. |
 | `MCP.md` | Cómo se conectan y se comprueban los servidores MCP, y cómo se apagan. |
+| `MODELOS.md` | Qué modelos hay, cómo se ha comportado cada uno y qué no se sabe. Sin columna de disponibilidad: eso se comprueba al usarlo. |
 | `AGENTES.md` | Catálogo de subagentes: quién necesita cada proyecto y cómo se eligen. |
 | `OPENCODE.md` | Referencia práctica de la herramienta: agentes, comandos, modo Plan. |
 | `aprendido.md` | Errores de proceso, con su causa y la directiva que los previene. |
@@ -114,7 +115,7 @@ devuelve límite de uso en menos de un segundo. Detalle y causas en `directrices
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica | **hecho** (21 documentos) |
+| 1 · Capa genérica | **hecho** (22 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |

@@ -12,7 +12,7 @@ Si no existe, este aviso sobra y puedes seguir por `INDICE.md`.
 
 | Carpeta | Qué hay |
 |---|---|
-| `directrices/` | La capa genérica: 21 documentos que gobiernan cómo se trabaja en cualquier proyecto |
+| `directrices/` | La capa genérica: 22 documentos que gobiernan cómo se trabaja en cualquier proyecto |
 | `plantilla/` | El esqueleto que se copia a cada proyecto nuevo. 33 archivos |
 | `historial/` | Copia literal de las directrices de cada proyecto, con su ficha |
 | `curso/` | Material de origen intacto y apuntes extraídos |
@@ -40,7 +40,7 @@ de verdad, no leyendo.
 powershell -File verificar.ps1
 ```
 
-Recorre los 101 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
+Recorre los 102 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
 palabras en inglés dentro de texto español. Puede fallar con falsos positivos si se toca un
 documento sin haberlo leído primero: conviene leer lo que cambias.
 
