@@ -56,7 +56,9 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `AGENTES.md` | Catálogo de subagentes: quién necesita cada proyecto y cómo se eligen. |
 | `OPENCODE.md` | Referencia práctica de la herramienta: agentes, comandos, modo Plan. |
 | `aprendido.md` | Errores de proceso, con su causa y la directiva que los previene. |
-| `BITACORA.md` | Registro de decisiones con su razonamiento. |
+| `BITACORA.md` | Registro de decisiones con su razonamiento y su alternativa descartada. |
+| `IMPROVE.md` | Lo que funciona pero molesta. Va en `aprendido.md` lo que falla; aquí lo que incomoda. |
+| `RECOMENDACIONES.md` | Qué añadiría el agente y qué no, con el coste y el riesgo de crecer. |
 
 **Aviso de nombres.** `AGENTS.md` y `AGENTES.md` son dos archivos distintos que solo se
 diferencian en una letra: la instrucción maestra y el catálogo de subagentes. Sitúate siempre
@@ -99,7 +101,7 @@ Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flu
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica | **hecho** (18 documentos) |
+| 1 · Capa genérica | **hecho** (20 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |
@@ -107,7 +109,19 @@ Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flu
 | 6 · Prueba con proyecto real | **hecho** — `prueba-del-sistema` |
 | 7 · Correcciones que reveló la prueba | **hecho** — T11 |
 | 8 · Portabilidad a otros agentes | **hecho** — `PORTABILIDAD.md` |
-| 9 · Probar el flujo con agentes | pendiente — T13 |
+| 9 · Revisión de fondo con el revisor | pendiente — T10, segunda pasada |
+| 10 · Probar el flujo con agentes | pendiente — T13 |
+
+### Lo que queda, y por qué
+
+**T10, segunda pasada del revisor.** Sobre todo lo añadido después: los 10 comandos, los
+cinco documentos de método, el script y `verificar-interfaz.js`.
+
+**T13, probar el flujo con agentes.** En la prueba real el agente primario hizo todo a mano.
+Que el catálogo de 13 y los 10 comandos funcionen **delegando** no está comprobado.
+
+**Dos recomendaciones de `RECOMENDACIONES.md` sin hacer:** el borrador de constitución
+automático, y un segundo proyecto en `historial/` de otro tipo para probar el formato.
 
 ### Estado de los requisitos de la Spec 000
 
