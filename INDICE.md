@@ -99,20 +99,32 @@ Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flu
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |
 | 5 · Spec 000 | hecho |
-| 6 · Demostración con un proyecto real | **pendiente** |
+| 6 · Demostración con un proyecto real | **hecho** — `prueba-del-sistema` |
 
-### Lo que falta
+### Estado de los requisitos de la Spec 000
 
-- **Un proyecto real.** Es el único hueco grande. Dos requisitos de la Spec 000 —RF-1 y
-  RF-11— están escritos pero no demostrados: nadie ha copiado la plantilla y no hay nada en
-  `historial/`. No se pueden cerrar hasta que exista.
-- **`historial/`** solo, si no se llega a crear un proyecto: el formato está listo y no hay
-  nada que archivar.
+Los doce están cubiertos. **Los dos que dependían de un proyecto real ya no son hipótesis:**
 
-### Lo que ya no falta
+- **RF-1** — la plantilla se copió con `nuevo-proyecto.ps1`, se rellenó y se construyó una
+  funcionalidad completa con ella.
+- **RF-11** — el proyecto está archivado en `historial/prueba-del-sistema/` con su ficha.
 
-Los comandos `/sdd-*` que automatizan las ocho fases del flujo, y los tres documentos de
-método que faltaban: `DEPURACION.md`, `REFACTOR.md` y `MCP.md`.
+### Qué reveló la prueba
+
+Cuatro cosas que solo se ven construyendo, todas registradas en `aprendido.md`:
+
+1. **`module.exports` no funciona en el navegador.** La lógica compartida entre `node --test` y
+   la página necesita exportación doble. Los tests pasaban y la página se rompía.
+2. **Un test puede sobreespecificar.** Fallaba un test, y tenía razón el código.
+3. **El MCP de `chrome-devtools` no se puede activar desde una sesión abierta.** Exige reinicio.
+   La alternativa que funcionó: Chrome headless por CDP, sin dependencias.
+4. **El script de arranque lista marcadores que no aplican** después de usar el proyecto.
+
+### Lo que queda
+
+- Corregir lo que la prueba reveló: el falso pendiente del script, y anadir el patrón de
+  exportación doble a la plantilla como trampa conocida.
+- Probar el flujo con agentes, no a mano. En la prueba el primario hizo todo.
 
 ## Las decisiones que gobiernan cómo se trabaja aquí
 

@@ -1,4 +1,4 @@
-param([string]$Ruta = ".")
+﻿param([string]$Ruta = ".")
 
 # Verificador de documentos: detecta lo que la relectura visual no caza.
 #   1. Caracteres cirilicos / CJK / reemplazo - tipografia colada en texto espanol.
@@ -31,11 +31,23 @@ $archivos = Get-ChildItem -Path $raiz -Recurse -Include *.md -File |
 foreach ($f in $archivos) {
   $lineas = [System.IO.File]::ReadAllLines($f.FullName, [System.Text.Encoding]::UTF8)
   $relativo = $f.FullName.Replace($raiz + [System.IO.Path]::DirectorySeparatorChar, '')
-  foreach ($nombre in $patrones.Keys) {
-    for ($i = 0; $i -lt $lineas.Count; $i++) {
-      if ($lineas[$i] -match $patrones[$nombre]) {
+  $enBloqueCodigo = $false
+  for ($i = 0; $i -lt $lineas.Count; $i++) {
+    $linea = $lineas[$i]
+
+    # Los bloques de codigo son ejemplos: su contenido puede ser JavaScript, YAML o
+    # PowerShell con palabras reservadas en ingles que son correctas ahi. Comprobar
+    # ingles dentro de ellos produce falsos positivos que acaban ignorando el informe.
+    if ($linea -match '^\s*(```|~~~)') {
+      $enBloqueCodigo = -not $enBloqueCodigo
+      continue
+    }
+    if ($enBloqueCodigo) { continue }
+
+    foreach ($nombre in $patrones.Keys) {
+      if ($linea -match $patrones[$nombre]) {
         Write-Host ("  [{0}] {1}:{2}" -f $nombre, $relativo, ($i + 1))
-        Write-Host ("      {0}" -f $lineas[$i].Trim())
+        Write-Host ("      {0}" -f $linea.Trim())
         $fallos++
       }
     }

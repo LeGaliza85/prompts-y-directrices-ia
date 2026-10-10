@@ -88,6 +88,107 @@ comprobacion visual sigue siendo necesaria.
 
 ---
 
+## 2026-10-10 — `module.exports` no funciona en el navegador: lógica compartida
+
+**Qué pasó.** Un proyecto con lógica pura compartida entre `node --test` y la página exportaba
+con `module.exports`. Los tests pasaban. Al abrir la página en el navegador daba
+`ReferenceError: module is not defined`.
+
+**Por qué.** La constitución del proyecto prohibía `type="module"` y `fetch`, que son las dos
+vías normales de compartir código sin compilación. Sin ellas, el archivo se carga con
+`<script src>` y `module` no existe en el navegador.
+
+Lo peligroso: **los tests seguían verdes**. El fallo solo aparecía al abrir la página. Una
+comprobación que pasa y otra que no se ha hecho parecen "todo bien".
+
+**Directiva que lo previene.** Para compartir lógica entre Node y navegador sin compilación,
+patrón de exportación doble:
+
+```js
+(function (raiz) {
+  const api = { /* ... */ };
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = api;      // Node
+  } else {
+    raiz.MiApi = api;          // Navegador
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+```
+
+Y es una **trampa conocida** del proyecto, no un detalle: si alguien cambia la exportación, los
+tests siguen pasando y la página se rompe en silencio. Va en la sección de trampas del
+`AGENTS.md` del proyecto.
+
+**Alcance general.** Verificar en navegador no es opcional cuando hay lógica compartida. Los
+tests verdes no implican que la página funcione.
+
+---
+
+## 2026-10-10 — Un test puede sobreespecificar y estar equivocado
+
+**Qué pasó.** El test exigía que un dato corrupto descartara **todo** el objeto guardado. El
+código recuperaba solo el campo válido y descartaba el corrupto. El test fallaba.
+
+**Quién tenía razón.** El código. La constitución del proyecto decía que los datos del usuario
+son sagrados, y perder un nombre válido porque el contador estuviera corrupto tira información
+que estaba bien.
+
+**Directiva que lo previene.** Cuando un test falla, lo primero no es arreglar el código: es
+preguntarse **cuál de los dos codifica la intención correcta**. Un test escrito con prisa
+puede fijar un comportamiento más estricto de lo que la especificación pide.
+
+Si el test estaba mal, se corrige el test y se deja escrito el porqué en un comentario, para
+que la próxima vez no se "corrija" otra vez en la dirección equivocada.
+
+---
+
+## 2026-10-10 — Verificar la interfaz en un navegador real, sin MCP ni dependencias
+
+**Qué pasó.** Para comprobar una web hacían falta 14 verificaciones de interfaz: flujo,
+persistencia, corrupción de datos, vista móvil y consola sin errores. Hacerlas a mano es lento
+y no se repite igual.
+
+Se intentó el MCP de `chrome-devtools`. **No se pudo usar**: activarlo exige conectarlo a la
+sesión y reiniciar, y desde dentro de una sesión ya abierta no hay forma.
+
+**La solución que funcionó.** Chrome en modo headless con el puerto de depuración remoto, y un
+script de Node que habla el protocolo CDP por `WebSocket` —que Node trae de serie desde la 22.
+Cero dependencias en el proyecto:
+
+```powershell
+chrome.exe --headless=new --remote-debugging-port=9222 --user-data-dir=<perfil temporal>
+```
+
+El detalle que costó: **el `sessionId` va en el mensaje CDP, no dentro de `params`**. Si se
+manda como parámetro, el servidor responde `"Runtime.enable" wasn't found`, que parece un error
+de nombre de método y no lo es.
+
+**Qué comprobó.** 14 puntos, incluidos dos que un test unitario no puede ver: que un
+`localStorage` con JSON roto arranca en estado inicial sin error en consola, y que nada
+desborda a 375 px medido (`scrollWidth - clientWidth`). Más una captura, que es la única forma
+de comprobar que algo **se ve** bien y no solo que cuadra.
+
+**Directiva que lo previene.** Para verificar interfaz, el MCP es la vía cómoda pero no está
+disponible dentro de una sesión abierta. El CDP directo da el mismo resultado y no depende de
+configurar nada. El patrón queda en `historial/` como referencia.
+
+---
+
+## 2026-10-10 — El script de arranque lista marcadores que ya no aplican
+
+**Qué pasó.** `nuevo-proyecto.ps1` terminó su informe listando `<idea>` y `<requisito>` como
+pendientes de rellenar. No lo eran: son palabras de la tabla de comandos del `LEEME.md`.
+
+**Por qué.** El listado usa una lista blanca de archivos editables, y dentro de esos busca
+cualquier cosa con forma de marcador. La tabla de comandos del LEEME contiene `<idea>` y
+`<requisito>` como texto explicativo, no como huecos.
+
+**Directiva que lo previene.** El mismo riesgo que ya se registró: *un informe que lista
+pendientes que no lo son acaba ignorándose entero*. Si se amplía la lista blanca, se comprueba
+el resultado con un proyecto real, no con la plantilla en seco.
+
+---
+
 ## 2026-10-09 — Delegar en paralelo acelera, pero hay que revisar el resultado
 
 **Qué pasó.** Tres subagentes escribieron tres documentos independientes en paralelo y los
