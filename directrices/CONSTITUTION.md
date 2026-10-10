@@ -132,16 +132,11 @@ aprobado impide que el trabajo avance.
 *Origen: sesión 2026-10-09.*
 
 ---
+## Disciplina
 
-## Cómo usar esta constitución
 
-En un proyecto nuevo, `docs/constitution.md` es una **adaptación** de esta: conserva los
-nueve principios y concretá los que dependen del stack. El principio 5, por ejemplo, aquí
-dice «comprobación ejecutada»; en un proyecto con tests dice qué comando los ejecuta. Un
-principio que no se puede comprobar en ese proyecto es un principio que no está escrito
-bien.
 
-## 10. Ninguna cifra se da sin origen
+### 10. Ninguna cifra se da sin origen
 
 Todo número que aparece en un documento, en un script o en una respuesta al usuario
 declara su procedencia, y es una de estas tres:
@@ -167,7 +162,7 @@ cuánto se esperó.
 
 Un número sin origen se trata como opinión disfrazada de dato.
 
-## 11. Lo crítico se documenta solo si el usuario lo pide
+### 11. Lo crítico se documenta solo si el usuario lo pide
 
 Cuando el usuario pide algo que a criterio del agente es crítico para el proyecto, se
 pregunta antes de escribirlo:
@@ -183,6 +178,14 @@ usuario.
 Esto no toca el principio 1: la autorización previa sigue siendo para las capacidades, no
 para el trabajo. Toca la documentación, que es producto y se lee.
 
+
+## Cómo usar esta constitución
+
+En un proyecto nuevo, `docs/constitution.md` es una **adaptación** de esta: conserva los
+once principios y concretá los que dependen del stack. El principio 5, por ejemplo, aquí
+dice «comprobación ejecutada»; en un proyecto con tests dice qué comando los ejecuta. Un
+principio que no se puede comprobar en ese proyecto es un principio que no está escrito
+bien.
 ## Lo que este documento no hace
 
 No incluye cláusula de desempate. Con once puntos que se leen enteros, la regla añade

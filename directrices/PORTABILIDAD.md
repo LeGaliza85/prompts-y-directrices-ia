@@ -59,6 +59,8 @@ configuración, solo instrucción.
 | Windsurf | `.windsurf/workflows/` para comandos |
 
 **Los subagentes son lo más atado.** Cursor y Windsurf no tienen el concepto equivalente: ahí el
+| ZED | **Sin verificar.** No se ha comprobado si tiene concepto de subagente ni dónde van. Averigualo antes de prometer nada. |
+| ChatGPT | **No existen.** No hay subagentes ni comandos: es una conversación. El método se sigue igual, pero lo reparte el agente principal en una sola sesión. |
 reparto de trabajo lo hace el agente principal en una sola sesión. La capa genérica sobrevive
 —el principio 7 habla de «cuando aporta»—, pero **el catálogo de 13 agentes no aplica**.
 

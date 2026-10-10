@@ -5,6 +5,26 @@ mal. Los errores de código de un proyecto concreto viven en su `MEMORY.md`.
 
 Cada entrada: qué pasó · por qué · qué directiva lo previene.
 
+
+**Las 13 lecciones, en orden.**
+
+1. Carácter corrupto al escribir un documento
+2. El material del curso usa sintaxis obsoleta de OpenCode
+3. Manipular caracteres de un archivo escrito con WriteAllLines corrompe los acentos
+4. `module.exports` no funciona en el navegador: lógica compartida
+5. Un test puede sobreespecificar y estar equivocado
+6. Verificar la interfaz en un navegador real, sin MCP ni dependencias
+7. El script de arranque lista marcadores que ya no aplican
+8. Delegar en paralelo acelera, pero hay que revisar el resultado
+9. PowerShell 5.1 lee los `.ps1` como ANSI si no llevan BOM
+10. Un marcador con tilde no lo sustituye un patrón ASCII
+11. El informe de pendientes debe ser corto o se ignora
+12. Afirmar un bug sin comprobarlo cuesta más que no buscarlo
+13. Un objeto nuevo no hereda las propiedades del hashtable
+
+Tres de ellas gobiernan todo lo demás: la **9** (sin BOM los scripts se leen mal), la **10**
+(un patrón con tilde no casa con la versión sin tilde) y la **12** (no se afirma nada sin
+ejecutar la comprobación). Si solo puedes leer tres, lee esas.
 ---
 
 ## 2026-10-09 — Carácter corrupto al escribir un documento

@@ -7,6 +7,18 @@ aquí se propone, se aprueba y se registra antes de escribirse en disco.
 
 ## Para empezar en 30 segundos
 
+**Si te han pasado este repositorio y quieres construir algo:**
+
+1. Lee `ENTREGA.md`. Dice qué es esto, por dónde empezar y qué hace falta tener instalado.
+2. Lee `directrices/CONSTITUTION.md`. Son 11 principios cortos; el que más te va a ahorrar
+   disgustos es el 10: ninguna cifra se da sin origen.
+3. Mira `directrices/aprendido.md`, que tiene 13 fallos reales con su causa. Lleva un índice
+   al principio; con leer tres basta (la 9, la 10 y la 12).
+4. Ejecuta `verificar.ps1` antes de dar nada por bueno.
+
+**Aviso sobre las cifras:** las mediciones de `MODELOS.md` y `BLOQUEOS.md` salieron del log
+de la cuenta con la que se construyó este material. **No son hechos de tu sistema.**
+Heredarlas sin comprobar es lo que prohíbe el principio 10. Vuelve a medirlas.
 **Si vuelves de una sesión anterior: lee `PROXIMA-SESION.md` primero.** Tiene lo que quedó
 pendiente. Este repositorio tiene `AGENTS.md` en la raíz que te manda leerlo, así que deberías
 haber llegado por ahí.
@@ -22,7 +34,7 @@ Después te lista exactamente qué queda por rellenar. Detalle en `plantilla/LEE
 
 **Si vienes a trabajar en un proyecto ya creado:** lee `directrices/AGENTS.md`.
 
-**Si quieres entender cómo se trabaja aquí:** `directrices/CONSTITUTION.md` (los 9 principios)
+**Si quieres entender cómo se trabaja aquí:** `directrices/CONSTITUTION.md` (los 11 principios)
 y `directrices/SDD.md` (el flujo).
 
 **Si quieres ver qué se decidió y por qué:** `directrices/BITACORA.md`.
@@ -39,7 +51,7 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 
 | Documento | Qué es |
 |---|---|
-| `CONSTITUTION.md` | Los 9 principios innegociables, en tres bloques, con su origen. |
+| `CONSTITUTION.md` | Los 11 principios innegociables, en tres bloques, con su origen. |
 | `AGENTS.md` | Instrucción maestra: qué hago al empezar, mientras trabajo y al terminar. |
 | `MEMORY.md` | Protocolo de memoria entre sesiones y cuándo recortarla. |
 | `EXPECT.md` | Cuándo se da algo por terminado, y la decisión de calidad frente a velocidad. |
@@ -98,8 +110,8 @@ no lo llevan, y los acentos rompen el parser.
 
 ### Comandos disponibles aquí
 
-Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flujo. Escribe
-`/sdd` para ver el menú y en qué fase está el proyecto.
+Los nueve comandos `/sdd-*` y el menú `/sdd` están en `.opencode/commands/`, uno por fase del
+flujo. Escribe `/sdd` para ver el menú y en qué fase está el proyecto.
 
 ### Si un subagente se queda parado
 
