@@ -103,8 +103,15 @@ los archivos que debe leer y el resultado de la fase anterior. Ese traspaso de c
 el coste real de delegar, y si explica todo lo que no es el trabajo en sí, delegar no sale
 a cuenta.
 
+**Un subagente atascado no da error: se queda en silencio.** Cuando eso ocurre, el agente
+principal no espera: lo detecta, lo cancela y retoma la tarea él mismo. Delegar es una
+optimización, no un compromiso.
+
+**No más de dos subagentes a la vez con modelos gratuitos.** Con tres en paralelo, el
+proveedor devuelve límite de uso en menos de un segundo —medido, ver `BLOQUEOS.md`.
+
 *Ámbito: organización del trabajo entre agentes.*
-*Origen: día 3 (sistemas multiagentes) + sesión 2026-10-09.*
+*Origen: día 3 (sistemas multiagentes) + sesión 2026-10-09 + medición del log 2026-10-10.*
 
 ### 8. Tú decides, yo propongo
 

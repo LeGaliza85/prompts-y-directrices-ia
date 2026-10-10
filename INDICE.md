@@ -85,7 +85,7 @@ coste). Los mismos que están en la plantilla, para poder usarlos aquí.
 | `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla, con agentes según el tipo y marcadores resueltos. |
 | `verificar.ps1` | Recorre todos los `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
 | `verificar-interfaz.js` | Comprueba una web en un Chrome real, incluida la vista móvil. Sin instalar nada. |
-| `vigilar-agentes.ps1` | Detecta subagentes atascados y los cancela solo. Ver `BLOQUEOS.md`. |
+| `watchdog.ps1` | Detecta subagentes atascados, clasifica la causa y cancela solo. Ver `BLOQUEOS.md`. |
 
 `nuevo-proyecto.ps1` acepta `-Nombre`, `-Destino`, `-Tipo` (web, api, datos, cli, movil,
 infra, docs), `-Stack`, `-Idioma`, `-Git` y `-Forzar`. No inventa nada del proyecto: lo que
@@ -98,6 +98,16 @@ no lo llevan, y los acentos rompen el parser.
 
 Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flujo. Escribe
 `/sdd` para ver el menú y en qué fase está el proyecto.
+
+### Si un subagente se queda parado
+
+```powershell
+powershell -File watchdog.ps1 -UnaVez     # informe
+powershell -File watchdog.ps1             # vigilancia continua, cancela solo
+```
+
+Con modelos gratuitos, **no más de dos subagentes en paralelo**: con tres, el proveedor
+devuelve límite de uso en menos de un segundo. Detalle y causas en `directrices/BLOQUEOS.md`.
 
 ## Estado del trabajo
 
