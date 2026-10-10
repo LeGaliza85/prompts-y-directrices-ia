@@ -261,3 +261,29 @@ propios mensajes de commit, no campos reales.
 watchdog» revisando ese registro. Todo lo demás —interrupción manual, error, otro
 script— queda **sin distinguir**. Es una separación parcial, no completa, y se usa como
 tal.
+## La otra mitad: comprobar ANTES de lanzar
+
+El watchdog actúa durante. Esto actúa antes, y es la pieza que faltaba para que la regla
+de ``MODELOS.md`` sea algo más que un párrafo:
+
+```powershell
+powershell -File modelos.ps1 -Comprobar opencode/space-bunny-free
+powershell -File modelos.ps1 -Elegir opencode/space-bunny-free,opencode/big-pickle
+```
+
+``-Elegir`` prueba en orden y **se para en el primero que responde**. Si ninguno responde,
+sale con código 1 y no lanza nada. El nombre del elegido lo imprime en stdout, así que se
+puede capturar desde otro script.
+
+**Sin umbrales, igual que el watchdog.** Ni tope de espera por defecto, ni memoria de
+resultado, ni ventana de paralelismo. Los tres se propusieron en su día y los tres eran
+invención. ``-TopeSegundos`` existe pero por defecto es 0, sin tope: no hay medida de
+latencia de sonda que lo justifique. Pasalo tú y di de dónde sale.
+
+Verificado el 2026-10-10: ``ling-3.0-flash-fin-free`` falla en ~4,4 s con error, y
+``space-bunny-free`` responde en ~6,4 s. La sonda es una llamada real, así que gasta lo
+ mínimo indispensable y crea una sesión.
+
+**El orden de ``-Elegir`` no es un ranking de calidad.** Es orden por historial medido,
+que es lo único que se puede sostener. Va primero quien más usos tiene sin fallos de
+disponibilidad, no quien sea más listo.

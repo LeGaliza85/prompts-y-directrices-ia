@@ -206,3 +206,23 @@ reiniciar, y un comprobador de disponibilidad por lotes. Los dos están propuest
   es la contabilidad de OpenCode, no tu plan. No hay comando que la exponga.
 - **El tiempo de arranque de los subagentes.** El análisis se encargó a un subagente
   y se canceló antes de completarse. Sigue pendiente.
+
+### `modelos.ps1` — comprobar disponibilidad antes de lanzar
+
+```powershell
+powershell -File modelos.ps1 -Comprobar opencode/space-bunny-free
+powershell -File modelos.ps1 -Elegir opencode/space-bunny-free,opencode/big-pickle
+powershell -File modelos.ps1 -Todos
+```
+
+Es la mitad que faltaba del watchdog: el watchdog vigila *durante*, esto decide *antes*.
+`-Elegir` prueba en orden y se para en el primero que responde; si ninguno responde, sale
+con código 1 y no lanza nada.
+
+**Sin umbrales.** Ni tope de espera, ni memoria de resultado, ni paralelismo. Los tres
+eran invención. `-TopeSegundos` existe pero por defecto es 0: sin tope.
+
+Parámetros: `-Elegir`, `-Comprobar`, `-Todos`, `-TopeSegundos`, `-Binario`.
+
+**Ojo con las comas:** `-Elegir a,b,c` desde la línea de comandos llega como una sola
+cadena. El script la parte, pero si lo llamas desde otro pásale un array de verdad.
