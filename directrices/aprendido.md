@@ -348,3 +348,30 @@ Y una quinta, sobre la presentación: **avisar de que un dato no se tiene tambi�
 resultado.** «No he podido medir el tiempo de arranque de los subagentes porque mi script
 se rompió» es una respuesta válida. Inventar el número para no dejar el hueco no lo es.
 
+
+## 2026-10-10 - Un objeto nuevo no hereda las propiedades del hashtable
+
+`Get-Sesiones` tenía un hashtable interno con `Streams` y `UltimoStream`, y devolvía un
+`[pscustomobject]` nuevo donde solo se copiaban `Loops` y `Tools`. El clasificador leía
+`$s.Streams`, que valía nulo, y la condición `Streams -gt 0` daba falsa en silencio. El
+dato estaba y no se veía; el watchdog llevaba un rato informando como si ningún subagente
+hubiera emitido stream.
+
+Peor: al añadir la línea que guarda el tipo del último evento usé `$ses[$id]` sin comprobar
+que `$id` no fuera nulo. Las líneas sin `session.id` —todas las de herramientas— reventaban
+con «el índice de la matriz está elevado a NULL». Ninguno de los dos fallos daba error de
+sintaxis: solo resultados falsos.
+
+**Directiva que lo previene.**
+
+1. Al construir un objeto nuevo a partir de un hashtable, se copian las propiedades una a
+   una y se comprueba que están antes de leerlas. PowerShell no falla al leer una
+   propiedad inexistente: devuelve nulo, y nulo compara como falso.
+2. `$matches` solo existe tras un `-match` que ha acertado, y un índice con `$null` dentro
+   revienta. Toda línea que use `$matches[n]` o `$ses[$id]` va dentro de un `if` que
+   compruebe el grupo y el índice.
+3. **Un contador que da cero se comprueba antes de usarlo.** Si `Streams` y `tools` salen
+   a cero en el mismo informe, el fallo es del código, no de los datos.
+
+Y la que faltaba de la propia lección: **si un detector da cero en todo, no es que no haya
+nada que detectar.** Es que no está mirando.

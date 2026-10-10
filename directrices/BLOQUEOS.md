@@ -286,4 +286,50 @@ Verificado el 2026-10-10: ``ling-3.0-flash-fin-free`` falla en ~4,4 s con error,
 
 **El orden de ``-Elegir`` no es un ranking de calidad.** Es orden por historial medido,
 que es lo único que se puede sostener. Va primero quien más usos tiene sin fallos de
-disponibilidad, no quien sea más listo.
+disponibilidad, no quien sea más listo.## Atasco: ahora se detecta y se puede cancelar
+
+La versión anterior solo informaba. Esta detecta el atasco y, si se pide, cancela.
+
+**La señal no es el silencio: es el stream cortado.** `message=stream` es el único evento
+que viene del modelo y lleva `session.id` — verificado: 3.049 eventos, los 3.049 con
+`session.id`. Las herramientas no lo llevan, y por eso se atribuyen por proximidad.
+
+Atasco = tres condiciones juntas, no una:
+
+1. La sesión emitió stream (`Streams -gt 0`).
+2. **El último evento de la sesión fue un stream.** Sin esto, cualquier sesión vieja con
+   el stream parado sale como atascada. Medido: con solo la condición 1, sesiones
+   terminadas 20 horas antes daban falso positivo.
+3. El silencio desde el último stream pasa el límite.
+
+Con 1 y 2 solas ya distingue una sesión cortada a medias de una que acabó hace horas.
+Eso es un estado, no un número: no se puede falsear con paciencia.
+
+### El límite, y de dónde sale
+
+| Medida del latido del stream | Valor |
+|---|---|
+| Eventos medidos | 3.049 |
+| p50 / p90 | 9 s / 60 s |
+| p99 | 353 s |
+| **Máximo** | **2051 s** |
+
+`-AtascoSegundos` es **2100 s por defecto: un 2,4% por encima del máximo medido.**
+**Ese 2,4% es una elección mía, no una medida.** Con 30 sesiones de muestra, el máximo
+real puede ser mayor: si una sesión legítima pasa de 2100 s sin emitir stream, se cancela
+trabajo. Es un riesgo conocido con dueño, no una garantía.
+
+### Lo que nunca se cancela
+
+Una sesión con herramientas registradas **no se toca**, aunque encaje con el atasco. Ahí
+hay trabajo que perder. Se avisa y se sigue.
+
+Y la cancelación solo ocurre con `-Cancelar`. Sin ese parámetro, se informa y nada más.
+
+### Cómo se usa
+
+```powershell
+powershell -File watchdog.ps1                  # vigilar, solo informar
+powershell -File watchdog.ps1 -Cancelar        # vigilar y cancelar atascos
+powershell -File watchdog.ps1 -AtascoSegundos N # N sale de ti, no de mí
+```
