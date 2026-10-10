@@ -23,6 +23,9 @@ Heredarlas sin comprobar es lo que prohíbe el principio 10. Vuelve a medirlas.
 pendiente. Este repositorio tiene `AGENTS.md` en la raíz que te manda leerlo, así que deberías
 haber llegado por ahí.
 
+`ESTADO.md` dice en qué paso estabas. Léelo antes que `PROXIMA-SESION.md` si la sesión se
+cortó a mitad de algo.
+
 **Si quieres crear un proyecto nuevo:**
 
 ```powershell

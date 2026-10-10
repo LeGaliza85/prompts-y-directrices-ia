@@ -1,109 +1,102 @@
 # PRÓXIMA SESIÓN
 
 **Fecha:** 2026-10-10
-**Estado:** verificador en verde. 104 archivos, 0 incidencias.
-**Último commit:** `18ef8d9` — el trabajo de esta sesión está sin commitear.
+**Estado:** verificador en verde. 105 archivos, 0 incidencias.
+**Último commit:** `efdde48`. Árbol limpio. 32 commits.
+**Si has perdido el hilo:** lee `ESTADO.md` antes de esto. Tiene el paso exacto.
 
-## Lee esto primero
+## Dónde paramos
 
-El `AGENTS.md` de la raíz manda empezar por este fichero. Si algo aquí no cuadra con lo
-que veas, gana lo que veas: este texto envejece, el repo no.
+La sesión se cerró con todo el material listo para entregarse a otro usuario. El paquete
+está hecho y verificado.
 
-## Qué se ha hecho en esta sesión
+### El entregable
 
-### Código
+| Fichero | Para qué |
+|---|---|
+| `C:\Proyectos\entrega\prompts-y-directrices-ia.zip` | El que se manda. 4,2 MB, 115 ficheros |
+| `C:\Proyectos\entrega\prompts-y-directrices-ia.bundle` | Alternativa si el otro usuario usa git |
+| `C:\Proyectos\entrega\mensaje-para-enviar.txt` | El texto del correo |
 
-Cuatro cosas muertas eliminadas y una rota:
+**No se ha enviado.** No hay herramienta de email ni acceso al Gmail. Queda pendiente solo
+el envío, que son 30 segundos: adjuntar el zip y pegar el texto.
 
-- `verificar-interfaz.js`: fuera `chromeYaAbierto()`, que se definía y no se llamaba.
-- La captura convertía el base64 a texto y de vuelta al
-  base64: una ida y vuelta identidad. No convertía nada y el PNG no se podía abrir. Ahora
-  entrega un bloque de bytes real y **se escribe en disco**. Comprobado: PNG de 18.886 bytes
-  con la firma correcta. Antes la devolvía y nadie la consumía.
-- `verificar.ps1`: fuera `$excepciones`, variable muerta, y el mensaje final que remitía
-  a un mecanismo de excepciones inexistente.
-- `watchdog.ps1`: fuera `$previos`, variable muerta.
+Si se vuelve a generar el zip o el bundle, hay que hacerlo **después** del último commit,
+porque se construyen con `git ls-files`. Un zip generado antes de un commit sale con
+ficheros viejos.
 
-### `verificar.ps1` (%d4 controles nuevos)
+## Lo que quedó pendiente
 
-Cada uno nace de un defecto encontrado a mano. Automatizan lo que se buscaba con la vista:
+**Bloquea la mejora de estado**
+1. **Dónde vive el estado durable.** Se propuso `ESTADO.md`, que ya existe, pero la
+   decisión de si es ese o `PROXIMA-SESION.md` o `tasks.md` sigue sin tomarse formalmente.
+   `ESTADO.md` se creó por criterio propio y funciona; conviene confirmarlo o cambiarlo.
 
-1. **Comillas angulares desbalanceadas.** Se cuenta por archivo, no por línea, porque una
-   cita abierta al final de una línea y cerrada en la siguiente es correcta. Eran 8 casos
-   reales de este repo.
-2. **Rutas inexistentes.** Dos reglas: con barra se resuelve contra el repo; sin barra se
-   busca ese nombre en todo el repo, porque `tasks.md` en prosa significa «el de tu
-   proyecto», no «uno de esta carpeta». La primera versión daba más de treinta falsos positivos.
-3. **Párrafos duplicados.** Se juntan las líneas antes de comparar, porque el mismo texto
-   partido en puntos distintos no se ve comparando líneas sueltas. Pilla el duplicado de
-   `plantilla/LEEME.md` que se había escapado.
-4. **Cifras desincronizadas.** Tres documentos dar tres números distintos (17, 20 y 21) es
-   lo que pasaba. Se comprueba contra el recuento real.
+**Van juntas**
+2. **Regla de interrupción** — seguir con la tarea previa cuando el usuario interrumpe,
+   salvo que lo pida o que seguir sea contraproducente. **Pendiente de escribir** en
+   `directrices/AGENTS.md` y `plantilla/AGENTS.md`.
+3. **Principio ampliado** — ningún paso se cierra solo en la conversación; su resultado
+   tiene que estar en el repo. Pendiente de escribir.
 
-### Texto
+**Independientes**
+4. **T13** — proyecto `divisor` con subagentes. Es la prueba que junta `modelos.ps1 -Elegir`
+   (elegir antes de delegar) con el watchdog (vigilar durante). Sin ella, ninguna de las dos
+   mitades tiene prueba real más allá del log.
+5. **`tasks.md`** — T1 a T12 siguen marcadas pese a estar hechas. T13 es la única pendiente.
+6. **Acceso remoto** — investigado y documentado, **cero instalado** (ni Tailscale ni
+   RustDesk).
 
-- 83 líneas de comillas rectas normalizadas a angulares, en cuarenta ficheros.
-- 14 correcciones de sintaxis y 45 de erratas y tildes.
-- `plantilla/LEEME.md`: párrafo duplicado eliminado, `QA` traducido, `anade`/`mas`
-  corregidos.
-- Cifras sincronizadas a 23 documentos y 104 archivos, en `AGENTS.md`, `INDICE.md` y
-  `PROXIMA-SESION.md`.
-- Corregida la referencia al fichero de configuracion, que no existe con ese nombre.
-- «cinco casos límite» → cuatro, en los tres ficheros que lo decían.
+## Lo que no se puede hacer, y no se rellena
 
-### `nuevo-proyecto.ps1`
+- **El tiempo desde que se llama al subagente hasta que arranca.** Las líneas
+  `permission=task` llevan `run=` pero no `session.id`. Sin ese campo no se puede vincular
+  una llamada con su sesión hija. No se estima.
+- **Quién canceló una sesión.** Comprobado campo a campo: 156 líneas `message=cancel` con
+  solo `timestamp`, `level`, `run`, `session.id`. No existe tipo de evento `abort`. Los
+  campos de origen (`reason=`, `source=`, `user=`) dan 0. Solo se distingue «lo canceló el
+  watchdog» revisando `watchdog-registro.md`.
+- **La cuota restante del plan.** Ningún comando la expone.
 
-El último paso imprimía `<COMANDO_DE_COMPROBACION>` sin tilde, mientras el fichero tiene
-`<COMANDO_DE_COMPROBACIÓN>` con tilde: copiar y pegar no encontraba nada. Ahora **lee los
-marcadores del proyecto generado** y avisa de los que quedan dentro de bloques
-`permission:`, que son los que no funcionan.
+## Lo que hay que reeditar, no heredar
 
-## Lo que se-rise mal y quedó documentado
+Las mediciones de `MODELOS.md` y `BLOQUEOS.md` salieron del log de la cuenta de origen.
+**No son hechos de otro sistema.** Heredarlas sin medir es lo que prohíbe el principio 10.
+Lo portable es el método para medirlas, que está descrito ahí.
 
-Se afirmó que los 13 agentes estaban rotos por faltarles `tools:`. **Estaban bien**: la
-lista real es `description`, `mode` y `permission`. Después se afirmó que el scaffolder no
-sustituía sus marcadores y que era un fallo silencioso. Al extraer el regex del propio
-script y probarlo contra el fichero real, salía **una coincidencia**: el marcador se
-detecta y se avisa. El script cumplía su diseño, que es no inventar lo que solo sabe quien
-pide el proyecto.
+## Decisiones que se tomaron y por qué
 
-Está en `aprendido.md`, con la causa. La lección: **antes de decir que algo está roto,
-ejecutar la comprobación y enseñar la salida.** Y extraer los patrones de los ficheros,
-no escribirlos de memoria.
+Para no reabrirlas sin motivo:
 
-## Estado de las tareas
+- **Los umbrales de tiempo del watchdog se eliminaron.** No había medida que los sostuviera:
+  el log no distingue un agente callado de un usuario ausente. Medidos 426 silencios de
+  trabajo por encima de 30 s, el mayor de 1873 s.
+- **El atasco se detecta por estado, no por tiempo.** Emitió stream + su último evento fue un
+  stream + el silencio pasa el límite. La condición del «último evento» es la que evita los
+  falsos positivos de sesiones terminadas hace horas.
+- **`modelos.ps1` sin umbrales.** Ni tope, ni memoria de resultado, ni paralelismo. Los tres
+  eran invención.
+- **ZED se dejó marcado «sin verificar».** No se comprobó su formato de agentes ni cómo carga
+  instrucciones. No se afirma que funcione.
+- **ChatGPT se documentó con su límite real:** sin acceso al sistema de ficheros no lee el
+  repo ni carga los agentes; solo viaja el método como texto.
 
-`specs/000-sistema-de-trabajo/tasks.md`: T1 a T12 hechas, **T13 pendiente**.
+## Errores de esta sesión, para no repetirlos
 
-## Qué queda
+Están desarrollados en `aprendido.md`, que ya va por 13 entradas. Los tres que más cuestan:
 
-1. **T13.** Terminar `C:\Proyectos\divisor` con subagentes. Rellenar sus marcadores y
-   comprobar que los agentes cargan y funcionan. Los marcadores sin rellenar **son lo
-   correcto**: la prueba es llenarlos y ver que el permiso pasa a funcionar.
-2. **Segunda pasada de `tasks.md`.** T1 a T12 están hechas y siguen como ruido. Quitar las
-   completadas y dejar solo lo que queda.
-3. **Medir liveness con datos.** `watchdog.ps1` está probado contra un log sintético,
-   nunca contra un subagente real atascado. T13 es la oportunidad.
+1. **Afirmar sin comprobar.** Cinco retractadas en una sesión. Directiva: si la comprobación
+   no se ha ejecutado, no se afirma.
+2. **`$S` y `$s` son la misma variable en PowerShell.** Un análisis se destruyó a sí mismo.
+   Usar `$tabla` y `$fila`.
+3. **Un objeto nuevo no hereda las propiedades del hashtable.** `Get-Sesiones` tenía los
+   datos y no los copiaba; el contador daba cero sin error.
 
-## Antes de dar algo por bueno
+## Antes de dar nada por bueno
 
 ```powershell
 powershell -File verificar.ps1
 ```
 
-Ha dado 0 incidencias en 104 archivos. Si aparece algo, mira primero si el texto tiene un
-carácter corrupto antes de tocar el patrón.
-
-## Acceso remoto
-
-Se-mm tenancyó, sin ejecutar: Tailscale + `opencode web`, y RustDesk como alternativa.
-**No se instaló nada.** Hechos verificados y guardados:
-
-- `opencode web` y `opencode serve` existen. `--hostname` por defecto `127.0.0.1`.
-- No hay flag `--auth`, pero el binario contiene `OPENCODE_SERVER_PASSWORD` y
-  `OPENCODE_SERVER_USERNAME`, que sí sirven para protegerlo.
-- ZED 1.23.2 está instalado. **No tiene cliente móvil**: su modelo es cliente → servidor
-  por `ssh://`, y el cliente es el propio ZED. Para usar ZED desde el móvil hay que
-  controlar el escritorio, no conectar ZED.
-
-Nada de esto se ha aplicado. Queda como decisión, no como tarea hecha.
+Si sale rojo, suele ser el recuento de ficheros: cada `.md` nuevo obliga a actualizar
+`AGENTS.md`, `INDICE.md` y `PROXIMA-SESION.md` a la vez.
