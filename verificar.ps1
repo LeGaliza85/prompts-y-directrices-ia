@@ -15,7 +15,13 @@ $raiz = (Resolve-Path $Ruta).Path
 $patrones = [ordered]@{
   'cirilico/CJK' = '[\u0400-\u04FF\u4E00-\u9FFF\uFFFD]'
   'puntuacion CJK' = '[\u3000-\u303F\uFF00-\uFFEF]'
+  'kanji' = '[\u4E00-\u9FFF]'
+  'hiragana/katakana' = '[\u3040-\u30FF]'
   'palabra inglesa' = '\b(the|and|with|this|that|from|have|about|should|would|there|their|when|then|only|more|what|which|will|been)\b'
+  # Basura pegada DENTRO de una palabra: "ideasPJ", "alguienKJ".
+  # CaseSensitive es obligatorio: PowerShell hace las comparaciones sin distinguir mayusculas,
+  # asi que [a-z] y [A-Z] son lo mismo y el patron marca cualquier palabra.
+  'palabra mezclada' = '\b[a-z]{3,}[A-Z]{2,}([a-z]{2,})?\b'
 }
 
 # Los ejemplos documentados de erroresusan estos caracteres a proposito.
@@ -29,6 +35,20 @@ $fallos = 0
 # falsos positivos que hacen ignorable el informe.
 $archivos = Get-ChildItem -Path $raiz -Recurse -Include *.md -File |
   Where-Object { $_.FullName -notmatch '\\\.git\\' -and $_.FullName -notmatch '\\node_modules\\' }
+
+$regex = @{}
+foreach ($nombre in $patrones.Keys) {
+  # CaseSensitive es obligatorio para el patron de palabra mezclada: sin el, [a-z] y
+  # [A-Z] son la misma clase en PowerShell y el patron marca cualquier palabra.
+  # Se compila con [regex] en vez de usar -match porque -match no admite opciones por
+  # parametro, y aqui hacen falta.
+  $cs = if ($nombre -eq 'palabra mezclada') {
+    [System.Text.RegularExpressions.RegexOptions]::None
+  } else {
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  }
+  $regex[$nombre] = New-Object System.Text.RegularExpressions.Regex($patrones[$nombre], $cs)
+}
 
 foreach ($f in $archivos) {
   $lineas = [System.IO.File]::ReadAllLines($f.FullName, [System.Text.Encoding]::UTF8)
@@ -47,7 +67,7 @@ foreach ($f in $archivos) {
     if ($enBloqueCodigo) { continue }
 
     foreach ($nombre in $patrones.Keys) {
-      if ($linea -match $patrones[$nombre]) {
+      if ($regex[$nombre].IsMatch($linea)) {
         Write-Host ("  [{0}] {1}:{2}" -f $nombre, $relativo, ($i + 1))
         Write-Host ("      {0}" -f $linea.Trim())
         $fallos++
