@@ -202,3 +202,44 @@ trabajo sin esperar.** Delegar es una optimización, no un compromiso.
 
 Y con la causa 1 añadida, la regla práctica es: **no más de dos subagentes a la vez con
 modelos gratuitos.** Tres en paralelo reproducen el rate limit en menos de un segundo.
+
+## Lo que midio el analisis de subagentes (2026-10-10)
+
+Medido sobre ``opencode.log`` (5.373.691 caracteres, 28.496 lineas). Con estos datos ya
+no se elige ningun umbral de tiempo: se sabe lo que tarda un subagente de verdad.
+
+| Medida | Resultado |
+|---|---|
+| Sesiones distintas en el log | **31** |
+| Sesiones con nacimiento registrado (``message=created``) | 29 |
+| Sesiones que dieron al menos un ``loop`` | **30 de 31** |
+| Sesion que nacio y no produjo nada | 1 (``misty-knight``) |
+| **Latencia: nacimiento -> primer loop** | p50 **0s**, p90 **118s**, max **537s** |
+| **Duracion del episodio contiguo mas largo** | p50 52s, p90 507s, max **1365s** |
+| Sesiones con algun ``cancel`` | 16 de 31 |
+
+### Lo que esto cambia
+
+**Un subagente puede estar 537 segundos -9 minutos- sin dar ningun loop.** Un umbral de
+90 o 240 segundos lo mataria. Eso ya no es una opinion: es la medida.
+
+El umbral de 60 s para separar episodios no es arbitrario. Sale del p99 de huecos dentro
+de una ejecucion, medido el mismo dia: **57 s**. Por encima de eso, un hueco es una
+pausa, no trabajo.
+
+### Lo que NO se pudo medir
+
+**El tiempo desde que se llama al subagente hasta que empieza.** Las lineas
+``message=evaluated permission=task`` llevan ``run=`` pero **no** ``session.id``. Sin ese
+campo no hay forma de vincular una llamada con su sesion hija. No se estima: se dice que
+falta el dato.
+
+Igual pasa con las herramientas: ``message=evaluated permission=<tool>`` tampoco lleva
+``session.id``. Se atribuyen por proximidad a la sesion mas reciente, que es una
+atribucion y no una certeza. ``watchdog.ps1`` lo hace asi y lo documenta en su codigo.
+
+### Las 16 cancelaciones
+
+**No se puede afirmar que sean atasco.** El log no distingue una cancelacion por fallo de
+una interrupcion manual. 16 de 31 es el recuento de eventos ``message=cancel``, no un
+diagnostico. Tratarlas como subagentes fallidos seria inventar.
