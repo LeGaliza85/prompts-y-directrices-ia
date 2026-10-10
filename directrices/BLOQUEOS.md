@@ -238,8 +238,26 @@ Igual pasa con las herramientas: ``message=evaluated permission=<tool>`` tampoco
 ``session.id``. Se atribuyen por proximidad a la sesion mas reciente, que es una
 atribucion y no una certeza. ``watchdog.ps1`` lo hace asi y lo documenta en su codigo.
 
-### Las 16 cancelaciones
+### Las 16 cancelaciones: comprobado campo a campo, no se puede saber el origen
 
-**No se puede afirmar que sean atasco.** El log no distingue una cancelacion por fallo de
-una interrupcion manual. 16 de 31 es el recuento de eventos ``message=cancel``, no un
-diagnostico. Tratarlas como subagentes fallidos seria inventar.
+Se verificó el 2026-10-10 si el log distingue una cancelación manual de una automática.
+**No se puede, y esto es lo que se comprobó:**
+
+| Comprobación | Resultado |
+|---|---|
+| Campos de las 156 líneas ``message=cancel`` | solo ``timestamp``, ``level``, ``run``, ``session.id`` |
+| Tipo de evento ``abort`` | **no existe**: 17 tipos de mensaje, ninguno es ``abort`` |
+| Campos de origen (``reason=``, ``source=``, ``user=``, ``client=``, ``origin=``) | **0 apariciones** en todo el log |
+| ``action.action=deny`` en todo el log | **0**. No hay ninguna denegación de permiso registrada |
+| ``asking`` (petición de permiso) en las 6 líneas previas a un cancel | 4 de 156 |
+
+Conclusión: **el log no guarda quién canceló.** El ``abort`` por API que hace el watchdog
+y el ESC o el clic de la interfaz caen en la misma línea ``message=cancel``, con los
+mismos campos. Las palabras «manual» y «automática» que aparecen en el log son de mis
+propios mensajes de commit, no campos reales.
+
+**Lo que sí se puede saber, y es parcial:** el watchdog registra lo que cancela en
+``watchdog-registro.md``. Así que una cancelación se puede clasificar como «la hizo el
+watchdog» revisando ese registro. Todo lo demás —interrupción manual, error, otro
+script— queda **sin distinguir**. Es una separación parcial, no completa, y se usa como
+tal.
