@@ -46,6 +46,7 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `SDD.md` | El flujo de 8 fases, las tres formas de SDD y cuándo no usarlo. |
 | `EARS.md` | Cómo se escribe un requisito para que sea verificable, con ejemplos. |
 | `DEPURACION.md` | Método para encontrar la causa de un fallo. Reproducir, aislar, hipótesis, verificar. |
+| `RECURSOS.md` | Referencia rápida: scripts, comandos, rutas, automatizaciones y consejos de tiempo. |
 | `REFACTOR.md` | Cambiar la estructura sin cambiar el comportamiento, sin romper lo que funciona. |
 | `APIS-VERIFICADAS.md` | Inventario de la sintaxis de OpenCode comprobada, con su fecha. |
 | `PIN.md` | La versión exacta contra la que está verificado todo esto. |
@@ -115,7 +116,7 @@ devuelve límite de uso en menos de un segundo. Detalle y causas en `directrices
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica | **hecho** (22 documentos) |
+| 1 · Capa genérica | **hecho** (23 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |

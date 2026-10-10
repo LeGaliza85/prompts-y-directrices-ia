@@ -1,7 +1,7 @@
 # PRÓXIMA SESIÓN
 
 **Fecha:** 2026-10-10
-**Estado:** verificador en verde. 102 archivos, 0 incidencias.
+**Estado:** verificador en verde. 103 archivos, 0 incidencias.
 **Último commit:** `18ef8d9` — el trabajo de esta sesión está sin commitear.
 
 ## Lee esto primero
@@ -46,7 +46,7 @@ Cada uno nace de un defecto encontrado a mano. Automatizan lo que se buscaba con
 - 14 correcciones de sintaxis y 45 de erratas y tildes.
 - `plantilla/LEEME.md`: párrafo duplicado eliminado, `QA` traducido, `anade`/`mas`
   corregidos.
-- Cifras sincronizadas a 22 documentos y 102 archivos, en `AGENTS.md`, `INDICE.md` y
+- Cifras sincronizadas a 23 documentos y 103 archivos, en `AGENTS.md`, `INDICE.md` y
   `PROXIMA-SESION.md`.
 - Corregida la referencia al fichero de configuracion, que no existe con ese nombre.
 - «cinco casos límite» → cuatro, en los tres ficheros que lo decían.
@@ -91,7 +91,7 @@ no escribirlos de memoria.
 powershell -File verificar.ps1
 ```
 
-Ha dado 0 incidencias en 102 archivos. Si aparece algo, mira primero si el texto tiene un
+Ha dado 0 incidencias en 103 archivos. Si aparece algo, mira primero si el texto tiene un
 carácter corrupto antes de tocar el patrón.
 
 ## Acceso remoto
