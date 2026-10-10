@@ -75,8 +75,8 @@ de archivo en la spec ata la solución a una estructura que todavía no está de
 
 ```
 proyecto/
-├── AGENTS.md · MEMORY.md · opencode.jsonc
-├── .opencode/
+├── AGENTS.md · MEMORY.md · <configuración del agente>
+├── <carpeta de agentes y comandos>   (en OpenCode, .opencode/)
 │   ├── agents/        subagentes
 │   └── commands/      comandos /sdd-*
 ├── .agents/skills/    habilidades
@@ -90,6 +90,9 @@ proyecto/
 │   └── 002-nombre/
 └── <código del proyecto>
 ```
+
+Lo que va entre paréntesis angulares depende de la herramienta. Con OpenCode son
+`opencode.jsonc` y `.opencode/`; con otros agentes, los suyos. Ver `PORTABILIDAD.md`.
 
 Cada spec en su carpeta numerada: `specs/NNN-nombre/`, con `spec.md`, `plan.md` y `tasks.md`.
 

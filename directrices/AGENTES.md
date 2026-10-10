@@ -181,9 +181,13 @@ El limite lo marca la necesidad. Un proyecto con tres agentes que trabajan bien 
 ## Primeros pasos en un proyecto nuevo
 
 1. Mira la fila de «Quién necesita cada proyecto» que corresponda al tipo de proyecto.
-2. Copia a `.opencode/agents/` los agentes de esa fila, más los que la situación pida.
+2. Copia a la carpeta de agentes los agentes de esa fila, más los que la situación pida.
 3. Sustituye `<COMANDO_DE_COMPROBACIÓN>` en los permisos de `implementer` y `reviewer`.
-4. Revisa que la sintaxis de `permission` coincide con la versión instalada (ver
-   `PIN.md` y `APIS-VERIFICADAS.md`).
-5. Con el tiempo, anade o quita según lo que el proyecto vaya necesitando.
+4. Revisa que la sintaxis de permisos coincide con la versión instalada del agente.
+5. Con el tiempo, añade o quita según lo que el proyecto vaya necesitando.
+
+**Los subagentes son la parte más atada a la herramienta.** No todos los agentes los tienen:
+Cursor y Windsurf no tienen el concepto, y ahí el reparto se hace en el agente principal. Los
+criterios de este catálogo siguen siendo válidos como criterio, pero no como instalación. Ver
+`PORTABILIDAD.md`.
 5. Anota en `MEMORY.md` qué subagentes hay y por qué, para no volver a crearlos.

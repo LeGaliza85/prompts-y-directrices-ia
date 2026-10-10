@@ -8,6 +8,44 @@ modificada sin registro se considera un error.
 
 ---
 
+## 2026-10-11 — Portabilidad: qué se lleva a otro agente y qué no
+
+**Decisión.** Se añade `PORTABILIDAD.md`, que separa lo independiente de la herramienta de lo
+que hay que adaptar. Y se generalizan las tres menciones innecesarias que quedaban en la capa
+genérica.
+
+**Propuso.** El usuario, al pedir que el sistema se pudiera usar fuera de OpenCode y con otros
+modelos.
+
+**El hallazgo que cambió el documento.** Al medirlo, la mayoría de las 61 menciones de
+"OpenCode" estaban en los documentos **sobre** la herramienta —`OPENCODE.md`, `PIN.md`,
+`APIS-VERIFICADAS.md`, `MCP.md`, `PROCEDIMIENTO-ACTUALIZACION.md`—, que por definición tratan de
+ella. En la capa genérica quedaban **cuatro**, y tres eran exemples de estructura de proyecto
+que se podían escribir con un marcador.
+
+**Medición después del cambio.** Cinco documentos de dieciocho no mencionan ninguna
+herramienta: `DEPURACION.md`, `EARS.md`, `EXPECT.md`, `MEMORY.md` y `REFACTOR.md`. Los otros
+trece la mencionan en una nota, en un ejemplo, o son sobre la herramienta.
+
+**Los cuatro puntos realmente atados**, y son cuatro: `opencode.jsonc` y `instructions`, la
+carpeta `.opencode/`, el frontmatter de los agentes, y la ubicación de las skills. Todo lo
+demás se copia tal cual.
+
+**El dato que más importa.** `AGENTS.md` es un formato estándar, no una invención de OpenCode:
+lo leen varios agentes, y OpenCode acepta `CLAUDE.md` si no encuentra `AGENTS.md`. Es el mayor
+punto de portabilidad del sistema, y hasta ahora no estaba escrito en ningún sitio.
+
+**La conclusión incómoda.** Los subagentes son lo más atado: Cursor y Windsurf no tienen el
+concepto. El principio 7 sobrevive —habla de "cuando aporta", no de cómo—, pero **el catálogo
+de trece agentes no es portable**, y eso no estaba dicho.
+
+**Con otros modelos.** No hay diferencia de compatibilidad: los documentos son texto. Lo que
+cambia es cuánta documentación conviene cargar a la vez, y eso es una decisión de proyecto, no
+del sistema. Queda escrito que cuanto mejor es el modelo, más importa el principio 4: un modelo
+mejor no compensa una spec peor.
+
+---
+
 ## 2026-10-10 — AGENTS.md en la raíz, y el archivo de próxima sesión
 
 **Decisión.** Este repo tiene ahora `AGENTS.md` en la raíz y `PROXIMA-SESION.md`. El primero

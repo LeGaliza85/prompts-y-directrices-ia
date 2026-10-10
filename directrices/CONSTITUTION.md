@@ -143,5 +143,7 @@ las colisiones se den, se añade entonces.
 No incluye los comandos ni el idioma: cambian por proyecto y pertenecen a `AGENTS.md`.
 
 No impone límites de longitud a ningún archivo. Los límites del curso (30-40 líneas para
-`AGENTS.md`, ~50 para `MEMORY.md`) eran específicos de aquel proyecto; aquí se manejan con
-el campo `instructions` de `opencode.jsonc`, que carga documentos bajo demanda.
+`AGENTS.md`, ~50 para `MEMORY.md`) eran específicos de aquel proyecto. Aquí la instrucción se
+divide en documentos que se cargan bajo demanda, mediante el mecanismo que tenga el agente en
+uso —en OpenCode, el campo `instructions` de `opencode.jsonc`—. Con otros agentes, ver
+`PORTABILIDAD.md`.

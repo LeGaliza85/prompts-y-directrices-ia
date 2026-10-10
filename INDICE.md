@@ -50,6 +50,7 @@ Lo que se aplica a cualquier proyecto, con independencia del stack.
 | `APIS-VERIFICADAS.md` | Inventario de la sintaxis de OpenCode comprobada, con su fecha. |
 | `PIN.md` | La versión exacta contra la que está verificado todo esto. |
 | `PROCEDIMIENTO-ACTUALIZACION.md` | Qué hacer al actualizar OpenCode, con los modos de fallo silencioso. |
+| `PORTABILIDAD.md` | Qué se lleva a otro agente y qué hay que adaptar. Empieza por aquí si no usas OpenCode. |
 | `CAPACIDADES.md` | Catálogo de MCP, skills y herramientas, con el formato para proponerlas. |
 | `MCP.md` | Cómo se conectan y se comprueban los servidores MCP, y cómo se apagan. |
 | `AGENTES.md` | Catálogo de subagentes: quién necesita cada proyecto y cómo se eligen. |
@@ -98,12 +99,15 @@ Los diez comandos `/sdd-*` están en `.opencode/commands/`, uno por fase del flu
 | Bloque | Estado |
 |---|---|
 | 0 · Andamiaje: git, carpetas y verificador | hecho |
-| 1 · Capa genérica | **hecho** (17 documentos) |
+| 1 · Capa genérica | **hecho** (18 documentos) |
 | 2 · Blindaje contra la desactualización | hecho |
 | 3 · Plantilla | **hecho** (33 archivos, 10 comandos) |
 | 4 · Registro: historial, curso, apuntes | hecho |
 | 5 · Spec 000 | hecho |
-| 6 · Demostración con un proyecto real | **hecho** — `prueba-del-sistema` |
+| 6 · Prueba con proyecto real | **hecho** — `prueba-del-sistema` |
+| 7 · Correcciones que reveló la prueba | **hecho** — T11 |
+| 8 · Portabilidad a otros agentes | **hecho** — `PORTABILIDAD.md` |
+| 9 · Probar el flujo con agentes | pendiente — T13 |
 
 ### Estado de los requisitos de la Spec 000
 
