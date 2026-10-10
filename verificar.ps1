@@ -25,8 +25,10 @@ $excepciones = @(
 )
 
 $fallos = 0
+# node_modules no es nuestro: son README de terceros en inglés. Recorrerlos solo produce
+# falsos positivos que hacen ignorable el informe.
 $archivos = Get-ChildItem -Path $raiz -Recurse -Include *.md -File |
-  Where-Object { $_.FullName -notmatch '\\\.git\\' }
+  Where-Object { $_.FullName -notmatch '\\\.git\\' -and $_.FullName -notmatch '\\node_modules\\' }
 
 foreach ($f in $archivos) {
   $lineas = [System.IO.File]::ReadAllLines($f.FullName, [System.Text.Encoding]::UTF8)

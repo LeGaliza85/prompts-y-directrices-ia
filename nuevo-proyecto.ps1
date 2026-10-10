@@ -127,6 +127,7 @@ $sustituciones = [ordered]@{
   '<NOMBRE DEL PROYECTO>'           = $titulo
   '<IDIOMA>'                        = $Idioma
   '<TECNOLOGÍAS Y VERSIONES CLAVE>' = $(if ($Stack) { $Stack } else { '<TECNOLOGÍAS Y VERSIONES CLAVE>' })
+  '<STACK>'                         = $(if ($Stack) { $Stack } else { '<STACK>' })
 }
 
 $archivosMd = Get-ChildItem -LiteralPath $objetivo -Recurse -Include *.md, *.jsonc, *.json -File
@@ -139,10 +140,32 @@ foreach ($f in $archivosMd) {
   }
   [System.IO.File]::WriteAllText($f.FullName, $texto, (New-Object System.Text.UTF8Encoding $false))
 
-  # Recoger lo que sigue sin resolver. El patron acepta acentos: un marcador que no
-  # encaje es un marcador que no se lista, y pasa desapercibido.
-  foreach ($m in [regex]::Matches($texto, '<[A-ZÁÉÍÓÚÑa-z][^<>]{0,60}>')) {
-    $pendientes.Add("$($f.FullName.Replace("$objetivo\", '')) : $($m.Value)")
+  # Releer DESPUES de sustituir. Leer antes listaria como pendiente lo que ya se ha
+  # resuelto, que es peor que listar de mas: hace dudar de la sustitucion.
+  $lineas = $texto -split "`r?`n"
+
+  # Recoger lo que sigue sin resolver. Tres filtros, y cada uno quita un falso positivo
+  # que se ha visto de verdad:
+  #   1. Solo mayusculas: `<COMANDO>` si, `<idea>` no. Un marcador de proyecto va en
+  #      mayusculas; en minusculas suele ser el uso de ejemplo de un comando.
+  #   2. Ni dentro de una tabla ni de un bloque de codigo, donde lo que hay entre < y >
+  #      es un argumento de ejemplo o un valor ilustrativo.
+  #   3. Con el marcador al principio o al final de la linea. En medio de una frase
+  #      ("y `<RUTAS...>` donde aparezca") es texto, no un hueco.
+  $enCodigo = $false
+  for ($i = 0; $i -lt $lineas.Count; $i++) {
+    $linea = $lineas[$i]
+    if ($linea -match '^\s*(```|~~~)') { $enCodigo = -not $enCodigo; continue }
+    if ($enCodigo) { continue }
+    if ($linea -match '^\s*\|') { continue }
+
+    foreach ($m in [regex]::Matches($linea, '<[A-ZÁÉÍÓÚÑ][^<>]{0,60}>')) {
+      $antes = $linea.Substring(0, $m.Index).Trim()
+      $despues = $linea.Substring($m.Index + $m.Length).Trim()
+      # Solo si no hay texto a ambos lados del marcador.
+      if ($antes -ne '' -and $despues -ne '') { continue }
+      $pendientes.Add("$($f.FullName.Replace("$objetivo\", '')) :L$($i + 1) $($m.Value)")
+    }
   }
 }
 

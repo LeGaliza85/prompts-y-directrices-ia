@@ -24,6 +24,53 @@
 <Lo que es fácil hacer mal y no se puede deducir leyendo el código: la regla que parece
 obvia pero está invertida aquí, el detalle que ya se rompió una vez.>
 
+**Añade aquí las trampas de tu proyecto, y Borra las de ejemplo cuando no apliquen.**
+
+### Trampa de ejemplo: la lógica compartida entre pruebas y navegador
+
+Si el proyecto usa JavaScript sin compilación, hay un fallo que **no da error en las pruebas**:
+la página se rompe y los tests pasan.
+
+`module.exports` solo existe en Node. Cargar el archivo con `<script src>` en el navegador da
+`ReferenceError: module is not defined`. Como las pruebas se ejecutan en Node, todo parece
+correcto y el fallo solo aparece al abrir la página.
+
+Dos vías, y son excluyentes según lo que permita la constitución:
+
+- **Con módulos nativos:** un archivo `.mjs`, o `<script type="module">`. Node lo importa con
+  `import`. Es la vía limpia, y exige servidor o configuración de módulos.
+- **Sin módulos y sin servidor:** exportación doble en el mismo archivo:
+
+```js
+(function (raiz) {
+  const api = { /* ... */ };
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = api;      // Node
+  } else {
+    raiz.MiApi = api;          // Navegador
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+```
+
+**Cómo se comprueba:** después de cambiar la forma de exportar, abre la página en un navegador
+y comprueba la consola. Los tests no la cubren.
+
+### Trampa de ejemplo: fechas
+
+`toISOString()` y `new Date("AAAA-MM-DD")` devuelven **UTC**, no la hora local del usuario. En
+una zona horaria positiva, una acción hecha a las 00:30 se guarda con la fecha del día
+anterior; en una negativa, con la del día siguiente.
+
+`YYYY-MM-DD` es solo un formato. El instante es UTC; la zona horaria hay que declararla.
+
+### Trampa de ejemplo: datos corruptos
+
+Un valor guardado puede no tener la forma esperada: JSON roto, un número donde tocaba texto,
+un campo que ya no existe. La tentación es fallar al leerlo. La correcta es **descartar solo
+lo que no sea válido y conservar el resto**, porque esos datos son de alguien.
+
+Un dato corrupto nunca se repara ni se medio-adivina: se trata como ausente.
+
 ## Datos
 
 - `<DÓNDE Y EN QUÉ FORMATO: clave, campos, ejemplos>`
