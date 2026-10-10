@@ -45,13 +45,33 @@ marcar y parar.
 - [ ] **T10. Revisión completa.** todos
   - Hecho cuando: `reviewer` ha recorrido la capa genérica y la plantilla buscando
     incoherencias, referencias rotas, ejemplos que contradicen su regla y sintaxis
-    desactualizada, con su informe.
+    desactualizada, con su informe. **Pendiente: segunda pasada** sobre lo añadido después
+    (comandos, documentos de método, script y proyecto de prueba).
+
+- [ ] **T11. Aplicar lo que reveló la prueba real.** RF-1, RF-11
+  - Hecho cuando: el patrón de exportación doble está en la plantilla como trampa conocida; el
+    pendiente falso del script está corregido; el método de verificación de interfaz por CDP
+    es una herramienta del repo y no solo una nota.
+
+- [ ] **T12. Portabilidad a otros agentes y modelos.** RF-1, RF-6, RF-10
+  - Hecho cuando: cada documento que dependa de la herramienta lleva una nota de qué cambia en
+    otros agentes; la constitución y `SDD.md` no nombran la herramienta donde no hace falta; y
+    queda escrito qué habría que adaptar para usar la capa genérica con otro agente.
+
+- [ ] **T13. Probar el flujo con agentes, no a mano.** RF-5, RF-12
+  - Hecho cuando: un proyecto se ha construido con el coordinador repartiendo entre
+    subagentes, y queda registro de si el catálogo de 13 y los 10 comandos funcionan así.
 
 ---
 
-## Al terminar
+## Estado de las anteriores
 
-- Marcar la spec como `implementada` si el revisor la aprueba.
-- Anotar en `aprendido.md` lo que la revisión encuentre.
-- Dejar anotado qué requisitos quedan sin demostrar hasta que exista un proyecto real: RF-1 y
-  RF-11.
+- **T1 a T9 — hechas.** El detalle está en `BITACORA.md`. T1 (verificador), T2 (blindaje),
+  T3 (capa genérica), T4 (catálogo de agentes), T5 (capacidades), T6 (plantilla), T7
+  (registros), T8 (archivo), T9 (material de origen) y T10 en su primera pasada.
+- **La prueba real** cerro los requisitos que dependían de un proyecto: RF-1 y RF-11.
+
+## Para la próxima sesión
+
+Las tres cosas que el usuario pidió que se le recuerden están en `PROXIMA-SESION.md`. Es el
+primer archivo que se lee al abrir el repo.

@@ -7,7 +7,11 @@ aquí se propone, se aprueba y se registra antes de escribirse en disco.
 
 ## Para empezar en 30 segundos
 
-**Si vienes a crear un proyecto nuevo:**
+**Si vuelves de una sesión anterior: lee `PROXIMA-SESION.md` primero.** Tiene lo que quedó
+pendiente. Este repositorio tiene `AGENTS.md` en la raíz que te manda leerlo, así que deberías
+haber llegado por ahí.
+
+**Si quieres crear un proyecto nuevo:**
 
 ```powershell
 .\nuevo-proyecto.ps1 -Nombre "mi-proyecto" -Tipo web -Stack "React, TypeScript" -Git

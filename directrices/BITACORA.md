@@ -8,6 +8,36 @@ modificada sin registro se considera un error.
 
 ---
 
+## 2026-10-10 — AGENTS.md en la raíz, y el archivo de próxima sesión
+
+**Decisión.** Este repo tiene ahora `AGENTS.md` en la raíz y `PROXIMA-SESION.md`. El primero
+manda leer el segundo antes de tocar nada.
+
+**Propuso.** El usuario, al pedir que se guardara lo necesario para seguir en otro momento y
+que se le recordaran tres cosas.
+
+**Por qué.** El repo no tenía nada en la raíz, así que una sesión nueva arrancaba **sin
+instrucciones y sin recordatorio**: dependía de que alguien abriera `INDICE.md` por iniciativa
+propia. Para un repo cuyo contenido es texto, ese hueco es caro —lo pendiente se pierde sin
+dejar rastro.
+
+**La contradicción con una decisión anterior, resuelta.** En esta bitácora consta que este repo
+**no** tendría `MEMORY.md` en la raíz porque no hay estado de implementación que recordar. Se
+mantiene: sigue sin haberlo. Lo que se anade no es memoria de proyecto, es *traspaso entre
+sesiones*, que es otra cosa. `PROXIMA-SESION.md` dice qué queda por hacer; una memoria diría
+en qué estado está el código, y aquí no hay código.
+
+**Contenido del traspaso.** Las tres cosas que el usuario pidió que se le recuerden: verificar
+todo lo hecho en busca de fallos, asegurar que el sistema funciona fuera de OpenCode y con
+otros modelos, y preguntar al agente qué añadiría y qué recomendaría. Más el estado de los
+bloques, lo que reveló la prueba y quedó sin corregir, y lo que no se ha probado.
+
+**Consecuencia.** `specs/000-sistema-de-trabajo/tasks.md` pasa de 10 a 13 tareas. Las tres
+nuevas son T11 (aplicar lo que reveló la prueba), T12 (portabilidad) y T13 (probar el flujo con
+agentes). T10 queda como segunda pasada del revisor.
+
+---
+
 ## 2026-10-09 — Condición de trabajo: sin plazos
 
 **Decisión.** Los proyectos se hacen con el tiempo necesario hasta que queden bien. No
