@@ -74,4 +74,5 @@ es portable es el método para medirlas, que está descrito ahí.
 
 ## Estado
 
-Verificador en verde: 106 archivos, 0 incidencias. 36 commits.
+Verificador en verde: 106 archivos, 0 incidencias. El número de commits no se escribe
+aquí: se consulta con `git rev-list --count HEAD`.

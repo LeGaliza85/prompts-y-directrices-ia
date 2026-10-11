@@ -1,4 +1,4 @@
-# aprendido.md — Errores de proceso y conocimiento acumulado
+﻿# aprendido.md — Errores de proceso y conocimiento acumulado
 
 Errores **nuestros** al trabajar: ambigüedades, desviaciones, suposiciones que salieron
 mal. Los errores de código de un proyecto concreto viven en su `MEMORY.md`.
@@ -6,7 +6,7 @@ mal. Los errores de código de un proyecto concreto viven en su `MEMORY.md`.
 Cada entrada: qué pasó · por qué · qué directiva lo previene.
 
 
-**Las 13 lecciones, en orden.**
+**Las 15 lecciones, en orden.**
 
 1. Carácter corrupto al escribir un documento
 2. El material del curso usa sintaxis obsoleta de OpenCode
@@ -20,11 +20,16 @@ Cada entrada: qué pasó · por qué · qué directiva lo previene.
 10. Un marcador con tilde no lo sustituye un patrón ASCII
 11. El informe de pendientes debe ser corto o se ignora
 12. Afirmar un bug sin comprobarlo cuesta más que no buscarlo
-13. Un objeto nuevo no hereda las propiedades del hashtable
+  13. Un objeto nuevo no hereda las propiedades del hashtable
+  14. Un número que se cuenta a sí mismo no puede estar escrito en un documento
+  15. Un comprobador que no mira un idioma avisa, no se calla
 
-Tres de ellas gobiernan todo lo demás: la **9** (sin BOM los scripts se leen mal), la **10**
-(un patrón con tilde no casa con la versión sin tilde) y la **12** (no se afirma nada sin
-ejecutar la comprobación). Si solo puedes leer tres, lee esas.
+  Tres de ellas gobiernan todo lo demás: la **9** (sin BOM los scripts se leen mal), la **10**
+  (un patrón con tilde no casa con la versión sin tilde) y la **12** (no se afirma nada sin
+  ejecutar la comprobación). Si solo puedes leer tres, lee esas.
+
+  La **15** es la más reciente y la que más cambió el código: el falso positivo se
+  arregla, pero lo que no se puede dejar es el silencio.
 ---
 
 ## 2026-10-09 — Carácter corrupto al escribir un documento
@@ -395,3 +400,39 @@ sintaxis: solo resultados falsos.
 
 Y la que faltaba de la propia lección: **si un detector da cero en todo, no es que no haya
 nada que detectar.** Es que no está mirando.
+
+---
+
+## 2026-10-11 - Un numero que se cuenta a si mismo no puede estar escrito en un documento
+
+`README.md` decia 33 commits. Se corrigio a 36, luego a 37. Cada vez que se
+corrige el numero en un commit, ese commit deja de ser cierto: hay un commit mas que
+contar. No hay forma de escribirlo bien, porque el numero cambia cuando escribes el numero.
+
+Se paso a poner el comando que da la verdad (`git rev-list --count HEAD`) en vez
+de la cifra. El documento queda cierto para siempre.
+
+**Directiva que lo previene.** Un dato que el propio acto de escribirlo altera no
+se escribe: se escribe de donde se consulta. Los recuentos de ficheros y documentos si
+se pueden escribir, porque solo cambian cuando anades o borras un fichero, y el
+verificador los comprueba. Los de commits, no.
+
+---
+
+## 2026-10-11 - Un comprobador que no mira un idioma avisa, no se calla
+
+El verificador solo entendia espanol. En un proyecto en ingles marcaba cada frase
+como "palabra inglesa" (falso positivo), no comprobaba las comillas porque solo buscaba
+las angulares, y solo miraba las cifras en tres ficheros de este repo con palabras
+castellanas. En cualquier otro proyecto la comprobacion de cifras no se hacia: verde por
+no mirar. El informe decia "sin incidencias" sin decir que no habia mirado.
+
+La parte que mas dano hace no es el falso positivo, es el silencio. Un informe que
+no declara que dejo de mirar es peor que no tener informe, porque se lee como si todo
+estuviera comprobado. Ahora los ficheros que no se pueden clasificar se cuentan y se
+listan.
+
+**Directiva que lo previene.** Cuando una comprobacion no se puede hacer, el informe
+lo dice. Verde por no mirar no es verde. Y al detectar el idioma: sin umbral ni
+porcentaje, que seria un numero inventado; se comparan dos recuentos de palabras
+funcionales de listas disjuntas y gana el mayor. Empate significa "no lo se".

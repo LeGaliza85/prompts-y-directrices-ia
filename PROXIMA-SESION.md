@@ -2,7 +2,10 @@
 
 **Fecha:** 2026-10-11
 **Estado:** verificador en verde. 106 archivos, 0 incidencias. Batería de 15 casos, 15 correctos.
-**Último commit:** `8627291`. Árbol limpio. 36 commits.
+**Último commit:** el de esta línea, en `master`. Árbol limpio.
+**Número de commits:** no se escribe aquí a propósito. Un número de commits escrito en
+un documento deja de ser cierto en el commit que lo corrige, así que se consulta:
+`git rev-list --count HEAD`.
 **Si has perdido el hilo:** lee `ESTADO.md` antes de esto. Tiene el paso exacto.
 
 ## Dónde paramos
