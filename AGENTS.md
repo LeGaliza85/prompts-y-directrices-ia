@@ -40,7 +40,7 @@ de verdad, no leyendo.
 powershell -File verificar.ps1
 ```
 
-Recorre los 105 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
+Recorre los 106 archivos buscando caracteres cirílicos o CJK colados, puntuación china y
 palabras en inglés dentro de texto español. Puede fallar con falsos positivos si se toca un
 documento sin haberlo leído primero: conviene leer lo que cambias.
 
