@@ -106,7 +106,7 @@ if (-not $Registro) { $Registro = Join-Path (Split-Path -Parent $Log) 'watchdog-
 # "el proceso no puede obtener acceso al archivo". Se abre con FileShare. Un vigilante
 # que solo lee con el log cerrado solo sirve cuando el agente ya está parado.
 
-function Leer-Log {
+function Read-Log {
   try { $fs = [System.IO.File]::Open($Log, 'Open', 'Read', 'ReadWrite') } catch { return $null }
   try {
     $sr = New-Object System.IO.StreamReader($fs, [System.Text.Encoding]::UTF8)
@@ -118,7 +118,7 @@ function Leer-Log {
 
 # --- Clasificacion de causas -------------------------------------------------
 
-function Get-Causa {
+function Get-Cause {
   <#
     Traduce el mensaje de un "stream error" a una de las cuatro causas con arreglo.
     Devuelve $null si el mensaje no es ninguno de esos: entonces no sabemos cual es,
@@ -138,22 +138,22 @@ function Get-Causa {
 
 # --- Analisis ----------------------------------------------------------------
 
-function Get-Sesiones {
+function Get-Sessions {
   param([string[]]$Lineas)
 
-  $ses = @{}
-  $orden = New-Object System.Collections.Generic.List[string]
-  $errores = @{}
+  $sessions = @{}
+  $order = New-Object System.Collections.Generic.List[string]
+  $errors = @{}
 
   # La sesion principal es la que mas veces aparece; no se vigila.
-  $cuenta = @{}
+  $count = @{}
   foreach ($l in $Lineas) {
     if ($l -match 'session\.id=(ses_\w+)') {
       $id = $matches[1]
-      $cuenta[$id] = 1 + $(if ($cuenta.ContainsKey($id)) { $cuenta[$id] } else { 0 })
+      $count[$id] = 1 + $(if ($count.ContainsKey($id)) { $count[$id] } else { 0 })
     }
   }
-  $principal = ($cuenta.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1).Key
+  $primary = ($count.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1).Key
 
   foreach ($l in $Lineas) {
     $id = $null
@@ -164,18 +164,18 @@ function Get-Sesiones {
                                [Globalization.DateTimeStyles]::AdjustToUniversal)
     }
 
-    if ($id -and -not $ses.ContainsKey($id)) { $ses[$id] = @{ Loops = 0; Tools = 0; Ultima = $null; UltimoStream = $null; Streams = 0 }; $orden.Add($id) }
-    if ($id -and $ts) { $ses[$id].Ultima = $ts }
-    if ($id -and $l -match 'message=(\w+)') { $ses[$id].UltimoTipo = $matches[1] }
+    if ($id -and -not $sessions.ContainsKey($id)) { $sessions[$id] = @{ Loops = 0; Tools = 0; LastSeen = $null; LastStream = $null; Streams = 0 }; $order.Add($id) }
+    if ($id -and $ts) { $sessions[$id].LastSeen = $ts }
+    if ($id -and $l -match 'message=(\w+)') { $sessions[$id].LastType = $matches[1] }
     # El stream es la UNICA senal de vida que viene del modelo y lleva session.id.
     # Verificado el 2026-10-10: 3.049 eventos message=stream, los 3.049 con session.id.
     # (las herramientas no lo llevan, y por eso se atribuyen por proximidad).
     # Medido sobre esas 3.049: p50 9s, p90 60s, p99 353s, MAX 2051s.
     if ($id -and $ts -and $l -match 'message=stream ') {
-      $ses[$id].UltimoStream = $ts
-      $ses[$id].Streams++
+      $sessions[$id].LastStream = $ts
+      $sessions[$id].Streams++
     }
-    if ($id -and $l -match 'message=loop session\.id=') { $ses[$id].Loops++ }
+    if ($id -and $l -match 'message=loop session\.id=') { $sessions[$id].Loops++ }
     # Las herramientas no se registran con su nombre: se registran como
     # message=evaluated permission=<herramienta>. Verificado el 2026-10-10 sobre
     # 27.948 eventos del log, donde aparecen 7.889 evaluaciones y CERO apariciones de
@@ -186,9 +186,9 @@ function Get-Sesiones {
     # atribuye a la sesion mas reciente vista, igual que ya se hace con los stream error,
     # que tienen el mismo hueco. Es una atribucion por proximidad, no una certeza.
     if ($l -match 'message=evaluated permission=') {
-      $destino = $id
-      if (-not $destino -and $orden.Count -gt 0) { $destino = $orden[$orden.Count - 1] }
-      if ($destino -and $ses.ContainsKey($destino)) { $ses[$destino].Tools++ }
+      $target = $id
+      if (-not $target -and $order.Count -gt 0) { $target = $order[$order.Count - 1] }
+      if ($target -and $sessions.ContainsKey($target)) { $sessions[$target].Tools++ }
     }
 
     # Errores de stream. NO llevan session.id: es el mismo problema que el
@@ -197,35 +197,35 @@ function Get-Sesiones {
     if ($l -match '"stream error"') {
       $mod = if ($l -match 'modelID=(\S+)') { $matches[1] } else { '?' }
       $msg = if ($l -match 'error\.error="([^"]+)"') { $matches[1] } else { $l }
-      $e = Get-Causa -Mensaje $msg -Modelo $mod
+      $e = Get-Cause -Mensaje $msg -Modelo $mod
       if ($e) {
         $e.Hora = $ts; $e.Modelo = $mod
-        $destino = $null
-        if ($id) { $destino = $id }
-        elseif ($orden.Count -gt 0) { $destino = $orden[$orden.Count - 1] }
-        if ($destino) { $errores[$destino] = $e }
+        $target = $null
+        if ($id) { $target = $id }
+        elseif ($order.Count -gt 0) { $target = $order[$order.Count - 1] }
+        if ($target) { $errors[$target] = $e }
       }
     }
 
     if ($l -match 'message=created id=(ses_\w+) slug=(\S+)') {
       $n = $matches[1]; $s = $matches[2]
-      if (-not $ses.ContainsKey($n)) { $ses[$n] = @{ Loops = 0; Tools = 0 }; $orden.Add($n) }
-      $ses[$n].Slug = $s
+      if (-not $sessions.ContainsKey($n)) { $sessions[$n] = @{ Loops = 0; Tools = 0 }; $order.Add($n) }
+      $sessions[$n].Slug = $s
     }
     if ($l -match 'message=(cancel|revert) session\.id=(ses_\w+)') {
       $c = $matches[2]
-      if ($ses.ContainsKey($c)) { $ses[$c].Cancelada = $true }
+      if ($sessions.ContainsKey($c)) { $sessions[$c].Cancelled = $true }
     }
   }
 
   $salida = New-Object System.Collections.Generic.List[object]
-  foreach ($id in $orden) {
-    if ($id -eq $principal) { continue }
-    $s = $ses[$id]
+  foreach ($id in $order) {
+    if ($id -eq $primary) { continue }
+    $s = $sessions[$id]
   $salida.Add([pscustomobject]@{
     Slug  = $(if ($s.Slug) { $s.Slug } else { $id.Substring(0, 12) })
     Id    = $id
-    Ultima = $s.Ultima
+    LastSeen = $s.LastSeen
     Loops = $s.Loops
     Tools = $s.Tools
     # OJO: estas dos propiedades hay que copiarlas expresamente. El hashtable interno si
@@ -233,29 +233,29 @@ function Get-Sesiones {
     # como si no existieran. Asi fue como el contador de streams se quedo a cero sin
     # dar error: el dato estaba y no se veia. Verificado el 2026-10-10.
     Streams = $s.Streams
-    UltimoStream = $s.UltimoStream
-    UltimoTipo = $s.UltimoTipo
-    Cancelada = [bool]$s.Cancelada
-    Error = $(if ($errores.ContainsKey($id)) { $errores[$id] } else { $null })
+    LastStream = $s.LastStream
+    LastType = $s.LastType
+    Cancelled = [bool]$s.Cancelled
+    Error = $(if ($errors.ContainsKey($id)) { $errors[$id] } else { $null })
     })
   }
   return $salida
 }
 
-function Get-Estado {
+function Get-State {
   param($Sesiones, [datetime]$AhoraUtc, [int]$AtascoSeg)
 
   $salida = New-Object System.Collections.Generic.List[object]
   foreach ($s in $Sesiones) {
-    if (-not $s.Ultima) { continue }
+    if (-not $s.LastSeen) { continue }
 
     # El silencio se mide sobre el ULTIMO STREAM, no sobre el ultimo evento de ningun
     # tipo. El stream es lo unico que viene del modelo y lleva session.id: es la senal
     # de vida real. Si una sesion no ha llegado a emitir stream, se usa su ultimo
     # evento, que es lo unico que se tiene.
-    $referencia = if ($s.UltimoStream) { $s.UltimoStream } else { $s.Ultima }
+    $referencia = if ($s.LastStream) { $s.LastStream } else { $s.LastSeen }
     $silencio = [int]($AhoraUtc - $referencia).TotalSeconds
-    $nadaHizo = ($s.Tools -eq 0 -and $s.Loops -le 1)
+    $didNothing = ($s.Tools -eq 0 -and $s.Loops -le 1)
 
     # ATASCO = la sesion abrio el stream (el modelo empezo a responder) y luego no ha
     # dicho nada durante mas de $AtascoSeg. Se exige que haya streams, porque una
@@ -266,31 +266,31 @@ function Get-Estado {
     # y cuyo ultimo evento fue un loop, un cancel o una herramienta. Sin esta condicion,
     # cualquier sesion vieja con el stream parado sale como atascada: falso positivo
     # medido el 2026-10-10, 20 horas de silencio en sesiones ya terminadas.
-    $atasco = ($s.Streams -gt 0 -and $s.UltimoTipo -eq 'stream' -and $silencio -ge $AtascoSeg)
+    $stuck = ($s.Streams -gt 0 -and $s.LastType -eq 'stream' -and $silencio -ge $AtascoSeg)
 
-    $clase = 'activa'; $causa = $null; $accion = ''
-    if ($s.Cancelada) {
-      $clase = 'cancelada'
+    $class = 'activa'; $cause = $null; $action = ''
+    if ($s.Cancelled) {
+      $class = 'cancelada'
     }
     elseif ($s.Error) {
       # Error de stream: la causa se lee del propio error, no se infiere del silencio.
-      $clase = 'error'; $causa = $s.Error; $accion = $s.Error.Cambio
+      $class = 'error'; $cause = $s.Error; $action = $s.Error.Cambio
     }
-    elseif ($atasco) {
-      $clase = 'ATASCO'
-      $causa = @{ Id = 'stream-muerto'; Texto = 'El stream se abrio y lleva mas del limite sin emitir nada.' }
-      $accion = 'Se cancela y el agente principal retoma la tarea.'
+    elseif ($stuck) {
+      $class = 'ATASCO'
+      $cause = @{ Id = 'stream-muerto'; Texto = 'El stream se abrio y lleva mas del limite sin emitir nada.' }
+      $action = 'Se cancela y el agente principal retoma la tarea.'
     }
-    elseif ($nadaHizo) {
+    elseif ($didNothing) {
       # Dato, no diagnostico: el log no registra herramientas y como maximo una vuelta.
-      $clase = 'sin-trabajo-registrado'
-      $causa = @{ Id = 'sin-trabajo'; Texto = 'Sin herramientas registradas y una vuelta de loop como maximo.' }
-      $accion = 'Observar. No se cancela sola.'
+      $class = 'sin-trabajo-registrado'
+      $cause = @{ Id = 'sin-trabajo'; Texto = 'Sin herramientas registradas y una vuelta de loop como maximo.' }
+      $action = 'Observar. No se cancela sola.'
     }
 
     $salida.Add([pscustomobject]@{
-      Sesion = $s; Clase = $clase; Silencio = $silencio
-      Causa = $causa; Accion = $accion; NadaHizo = $nadaHizo
+      Sesion = $s; Clase = $class; Silence = $silencio
+      Causa = $cause; Accion = $action; DidNothing = $didNothing
     })
   }
   return $salida
@@ -298,7 +298,7 @@ function Get-Estado {
 
 # --- Acciones ----------------------------------------------------------------
 
-function Cancelar-Sesion {
+function Cancel-Session {
   param([string]$Id)
   foreach ($p in @(4096, 4097, 7575, 8080)) {
     foreach ($a in @('abort', 'cancel')) {
@@ -311,14 +311,14 @@ function Cancelar-Sesion {
   return $false
 }
 
-function Registrar {
+function Write-Log {
   param([string]$Linea)
   $ts = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
   $c = "## $ts`n`n$Linea`n`n"
   Add-Content -LiteralPath $Registro -Value $c -Encoding UTF8
 }
 
-function Accionar {
+function Take-Action {
   param($Estados, [switch]$SoloInformar)
 
   $n = 0
@@ -326,33 +326,33 @@ function Accionar {
     $s = $e.Sesion
     # NUNCA se toca una sesion con trabajo: ahi hay informacion que perder. Las de clase
     # 'error' pueden tenerla, asi que se comprueba antes de cancelar.
-    if (-not $e.NadaHizo) {
+    if (-not $e.DidNothing) {
       Write-Host ("  >> AVISO: {0} tiene error registrado pero HA HECHO trabajo ({1} tools). No se cancela." -f $s.Slug, $s.Tools) -ForegroundColor Yellow
-      Registrar -Linea ("- **AVISO** `{0}`: error con trabajo hecho ({1} tools). No se toca." -f $s.Slug, $s.Tools)
+      Write-Log -Linea ("- **AVISO** `{0}`: error con trabajo hecho ({1} tools). No se toca." -f $s.Slug, $s.Tools)
       $n++
       continue
     }
-    $causa = $e.Causa
+    $cause = $e.Causa
     $cancelo = $false
-    if ($e.Clase -in @('error','ATASCO') -and $Cancelar) { $cancelo = Cancelar-Sesion -Id $s.Id }
+    if ($e.Clase -in @('error','ATASCO') -and $Cancelar) { $cancelo = Cancel-Session -Id $s.Id }
 
     if ($cancelo) {
-      Write-Host ("  >> CANCELADO {0}  causa: {1}" -f $s.Slug, $causa.Texto) -ForegroundColor Red
-      Registrar -Linea ("- **CANCELADO** `{0}`. Causa: {1} Accion: {2}" -f $s.Slug, $causa.Texto, $causa.Cambio)
+      Write-Host ("  >> CANCELADO {0}  causa: {1}" -f $s.Slug, $cause.Texto) -ForegroundColor Red
+      Write-Log -Linea ("- **CANCELADO** `{0}`. Causa: {1} Accion: {2}" -f $s.Slug, $cause.Texto, $cause.Cambio)
       $n++
     } elseif ($e.Clase -in @('error','ATASCO')) {
-      Write-Host ("  >> ERROR {0}: {1}" -f $s.Slug, $causa.Texto) -ForegroundColor Red
-      Write-Host ("     Que hacer: {0}" -f $causa.Cambio) -ForegroundColor Cyan
-      Registrar -Linea ("- **ERROR** `{0}` ({1}): {2} Cambiar: {3}" -f $s.Slug, $causa.Id, $causa.Texto, $causa.Cambio)
+      Write-Host ("  >> ERROR {0}: {1}" -f $s.Slug, $cause.Texto) -ForegroundColor Red
+      Write-Host ("     Que hacer: {0}" -f $cause.Cambio) -ForegroundColor Cyan
+      Write-Log -Linea ("- **ERROR** `{0}` ({1}): {2} Cambiar: {3}" -f $s.Slug, $cause.Id, $cause.Texto, $cause.Cambio)
       $n++
     } else {
-      Write-Host ("  >> SIN TRABAJO REGISTRADO {0}: {1} lleva {2}s" -f $s.Slug, $causa.Texto, $e.Silencio) -ForegroundColor Yellow
+      Write-Host ("  >> SIN TRABAJO REGISTRADO {0}: {1} lleva {2}s" -f $s.Slug, $cause.Texto, $e.Silence) -ForegroundColor Yellow
     }
   }
   return $n
 }
 
-function Mostrar {
+function Show-State {
   param($Estados, [datetime]$AhoraUtc)
 
   # Sin umbrales: se informa de lo medido y de lo observado en el log. Las clases son
@@ -368,20 +368,20 @@ function Mostrar {
 
   foreach ($e in $err) {
     if ($e.Clase -eq 'ATASCO') {
-    Write-Host ("  ATASCO   {0,-16} lleva {1}s sin emitir stream" -f $e.Sesion.Slug, $e.Silencio) -ForegroundColor Red
+    Write-Host ("  ATASCO   {0,-16} lleva {1}s sin emitir stream" -f $e.Sesion.Slug, $e.Silence) -ForegroundColor Red
   } else {
     Write-Host ("  ERROR    {0,-16} {1}" -f $e.Sesion.Slug, $e.Causa.Texto) -ForegroundColor Red
   }
-    Write-Host ("           silencio {0}s  loops={1} tools={2}" -f $e.Silencio, $e.Sesion.Loops, $e.Sesion.Tools) -ForegroundColor DarkGray
+    Write-Host ("           silencio {0}s  loops={1} tools={2}" -f $e.Silence, $e.Sesion.Loops, $e.Sesion.Tools) -ForegroundColor DarkGray
   }
-  foreach ($s in ($sin | Sort-Object Silencio -Descending)) {
-    Write-Host ("  sin trabbajo {0,-14} silencio {1}s  loops={2} tools={3}" -f $s.Sesion.Slug, $s.Silencio, $s.Sesion.Loops, $s.Sesion.Tools) -ForegroundColor Yellow
+  foreach ($s in ($sin | Sort-Object Silence -Descending)) {
+    Write-Host ("  sin trabbajo {0,-14} silencio {1}s  loops={2} tools={3}" -f $s.Sesion.Slug, $s.Silence, $s.Sesion.Loops, $s.Sesion.Tools) -ForegroundColor Yellow
   }
-  foreach ($o in ($act | Sort-Object Silencio -Descending | Select-Object -First 3)) {
-    Write-Host ("  activa   {0,-16} silencio {1}s  loops={2} tools={3} streams={4}" -f $o.Sesion.Slug, $o.Silencio, $o.Sesion.Loops, $o.Sesion.Tools, $o.Sesion.Streams) -ForegroundColor DarkGray
+  foreach ($o in ($act | Sort-Object Silence -Descending | Select-Object -First 3)) {
+    Write-Host ("  activa   {0,-16} silencio {1}s  loops={2} tools={3} streams={4}" -f $o.Sesion.Slug, $o.Silence, $o.Sesion.Loops, $o.Sesion.Tools, $o.Sesion.Streams) -ForegroundColor DarkGray
   }
   foreach ($c in $can) {
-    Write-Host ("  cancelada {0,-15} silencio {1}s  loops={2} tools={3}" -f $c.Sesion.Slug, $c.Silencio, $c.Sesion.Loops, $c.Sesion.Tools) -ForegroundColor DarkGray
+    Write-Host ("  cancelada {0,-15} silencio {1}s  loops={2} tools={3}" -f $c.Sesion.Slug, $c.Silence, $c.Sesion.Loops, $c.Sesion.Tools) -ForegroundColor DarkGray
   }
   if (-not $err -and -not $sin -and -not $can) { Write-Host '  sin incidencias' -ForegroundColor Green }
 }
@@ -389,10 +389,10 @@ function Mostrar {
 # --- Ejecucion ---------------------------------------------------------------
 
 if ($UnaVez) {
-  $l = Leer-Log
+  $l = Read-Log
   if (-not $l) { Write-Error 'No se pudo leer el log.'; exit 1 }
-  $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc ([datetime]::UtcNow) -AtascoSeg $AtascoSegundos
-  Mostrar -Estados $est -AhoraUtc ([datetime]::UtcNow)
+  $est = Get-State -Sesiones (Get-Sessions -Lineas $l) -AhoraUtc ([datetime]::UtcNow) -AtascoSeg $AtascoSegundos
+  Show-State -Estados $est -AhoraUtc ([datetime]::UtcNow)
   if ($est | Where-Object { $_.Clase -in @('error','ATASCO') }) { exit 1 }
   exit 0
 }
@@ -404,18 +404,18 @@ Write-Host "  registro: $Registro" -ForegroundColor DarkGray
 Write-Host ''
 
 while ($true) {
-  $l = Leer-Log
+  $l = Read-Log
   if ($l) {
     $ahora = [datetime]::UtcNow
-    $est = Get-Estado -Sesiones (Get-Sesiones -Lineas $l) -AhoraUtc $ahora -AtascoSeg $AtascoSegundos
+    $est = Get-State -Sesiones (Get-Sessions -Lineas $l) -AhoraUtc $ahora -AtascoSeg $AtascoSegundos
     # "Problema" es solo lo que tiene causa leida de un error real. El silencio y la
     # ausencia de trabajo se INFORMAN, pero no son un problema: no hay medicion que los
     # separe de una sesion que simplemente esta trabajando callada.
     $problemas = $est | Where-Object { $_.Clase -in @('error','ATASCO') }
     $firma = ($problemas | ForEach-Object { "$($_.Sesion.Id):$($_.Clase)" }) -join ','
     if ($firma -ne $script:prevFirma) {
-      Mostrar -Estados $est -AhoraUtc $ahora
-      if ($problemas) { Accionar -Estados $est -SoloInformar:(-not $Cancelar) | Out-Null }
+      Show-State -Estados $est -AhoraUtc $ahora
+      if ($problemas) { Take-Action -Estados $est -SoloInformar:(-not $Cancelar) | Out-Null }
       $script:prevFirma = $firma
     }
   }

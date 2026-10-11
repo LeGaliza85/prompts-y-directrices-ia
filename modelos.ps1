@@ -58,7 +58,7 @@ if (-not $Elegir -and -not $Comprobar -and -not $Todos) {
 
 # Lista completa de los modelos configurados. Fuente: `opencode models`, verificada el
 # 2026-10-10. 11 del proveedor opencode y 7 de zai-coding-plan.
-$catalogo = @(
+$catalog = @(
   'opencode/space-bunny-free', 'opencode/big-pickle', 'opencode/step-5-preview-free',
   'opencode/ling-3.0-flash-fin-free', 'opencode/ling-3.1-flash-free',
   'opencode/nemotron-3-ultra-free', 'opencode/nemotron-3.5-lightning-free',
@@ -72,78 +72,78 @@ $catalogo = @(
 # Orden por defecto para -Elegir. NO es un ranking de calidad: es orden por historial
 # medido, que es lo unico que se puede sostener. space-bunny-free va primero porque
 # tiene 1.494 usos sin un error de disponibilidad, no porque sea el mejor.
-$ordenMedido = @(
+$measuredOrder = @(
   'opencode/space-bunny-free', 'opencode/big-pickle', 'opencode/muse-spark-1.3-contributor-free',
   'opencode/nemotron-3-ultra-free', 'opencode/exo-free', 'opencode/longcat-2.5-preview-free',
   'opencode/nemotron-3.5-lightning-free', 'opencode/mimo-v2.6-flash-free',
   'opencode/ling-3.1-flash-free', 'opencode/step-5-preview-free'
 )
 
-function Probar-Modelo {
+function Probe-Model {
   param([string]$Modelo)
 
-  $arg = "run -m `"$Modelo`" --format json ok"
+  $argLine = "run -m `"$Modelo`" --format json ok"
   $psi = New-Object System.Diagnostics.ProcessStartInfo
   $psi.FileName = $Binario
-  $psi.Arguments = $arg
+  $psi.Arguments = $argLine
   $psi.RedirectStandardOutput = $true
   $psi.RedirectStandardError = $true
   $psi.UseShellExecute = $false
   $psi.CreateNoWindow = $true
 
-  $crono = [System.Diagnostics.Stopwatch]::StartNew()
+  $timer = [System.Diagnostics.Stopwatch]::StartNew()
   try {
     $proc = [System.Diagnostics.Process]::Start($psi)
     if ($TopeSegundos -gt 0) {
       if (-not $proc.WaitForExit($TopeSegundos * 1000)) {
         try { $proc.Kill() } catch { }
-        $crono.Stop()
-        return [pscustomobject]@{ Ok = $false; Ms = -1; Nota = 'tope agotado' }
+        $timer.Stop()
+        return [pscustomobject]@{ Ok = $false; Ms = -1; Note = 'tope agotado' }
       }
     } else {
       $proc.WaitForExit()
     }
-    $crono.Stop()
-    $salida = $proc.StandardOutput.ReadToEnd()
-    $err = $proc.StandardError.ReadToEnd()
-    $codigo = $proc.ExitCode
-    $nota = ''
-    if ($salida -match '"type"\s*:\s*"error"') { $nota = 'error en la respuesta' }
-    elseif ($err -match 'no disponible|not available|unavailable|Insufficient balance') {
-      $nota = ($err -split "`n" | Where-Object { $_ -match 'no disponible|not available|unavailable|Insufficient balance' } | Select-Object -First 1).Trim()
+    $timer.Stop()
+    $stdout = $proc.StandardOutput.ReadToEnd()
+    $stderr = $proc.StandardError.ReadToEnd()
+    $exitCode = $proc.ExitCode
+    $note = ''
+    if ($stdout -match '"type"\s*:\s*"error"') { $note = 'error en la respuesta' }
+    elseif ($stderr -match 'no disponible|not available|unavailable|Insufficient balance') {
+      $note = ($stderr -split "`n" | Where-Object { $_ -match 'no disponible|not available|unavailable|Insufficient balance' } | Select-Object -First 1).Trim()
     }
-    elseif ($codigo -ne 0) { $nota = "codigo de salida $codigo" }
-    [pscustomobject]@{ Ok = ($codigo -eq 0 -and $nota -eq ''); Ms = [int]$crono.ElapsedMilliseconds; Nota = $nota }
+    elseif ($exitCode -ne 0) { $note = "codigo de salida $exitCode" }
+    [pscustomobject]@{ Ok = ($exitCode -eq 0 -and $note -eq ''); Ms = [int]$timer.ElapsedMilliseconds; Note = $note }
   } catch {
-    $crono.Stop()
-    [pscustomobject]@{ Ok = $false; Ms = -1; Nota = $_.Exception.Message }
+    $timer.Stop()
+    [pscustomobject]@{ Ok = $false; Ms = -1; Note = $_.Exception.Message }
   }
 }
 
-function Mostrar {
-  param($r, $Modelo)
-  $estado = if ($r.Ok) { 'RESPONDE' } else { 'NO' }
-  $color = if ($r.Ok) { 'Green' } else { 'Red' }
-  $lat = if ($r.Ms -ge 0) { "$($r.Ms) ms" } else { '-' }
-  Write-Host ("  {0,-40} {1,-9} {2,-10} {3}" -f $Modelo, $estado, $lat, $r.Nota) -ForegroundColor $color
-  if ($r.Ok) { $script:latencias += [pscustomobject]@{ Modelo = $Modelo; Ms = $r.Ms } }
+function Show-Result {
+  param($result, $Modelo)
+  $state = if ($result.Ok) { 'RESPONDE' } else { 'NO' }
+  $color = if ($result.Ok) { 'Green' } else { 'Red' }
+  $latency = if ($result.Ms -ge 0) { "$($result.Ms) ms" } else { '-' }
+  Write-Host ("  {0,-40} {1,-9} {2,-10} {3}" -f $Modelo, $state, $latency, $result.Note) -ForegroundColor $color
+  if ($result.Ok) { $script:latencies += [pscustomobject]@{ Modelo = $Modelo; Ms = $result.Ms } }
 }
 
-$script:latencias = @()
+$script:latencies = @()
 
 if ($Comprobar) {
   Write-Host "Comprobando un modelo..."
-  Mostrar (Probar-Modelo -Modelo $Comprobar) $Comprobar
-  if (-not (Probar-Modelo -Modelo $Comprobar).Ok) { exit 1 }
+  Show-Result (Probe-Model -Modelo $Comprobar) $Comprobar
+  if (-not (Probe-Model -Modelo $Comprobar).Ok) { exit 1 }
   exit 0
 }
 
 if ($Elegir) {
   Write-Host "Eligendo modelo en orden. Se para en el primero que responda..."
   foreach ($m in $Elegir) {
-    $r = Probar-Modelo -Modelo $m
-    Mostrar $r $m
-    if ($r.Ok) {
+    $result = Probe-Model -Modelo $m
+    Show-Result $result $m
+    if ($result.Ok) {
       Write-Host ""
       Write-Host "ELEGIDO: $m" -ForegroundColor Green
       Write-Host "para asignar desde un script: `$modelo = `"$m`"" -ForegroundColor DarkGray
@@ -159,20 +159,20 @@ if ($Elegir) {
 }
 
 if ($Todos) {
-  Write-Host "Comprobando los $($catalogo.Count) modelos configurados, uno a uno..."
+  Write-Host "Comprobando los $($catalog.Count) modelos configurados, uno a uno..."
   Write-Host "  (orden del catalogo, no de preferencia)" -ForegroundColor DarkGray
   Write-Host ""
-  foreach ($m in $catalogo) { Mostrar (Probar-Modelo -Modelo $m) $m }
+  foreach ($m in $catalog) { Show-Result (Probe-Model -Modelo $m) $m }
   Write-Host ""
-  $vivos = @($script:latencias).Count
-  Write-Host ("responden {0} de {1}" -f $vivos, $catalogo.Count) -ForegroundColor Cyan
-  if ($vivos -gt 0) {
+  $alive = @($script:latencies).Count
+  Write-Host ("responden {0} de {1}" -f $alive, $catalog.Count) -ForegroundColor Cyan
+  if ($alive -gt 0) {
     Write-Host ""
     Write-Host "Los tres mas rapidos de esta pasada (dato de esta ejecucion, no un ranking):" -ForegroundColor Cyan
-    $script:latencias | Sort-Object Ms | Select-Object -First 3 | ForEach-Object {
+    $script:latencies | Sort-Object Ms | Select-Object -First 3 | ForEach-Object {
       Write-Host ("  {0,-40} {1} ms" -f $_.Modelo, $_.Ms) -ForegroundColor DarkGray
     }
   }
-  if ($vivos -eq 0) { exit 1 }
+  if ($alive -eq 0) { exit 1 }
   exit 0
 }

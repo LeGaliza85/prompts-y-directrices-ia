@@ -18,11 +18,11 @@
 //
 // Requisitos: Node 22 o superior (WebSocket global) y Chrome instalado.
 
-const PUERTO_CDP = 9222;
-const ANCHO_MOVIL = 375;
+const CDP_PORT = 9222;
+const MOBILE_WIDTH = 375;
 
 /** Rutas donde suele estar Chrome, en orden de probabilidad. */
-const RUTAS_CHROME = [
+const CHROME_PATHS = [
   process.env.CHROME_PATH,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
@@ -33,7 +33,7 @@ const RUTAS_CHROME = [
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
 ].filter(Boolean);
 
-const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
  * Arranca Chrome en headless con el puerto de depuracion abierto, y devuelve un manejador
@@ -44,24 +44,24 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
  *
  * El perfil es temporal y se borra al parar: no toca el Chrome del usuario.
  */
-async function abrirChrome(rutaChrome = null) {
+async function openChrome(rutaChrome = null) {
   const { spawn } = require('node:child_process');
   const fs = require('node:fs');
   const os = require('node:os');
   const path = require('node:path');
 
-  const candidatas = rutaChrome ? [rutaChrome, ...RUTAS_CHROME] : RUTAS_CHROME;
-  const ejecutable = candidatas.find((r) => fs.existsSync(r));
-  if (!ejecutable) {
+  const candidates = rutaChrome ? [rutaChrome, ...CHROME_PATHS] : CHROME_PATHS;
+  const exePath = candidates.find((r) => fs.existsSync(r));
+  if (!exePath) {
     throw new Error(
       'No encuentro Chrome. Indica la ruta con CHROME_PATH o como primer argumento.'
     );
   }
 
   const perfil = path.join(os.tmpdir(), `verif-chrome-${process.pid}`);
-  const proc = spawn(ejecutable, [
+  const proc = spawn(exePath, [
     '--headless=new',
-    `--remote-debugging-port=${PUERTO_CDP}`,
+    `--remote-debugging-port=${CDP_PORT}`,
     '--no-first-run',
     '--no-default-browser-check',
     '--disable-extensions',
@@ -69,14 +69,14 @@ async function abrirChrome(rutaChrome = null) {
   ], { stdio: 'ignore', detached: false });
 
   // El puerto tarda un poco en abrir. Se espera a que responda, no un tiempo fijo.
-  const endpoint = `http://127.0.0.1:${PUERTO_CDP}`;
+  const endPoint = `http://127.0.0.1:${CDP_PORT}`;
   for (let intento = 0; intento < 40; intento++) {
-    await esperar(250);
+    await wait(250);
     try {
-      const r = await fetch(`${endpoint}/json/version`);
+      const r = await fetch(`${endPoint}/json/version`);
       if (r.ok) {
         return {
-          endpoint,
+          endPoint,
           proceso: proc,
           parar: () => {
             try { proc.kill(); } catch { /* ya estaba parado */ }
@@ -88,7 +88,7 @@ async function abrirChrome(rutaChrome = null) {
   }
 
   try { proc.kill(); } catch { /* nada que hacer */ }
-  throw new Error(`Chrome arranco pero el puerto ${PUERTO_CDP} no responde.`);
+  throw new Error(`Chrome arranco pero el puerto ${CDP_PORT} no responde.`);
 }
 
 /**
@@ -98,10 +98,10 @@ async function abrirChrome(rutaChrome = null) {
  * parametro, el servidor responde "Runtime.enable wasn't found", que parece un error de
  * nombre de metodo y no lo es.
  */
-function conectar(wsUrl) {
+function connect(wsUrl) {
   const ws = new WebSocket(wsUrl);
   const pendientes = new Map();
-  const eventos = [];
+  const events = [];
   let id = 0;
 
   ws.addEventListener('message', (ev) => {
@@ -111,7 +111,7 @@ function conectar(wsUrl) {
       pendientes.delete(msg.id);
       msg.error ? reject(new Error(msg.error.message)) : resolve(msg.result);
     } else if (msg.method) {
-      eventos.push(msg);
+      events.push(msg);
     }
   });
 
@@ -125,7 +125,7 @@ function conectar(wsUrl) {
       ws.send(JSON.stringify(msg));
       return p;
     },
-    eventos,
+    events,
     cerrar: () => ws.close(),
   };
 }
@@ -136,10 +136,10 @@ function conectar(wsUrl) {
  * @param {string} urlPagina - URL a abrir
  * @param {Array<{nombre: string, expresion: string}>} pasos - Comprobaciones a ejecutar
  * @param {object} opciones - {movil: boolean} añade la comprobacion de desborde a 375 px
- * @returns {Promise<{ok, resultados, errores, erroresConsola, captura}>}
+ * @returns {Promise<{ok, resultados, errors, consoleErrors, image}>}
  * @throws Si pasos esta vacio: sin comprobaciones, decir "OK" no significaria nada.
  */
-async function comprobar(urlPagina, pasos = [], opciones = {}) {
+async function check(urlPagina, pasos = [], opciones = {}) {
   if (!Array.isArray(pasos) || pasos.length === 0) {
     throw new Error(
       'Hay que pasar al menos una comprobacion. Sin pasos, "OK" no significa nada: ' +
@@ -147,15 +147,15 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
     );
   }
 
-  const endpoint = `http://127.0.0.1:${PUERTO_CDP}`;
-  const version = await fetch(`${endpoint}/json/version`).then((r) => r.json());
+  const endPoint = `http://127.0.0.1:${CDP_PORT}`;
+  const version = await fetch(`${endPoint}/json/version`).then((r) => r.json());
 
-  const cliente = await conectar(version.webSocketDebuggerUrl);
-  await cliente.listo;
+  const client = await connect(version.webSocketDebuggerUrl);
+  await client.listo;
 
-  const { targetId } = await cliente.enviar('Target.createTarget', { url: 'about:blank' });
-  const { sessionId } = await cliente.enviar('Target.attachToTarget', { targetId, flatten: true });
-  const s = (method, params = {}) => cliente.enviar(method, params, sessionId);
+  const { targetId } = await client.enviar('Target.createTarget', { url: 'about:blank' });
+  const { sessionId } = await client.enviar('Target.attachToTarget', { targetId, flatten: true });
+  const s = (method, params = {}) => client.enviar(method, params, sessionId);
 
   await s('Runtime.enable');
   await s('Log.enable');
@@ -164,18 +164,18 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
   const todos = [...pasos];
   if (opciones.movil) {
     await s('Emulation.setDeviceMetricsOverride', {
-      width: ANCHO_MOVIL, height: 667, deviceScaleFactor: 2, mobile: true,
+      width: MOBILE_WIDTH, height: 667, deviceScaleFactor: 2, mobile: true,
     });
     todos.push({
-      nombre: `nada desborda a ${ANCHO_MOVIL} px`,
+      nombre: `nada desborda a ${MOBILE_WIDTH} px`,
       expresion: 'document.documentElement.scrollWidth - document.documentElement.clientWidth <= 0',
     });
   }
 
   await s('Page.navigate', { url: urlPagina });
-  await esperar(1200);
+  await wait(1200);
 
-  const erroresConsola = cliente.eventos
+  const consoleErrors = client.events
     .filter((e) => e.method === 'Log.entryAdded' && e.params.entry.level === 'error')
     .map((e) => e.params.entry.text);
 
@@ -192,28 +192,28 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
     }
   }
 
-  // La captura se guarda a disco tal cual. Antes se fazia
+  // La image se guarda a disco tal cual. Antes se fazia
   // Buffer.from(base64).toString('base64'), que es una ida y vuelta identidad: no
   // convertia nada y el PNG nunca se podia abrir.
-  let captura = null;
+  let image = null;
   try {
     const { data } = await s('Page.captureScreenshot', { format: 'png' });
-    captura = Buffer.from(data, 'base64');
-  } catch { /* la captura es opcional */ }
+    image = Buffer.from(data, 'base64');
+  } catch { /* la image es opcional */ }
 
-  await cliente.enviar('Target.closeTarget', { targetId });
-  cliente.cerrar();
+  await client.enviar('Target.closeTarget', { targetId });
+  client.cerrar();
 
-  const errores = resultados.filter((r) => !r.ok).map((r) => r.nombre);
-  if (erroresConsola.length > 0) {
-    errores.push(`${erroresConsola.length} error(es) en la consola del navegador`);
+  const errors = resultados.filter((r) => !r.ok).map((r) => r.nombre);
+  if (consoleErrors.length > 0) {
+    errors.push(`${consoleErrors.length} error(es) en la consola del navegador`);
   }
   return {
-    ok: errores.length === 0,
+    ok: errors.length === 0,
     resultados,
-    errores,
-    erroresConsola,
-    captura,
+    errors,
+    consoleErrors,
+    image,
   };
 }
 
@@ -221,11 +221,11 @@ async function comprobar(urlPagina, pasos = [], opciones = {}) {
 // --- Uso directo -----------------------------------------------------------
 // Sin comprobaciones, decir "OK" no significaria nada: se comprueba que no se ha
 // comprobado. Por eso el uso directo exige un archivo con los pasos.
-async function principal() {
+async function main() {
   const [url, rutaPasos, rutaCaptura] = process.argv.slice(2);
 
   if (!url || !rutaPasos) {
-    console.error('Uso: node verificar-interfaz.js <url> <archivo-de-comprobaciones.js> [captura.png]');
+    console.error('Uso: node verificar-interfaz.js <url> <archivo-de-comprobaciones.js> [image.png]');
     console.error('');
     console.error('El archivo debe exportar `pasos`: un array de { nombre, expresion }.');
     console.error('El tercer argumento, si se da, es donde se guarda la captura. Por');
@@ -237,9 +237,9 @@ async function principal() {
     process.exit(1);
   }
 
-  // await es obligatorio: abrirChrome es async y sin el se guarda una promesa, que
+  // await es obligatorio: openChrome es async y sin el se guarda una promesa, que
   // no tiene .parar(). Fallaria al borrar, no al arrancar, que es mas dificil de ver.
-  const chrome = await abrirChrome();
+  const chrome = await openChrome();
 
   let pasos;
   try {
@@ -251,18 +251,18 @@ async function principal() {
   }
 
 try {
-    const r = await comprobar(url, pasos, { movil: true });
+    const r = await check(url, pasos, { movil: true });
     r.resultados.forEach((x) => console.log(`  ${x.ok ? 'OK   ' : 'FALLA'} ${x.nombre}`));
-    if (r.erroresConsola.length) {
-      console.log(`  consola: ${r.erroresConsola.join(' | ')}`);
+    if (r.consoleErrors.length) {
+      console.log(`  consola: ${r.consoleErrors.join(' | ')}`);
     }
 
-    // La captura se escribe a disco. Sin ella, el script comprueba numeros y no dice
+    // La image se escribe a disco. Sin ella, el script comprueba numeros y no dice
     // nada de si la pagina se VE bien: un OK no distingue una interfaz correcta de una
     // que desborda, ilegible o con el contraste justo.
-    if (r.captura) {
+    if (r.image) {
       const ruta = rutaCaptura || 'verificacion.png';
-      require('node:fs').writeFileSync(ruta, r.captura);
+      require('node:fs').writeFileSync(ruta, r.image);
       console.log(`  captura: ${ruta}`);
     }
 
@@ -277,14 +277,14 @@ try {
 }
 
 if (require.main === module) {
-  principal();
+  main();
 }
 
 module.exports = {
-  comprobar,
-  conectar,
-  esperar,
-  abrirChrome,
-  PUERTO_CDP,
-  ANCHO_MOVIL,
+  check,
+  connect,
+  wait,
+  openChrome,
+  CDP_PORT,
+  MOBILE_WIDTH,
 };
