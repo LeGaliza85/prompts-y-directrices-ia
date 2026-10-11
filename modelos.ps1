@@ -71,17 +71,24 @@ try {
   exit 1
 }
 
-# Lista completa de los modelos configurados. Fuente: `opencode models`, verificada el
-# 2026-10-10. 11 del proveedor opencode y 7 de zai-coding-plan.
+# Catálogo de modelos. Fuente: `GET /api/model` del servidor de OpenCode, consultado el
+# 2026-10-11. Son 38 modelos del proveedor opencode.
+#
+# Los 7 modelos de zai-coding-plan que estaban aqui se han quitado porque el servidor ya
+# no los anuncia: la credencial sigue conectada, pero no ofrece ninguno. Un modelo que no
+# se anuncia no se puede elegir y su sonda tardaba mas de minuto en fallar. Se probe uno
+# a mano el 2026-10-11: "Insufficient balance or no resource package".
+#
+# Si el catalogo se queda viejo otra vez, la fuente se vuelve a consultar. No se escribe
+# aqui lo que no se ha comprobado contra el servidor el dia de la consulta.
 $catalog = @(
-  'opencode/space-bunny-free', 'opencode/big-pickle', 'opencode/step-5-preview-free',
-  'opencode/ling-3.0-flash-fin-free', 'opencode/ling-3.1-flash-free',
-  'opencode/nemotron-3-ultra-free', 'opencode/nemotron-3.5-lightning-free',
-  'opencode/longcat-2.5-preview-free', 'opencode/mimo-v2.6-flash-free',
-  'opencode/muse-spark-1.3-contributor-free', 'opencode/exo-free',
-  'zai-coding-plan/glm-4.7', 'zai-coding-plan/glm-5-turbo', 'zai-coding-plan/glm-5.2',
-  'zai-coding-plan/glm-5.2-highspeed', 'zai-coding-plan/glm-5.3',
-  'zai-coding-plan/glm-5.3-flash', 'zai-coding-plan/glm-5.3-highspeed'
+  'opencode/space-bunny-free', 'opencode/big-pickle', 'opencode/exo-free',
+  'opencode/muse-spark-1.3-contributor-free', 'opencode/step-5-preview-free',
+  'opencode/nemotron-3.5-lightning-free', 'opencode/nemotron-3-ultra-free',
+  'opencode/ling-3.1-flash-free', 'opencode/ling-3.0-flash-fin-free',
+  'opencode/ling-3.0-tiny-free', 'opencode/longcat-2.5-preview-free',
+  'opencode/mimo-v2.6-flash-free', 'opencode/fledge-alpha-free',
+  'opencode/x-preview-f-free'
 )
 
 # Orden por defecto para -Elegir. NO es un ranking de calidad: es orden por historial

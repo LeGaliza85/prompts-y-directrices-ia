@@ -6,6 +6,31 @@ Qué modelos hay, de dónde sale cada cifra, y qué no se sabe.
 modelo hasta ahora. Si vas a usar uno, se comprueba **en ese momento**:
 principio 10 de `CONSTITUTION.md`. Lo de aquí es historial, y el historial caduca.
 
+## Estado en esta máquina (medido el 2026-10-11)
+
+Fuente: `GET http://127.0.0.1:4096/api/model` del servidor de OpenCode, y sondas reales
+con `modelos.ps1 -Comprobar`.
+
+| Qué | Resultado |
+|---|---|
+| Modelos que anuncia el servidor | 38, todos del proveedor `opencode` |
+| Modelos de `zai-coding-plan` | **0**. La credencial sigue conectada, pero no ofrece ninguno. |
+| `opencode/space-bunny-free` | Responde. Sonda entre 1,6 s y 22 s según la carga del servidor. |
+| `opencode/big-pickle` | Responde. |
+| `zai-coding-plan/glm-5.3-highspeed` | **No responde.** Motivo del proveedor: «Insufficient balance or no resource package». Tardó 73 s en fallar. |
+
+Dos cosas que cambian cómo se usa lo de abajo:
+
+1. **El CLI ya no sirve para comprobar modelos.** `opencode run -m <modelo>` devuelve 403
+   con un texto explícito: el nivel gratuito solo se puede usar desde dentro de la propia
+   aplicación. `modelos.ps1` pregunta al servidor, que sí cuenta como «dentro».
+2. **`-Todos` es impracticable en primer plano.** Las sondas van de 2,9 s a 73 s según
+   el modelo. Los 14 del catálogo tardan más de diez minutos. Para una comprobación puntual
+   sirve `-Comprobar` o `-Elegir`.
+
+La tabla de más abajo es de la cuenta de origen y describe el historial de uso. Se conserva
+como historial; no dice qué hay hoy en esta máquina.
+
 ## De dónde sale cada número
 
 Ninguna cifra de este documento está elegida a ojo. Cada columna tiene su origen:
