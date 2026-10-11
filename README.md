@@ -76,3 +76,27 @@ es portable es el método para medirlas, que está descrito ahí.
 
 Verificador en verde: 106 archivos, 0 incidencias. El número de commits no se escribe
 aquí: se consulta con `git rev-list --count HEAD`.
+
+## Dónde está
+
+<https://github.com/LeGaliza85/prompts-y-directrices-ia>
+
+Es un repositorio **público**: se clona sin cuenta y sin invitación.
+
+```bash
+git clone https://github.com/LeGaliza85/prompts-y-directrices-ia.git
+```
+
+Estaba en privado. Se hizo público el 2026-10-11 para poder compartirlo por enlace, que
+era más rápido que gestionar invitaciones una a una. Antes de hacerlo se pasó el escaneo
+de secretos sobre todo lo versionado: no hay claves, ni tokens, ni ficheros de
+autenticación en el historial.
+
+Lo que sí queda visible y conviene saber: el email del autor en los metadatos de los
+commits (`jpoliveiramoreiras@gmail.com`). No es un secreto, pero es un dato personal, y
+un repositorio público lo indexa. Si algún día molesta, se cambia con un filtro de git y
+reeescribiendo el historial.
+
+**No hay `LICENSE`.** Sin ella, el repositorio es de «todos los derechos reservados» por
+defecto: se puede leer y clonar, pero no se permite reutilizar ni modificar. Si la intención es
+que otros lo aprovechen, hace falta elegir una licencia.
