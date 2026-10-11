@@ -103,6 +103,35 @@ se vuelve a anotar por qué.
 7. **Acceso remoto** — investigado y documentado, **cero instalado** (ni Tailscale ni
    RustDesk).
 
+## Preguntas que el usuario tiene pendientes de contestar
+
+Estaban solo en la conversación, que es justo lo que no debe pasar. Se escriben aquí el
+2026-10-11 para que sobrevivan a que se cierre la sesión.
+
+**Sobre el contexto**
+1. ¿Hay que fijar una regla de «compactar o sesión nueva antes de X»? Si la hay, **¿qué
+   límite te resulta cómodo?** No se inventa. Hay datos para derivarlo: esta sesión
+   compactó en el mensaje 818 y en el 1378.
+2. **¿Cada cuánto se reescribe el estado en disco?** Es la regla que aplica Gentle antes
+   del reset de contexto y este repo aplica después.
+
+**Sobre lo descubierto hoy**
+3. El aviso de la codificación de consola va a `aprendido.md` (error de proceso) o a
+   `directrices/DEPURACION.md` (herramienta de depuración)?
+4. **¿Licencia?** El repositorio es público y no tiene ninguna, así que está en «todos los
+   derechos reservados» por defecto. Si se toman ideas de un proyecto MIT, lo razonable es
+   que el nuestro lo sea.
+
+**Sobre Gentle / Engram**
+5. **¿Adoptar Engram** (binario Go + SQLite vía MCP, no se controla) **o extraer las ideas
+   y hacerlo aquí**? Recomendación propia: extraer.
+6. ¿Leer el **código** del mecanismo de compactación de Engram? Lo que se sabe viene del
+   README, no de la implementación.
+
+**Sobre este repositorio**
+7. `ESTADO.md` frente a `PROXIMA-SESION.md`: ¿cuál manda? Ya está en la lista de arriba.
+8. `tasks.md`: T1 a T12 siguen marcadas pese a estar hechas.
+
 ## Lo que no se puede hacer, y no se rellena
 
 - **El tiempo desde que se llama al subagente hasta que arranca.** Las líneas
