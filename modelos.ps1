@@ -7,10 +7,18 @@
   decide ANTES de lanzar. No hay ranking ni columna de disponibilidad en documentos:
   la disponibilidad se pregunta en el momento de usarla, y esto es la pregunta.
 
-  NO HAY UMBRALES AQUI. Ni tope de espera, ni memoria de resultado, ni ventana de
-  paralelismo. Los tres se propusieron en su dia y los tres eran invencion: no habia
-  medida que los sostuviera. Principio 10 de CONSTITUTION.md. Si se quieren, se
-  miden primero.
+  POR QUE NO SE USA EL CLI. La primera version llamaba a `opencode run -m <modelo>`.
+  Eso dejo de funcionar: OpenCode responde 403 con un texto explicito, "OpenCode's
+  free tier can only be used from within OpenCode". El nivel gratuito solo es valido
+  desde dentro de la propia aplicacion, no desde una llamada externa. Verificado a mano
+  el 2026-10-11 contra https://opencode.ai/zen/v1/chat/completions.
+
+  Ahora se pregunta al SERVIDOR de OpenCode, que si es "dentro de OpenCode". Se le
+  crea una sesion desechable por sonda y se le manda un mensaje minimo.
+
+  NO HAY UMBRALES AQUI. Ni memoria de resultado, ni ventana de paralelismo, ni espera
+  maxima. Se propusieron en su dia y eran invencion: no habia medida que los sostuviera.
+  Principio 10 de CONSTITUTION.md. Si se quieren, se miden primero.
 
 .PARAMETER Elegir
   Lista de modelos en orden de preferencia. Devuelve el primero que responde.
@@ -21,12 +29,8 @@
 .PARAMETER Todos
   Los 18 modelos configurados, uno a uno.
 
-.PARAMETER TopeSegundos
-  Segundos antes de dar un modelo por muerto. 0 = sin tope. Sin valor por defecto a
-  proposito: no hay medicion de la latencia de sonda. Pasalo tu y di de donde sale.
-
-.PARAMETER Binario
-  Ruta al opencode-cli.exe. No esta en el PATH del shell.
+.PARAMETER Servidor
+  URL del servidor de OpenCode. Por defecto el puerto 4096, que es el que usa Zed.
 
 .EXAMPLE
   powershell -File modelos.ps1 -Comprobar opencode/space-bunny-free
@@ -38,21 +42,32 @@ param(
   [string[]]$Elegir,
   [string]$Comprobar,
   [switch]$Todos,
-  [int]$TopeSegundos = 0,
-  [string]$Binario = "C:\Users\Pablo\AppData\Local\opencode\opencode-cli.exe"
+  [string]$Servidor = "http://127.0.0.1:4096"
 )
 
 $ErrorActionPreference = 'Stop'
 
-if (-not (Test-Path -LiteralPath $Binario)) { Write-Error "No encuentro el binario en $Binario"; exit 1 }
+if (-not $Elegir -and -not $Comprobar -and -not $Todos) {
+  Write-Host "Uso: modelos.ps1 -Elegir <modelos...> | -Comprobar <modelo> | -Todos"
+  Write-Host "     [-Servidor url]   por defecto $Servidor"
+  exit 1
+}
 
 # Desde la linea de comandos, `-Elegir a,b,c` llega como UNA cadena. Se parte por comas
 # para que funcione igual que `-Elegir a b c`.
 if ($Elegir) { $Elegir = @($Elegir -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
 
-if (-not $Elegir -and -not $Comprobar -and -not $Todos) {
-  Write-Host "Uso: modelos.ps1 -Elegir <modelos...> | -Comprobar <modelo> | -Todos"
-  Write-Host "     [-TopeSegundos n]   n=0 significa sin tope (por defecto)"
+# El servidor tiene que estar en pie ANTES de sondear nada. Si no esta, el fallo por
+# modelo seria "no responde" para todos, que se lee como si los modelos estuvieran caidos
+# y no es verdad: lo que no esta es el servidor.
+try {
+  $null = Invoke-RestMethod -Uri "$Servidor/global/health" -TimeoutSec 10
+} catch {
+  # Write-Error con ErrorActionPreference = Stop lanza una excepcion que sube y deja
+  # la salida a medias. Aqui se avisa y se sale, que es lo que se quiere decir.
+  Write-Host "No hay servidor OpenCode en $Servidor." -ForegroundColor Red
+  Write-Host "Es el que responde de verdad: el nivel gratuito no se puede usar desde fuera." -ForegroundColor Red
+  Write-Host "Arranca OpenCode, o pasa -Servidor con la URL correcta." -ForegroundColor Red
   exit 1
 }
 
@@ -82,38 +97,46 @@ $measuredOrder = @(
 function Probe-Model {
   param([string]$Modelo)
 
-  $argLine = "run -m `"$Modelo`" --format json ok"
-  $psi = New-Object System.Diagnostics.ProcessStartInfo
-  $psi.FileName = $Binario
-  $psi.Arguments = $argLine
-  $psi.RedirectStandardOutput = $true
-  $psi.RedirectStandardError = $true
-  $psi.UseShellExecute = $false
-  $psi.CreateNoWindow = $true
+  # El id viene como "proveedor/modelo". La API los quiere separados.
+  $slash = $Modelo.IndexOf('/')
+  if ($slash -lt 1 -or $slash -ge ($Modelo.Length - 1)) {
+    return [pscustomobject]@{ Ok = $false; Ms = -1; Note = 'id mal formado, se espera proveedor/modelo' }
+  }
+  $providerId = $Modelo.Substring(0, $slash)
+  $modelId = $Modelo.Substring($slash + 1)
 
   $timer = [System.Diagnostics.Stopwatch]::StartNew()
   try {
-    $proc = [System.Diagnostics.Process]::Start($psi)
-    if ($TopeSegundos -gt 0) {
-      if (-not $proc.WaitForExit($TopeSegundos * 1000)) {
-        try { $proc.Kill() } catch { }
-        $timer.Stop()
-        return [pscustomobject]@{ Ok = $false; Ms = -1; Note = 'tope agotado' }
-      }
-    } else {
-      $proc.WaitForExit()
+    # Una sesion propia y desechable por sonda. Se crea en un directorio temporal
+    # para que la sonda no toque el proyecto de quien la lanza.
+    $workDir = Join-Path ([System.IO.Path]::GetTempPath()) ('sonda-modelo-' + [System.Guid]::NewGuid().ToString('N').Substring(0, 8))
+    New-Item -ItemType Directory -Path $workDir -Force | Out-Null
+    try {
+      $s = Invoke-RestMethod -Method Post -Uri "$Servidor/session" `
+        -Body (@{ directory = $workDir } | ConvertTo-Json) `
+        -ContentType 'application/json' -TimeoutSec 30
+      $sid = if ($s.id) { $s.id } else { $s.info.id }
+
+      $payload = @{
+        model = @{ providerID = $providerId; modelID = $modelId }
+        parts = @(@{ type = 'text'; text = 'ok' })
+      } | ConvertTo-Json -Depth 6
+
+      $r = Invoke-RestMethod -Method Post -Uri "$Servidor/session/$sid/message" `
+        -Body $payload -ContentType 'application/json' -TimeoutSec 600
+    } finally {
+      Remove-Item $workDir -Recurse -Force -ErrorAction SilentlyContinue
     }
+
     $timer.Stop()
-    $stdout = $proc.StandardOutput.ReadToEnd()
-    $stderr = $proc.StandardError.ReadToEnd()
-    $exitCode = $proc.ExitCode
     $note = ''
-    if ($stdout -match '"type"\s*:\s*"error"') { $note = 'error en la respuesta' }
-    elseif ($stderr -match 'no disponible|not available|unavailable|Insufficient balance') {
-      $note = ($stderr -split "`n" | Where-Object { $_ -match 'no disponible|not available|unavailable|Insufficient balance' } | Select-Object -First 1).Trim()
+    if ($r.info.error) {
+      $note = $r.info.error.name + ': ' + $r.info.error.data.message
+    } elseif ($r.info.providerID -ne $providerId -or $r.info.modelID -ne $modelId) {
+      # La API puede atender con otro modelo. Si eso pasa, el dato NO es de este.
+      $note = "respondio otro modelo: $($r.info.providerID)/$($r.info.modelID)"
     }
-    elseif ($exitCode -ne 0) { $note = "codigo de salida $exitCode" }
-    [pscustomobject]@{ Ok = ($exitCode -eq 0 -and $note -eq ''); Ms = [int]$timer.ElapsedMilliseconds; Note = $note }
+    [pscustomobject]@{ Ok = ($note -eq ''); Ms = [int]$timer.ElapsedMilliseconds; Note = $note }
   } catch {
     $timer.Stop()
     [pscustomobject]@{ Ok = $false; Ms = -1; Note = $_.Exception.Message }
@@ -133,8 +156,11 @@ $script:latencies = @()
 
 if ($Comprobar) {
   Write-Host "Comprobando un modelo..."
-  Show-Result (Probe-Model -Modelo $Comprobar) $Comprobar
-  if (-not (Probe-Model -Modelo $Comprobar).Ok) { exit 1 }
+  # El resultado se guarda. Antes se llamaba a Probe-Model dos veces, una para mostrar y
+  # otra para el exit: la sonda se repetia y todo esperaba el doble para nada.
+  $result = Probe-Model -Modelo $Comprobar
+  Show-Result $result $Comprobar
+  if (-not $result.Ok) { exit 1 }
   exit 0
 }
 
