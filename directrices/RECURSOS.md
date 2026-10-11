@@ -37,7 +37,7 @@ Comprueba dos bloques, sobre los ficheros `.md`:
 
 Parámetro: `-Ruta` para revisar otra carpeta.
 
-Salida roja y `exit 1` si hay algo. Va por 102 archivos sin incidencias.
+Salida roja y `exit 1` si hay algo. Va por 106 archivos sin incidencias.
 
 ### `watchdog.ps1` — vigilancia de subagentes
 

@@ -90,7 +90,7 @@ Tentador y equivocado. El sistema ya tiene: verificador de caracteres, script de
 herramienta de interfaz en navegador real, revisor y asesor. **El cuello de botella ya no es
 falta de comprobación automática: es que las comprobaciones no miran lo que importa.**
 
-`verificar.ps1` comprueba 98 archivos y no ha encontrado nunca un error de lógica. Ninguna
+`verificar.ps1` comprueba 106 archivos y no ha encontrado nunca un error de lógica. Ninguna
 comprobación automática de texto lo haría. Lo que sirve aquí es el criterio humano de leer y
 preguntarse si algo significa lo que dice.
 
@@ -113,7 +113,7 @@ que ganarse el sitio por algo parecido.
 
 ## Sobre el coste de todo esto
 
-El repositorio tiene 21 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
+El repositorio tiene 23 documentos, 13 agentes, 10 comandos y 2 scripts para lo que empezó como
 «aprender de un curso». Funciona, y la prueba real lo demuestra.
 
 **El riesgo real ya no es que falte nada: es que una biblioteca de directrices crezca más que

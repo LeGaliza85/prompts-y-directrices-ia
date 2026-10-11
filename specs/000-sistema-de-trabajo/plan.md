@@ -6,7 +6,7 @@ Plan de esta spec. Marca qué requisito cubre cada parte.
 
 | Archivo | Qué contiene | Requisitos |
 |---|---|---|
-| `directrices/` (21 archivos) | Capa genérica: principios, instrucción, memoria, criterios, flujo, requisitos, catálogos, blindaje y registros | RF-1 a RF-8 |
+| `directrices/` (23 archivos) | Capa genérica: principios, instrucción, memoria, criterios, flujo, requisitos, catálogos, blindaje y registros | RF-1 a RF-8 |
 | `plantilla/` (33 archivos) | Esqueleto copiable para un proyecto nuevo | RF-1 |
 | `.opencode/agents/` | `reviewer` y `tooling-advisor`, con permisos de escritura denegados | RF-5, RF-6 |
 | `verificar.ps1` | Comprobador de documentos | RF-8 |
