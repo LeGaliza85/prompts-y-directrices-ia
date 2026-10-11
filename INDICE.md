@@ -100,9 +100,22 @@ coste). Los mismos que están en la plantilla, para poder usarlos aquí.
 | Script | Para qué |
 |---|---|
 | `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla, con agentes según el tipo y marcadores resueltos. |
-| `verificar.ps1` | Recorre todos los `.md` buscando caracteres corruptos, puntuación CJK y palabras en inglés. |
+| `verificar.ps1` | Recorre todos los `.md` buscando caracteres corruptos, puntuación CJK, palabras del idioma equivocado y cifras desincronizadas. |
+| `tests-verificar.ps1` | 15 casos que comprueban que `verificar.ps1` detecta lo que debe y **no** marca lo que no debe. |
 | `verificar-interfaz.js` | Comprueba una web en un Chrome real, incluida la vista móvil. Sin instalar nada. |
-| `watchdog.ps1` | Detecta subagentes atascados, clasifica la causa y cancela solo. Ver `BLOQUEOS.md`. |
+| `modelos.ps1` | Pregunta al servidor de OpenCode si un modelo responde **ahora**, y devuelve el primero que sí. |
+| `watchdog.ps1` | Lee el log: detecta subagentes atascados, clasifica la causa y cancela solo. Ver `BLOQUEOS.md`. |
+| `vigilancia.ps1` | Pregunta a la API: quién está ocupado, qué herramienta sigue en marcha y quién **espera permiso**. Complementa al anterior. |
+| `medir-api.ps1` | Mide cuánto dura cada tipo de herramienta, para no escribir umbrales de memoria. |
+
+`watchdog.ps1` y `vigilancia.ps1` miran cosas distintas y **no se sustituyen**: el log es
+el único que registra `stream error`, y la API es la única que sabe si un subagente está
+esperando permiso. Juntas cubren más que cada una sola.
+
+`vigilancia.ps1` **detecta y avisa; todavía no reanuda nada**. La parte que reanuda está sin
+escribir a propósito, porque hasta colgarla a propósito no se puede garantizar que no
+duplique trabajo. Lo que sí hace ya, y no se puede saltarse: si hay un permiso pendiente,
+no toca esa sesión. Está anotado en `PROXIMA-SESION.md`.
 
 `nuevo-proyecto.ps1` acepta `-Nombre`, `-Destino`, `-Tipo` (web, api, datos, cli, movil,
 infra, docs), `-Stack`, `-Idioma`, `-Git` y `-Forzar`. No inventa nada del proyecto: lo que

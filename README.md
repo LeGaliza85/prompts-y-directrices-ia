@@ -1,7 +1,7 @@
 # Prompts y directrices para trabajar con agentes de IA
 
 Un sistema para trabajar con agentes de IA en cualquier proyecto: unas directrices que
-dicen cómo se trabaja, una plantilla que se copia al empezar, y cinco herramientas que se
+dicen cómo se trabaja, una plantilla que se copia al empezar, y ocho herramientas que se
 comprueban a sí mismas.
 
 No es una aplicación. Es el método y las herramientas para aplicarlo.
@@ -27,15 +27,22 @@ saber de antemano y **te lista exactamente lo que queda por rellenar**. Hay ocho
 | `specs/` | La spec de este propio sistema, con su plan y sus tareas |
 | `historial/` | Copias literales de proyectos ya terminados |
 
-## Las cinco herramientas
+## Las herramientas
 
 | Herramienta | Para qué |
 |---|---|
 | `verificar.ps1` | Se pasa antes de dar nada por bueno. Detecta corrupción, comillas sin cerrar, rutas inexistentes, párrafos repetidos y cifras desincronizadas |
+| `tests-verificar.ps1` | 15 casos que comprueban que el anterior **no** marca lo que no debe |
 | `nuevo-proyecto.ps1` | Crea un proyecto desde la plantilla |
 | `modelos.ps1` | Comprueba si un modelo de IA responde **ahora**, antes de delegar en él |
-| `watchdog.ps1` | Vigila los subagentes y detecta los que se atascan |
+| `watchdog.ps1` | Lee el log y vigila los subagentes |
+| `vigilancia.ps1` | Pregunta a la API: quién está ocupado y quién **espera permiso** |
+| `medir-api.ps1` | Mide cuánto dura cada herramienta, para no escribir umbrales de memoria |
 | `verificar-interfaz.js` | Prueba una interfaz en un Chrome real y guarda una captura |
+
+`watchdog.ps1` y `vigilancia.ps1` miran cosas distintas y no se sustituyen: el log es el
+único que registra `stream error`, y la API es la única que sabe si un subagente está
+esperando permiso.
 
 ## Los principios
 
